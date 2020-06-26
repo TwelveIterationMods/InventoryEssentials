@@ -24,7 +24,7 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void onMouseDrag(GuiScreenEvent.MouseDragEvent event) {
-        if (Screen.hasShiftDown() && InventoryEssentialsConfig.CLIENT.enableShiftDrag.get()) {
+        if (Screen.func_231173_s_() && InventoryEssentialsConfig.CLIENT.enableShiftDrag.get()) { // hasShiftDown
             InventoryControls controls = getInventoryControls();
             if (event.getGui() instanceof ContainerScreen<?>) {
                 ContainerScreen<?> screen = (ContainerScreen<?>) event.getGui();
@@ -45,11 +45,11 @@ public class ClientEventHandler {
         if (event.getGui() instanceof ContainerScreen<?>) {
             ContainerScreen<?> screen = (ContainerScreen<?>) event.getGui();
             Slot hoverSlot = screen.getSlotUnderMouse();
-            if (Screen.hasShiftDown() && Screen.hasControlDown() && InventoryEssentialsConfig.CLIENT.enableBulkTransfer.get()) {
+            if (Screen.func_231173_s_() && Screen.func_231172_r_() && InventoryEssentialsConfig.CLIENT.enableBulkTransfer.get()) { // hasShiftDown, hasControlDown
                 if (hoverSlot != null && controls.bulkTransfer(screen, hoverSlot)) {
                     event.setCanceled(true);
                 }
-            } else if (Screen.hasControlDown() && InventoryEssentialsConfig.CLIENT.enableSingleTransfer.get()) {
+            } else if (Screen.func_231172_r_() && InventoryEssentialsConfig.CLIENT.enableSingleTransfer.get()) { // hasControlDown
                 if (hoverSlot != null && controls.singleTransfer(screen, hoverSlot)) {
                     event.setCanceled(true);
                 }
