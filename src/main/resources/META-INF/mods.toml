@@ -3,6 +3,7 @@ loaderVersion="[24,)"
 issueTrackerURL="https://github.com/blay09/InventoryEssentials/issues"
 displayURL="https://minecraft.curseforge.com/projects/inventory-essentials"
 authors="BlayTheNinth"
+license="MIT"
 
 [[mods]]
 modId="inventoryessentials"
