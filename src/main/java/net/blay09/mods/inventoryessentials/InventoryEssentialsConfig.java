@@ -15,6 +15,7 @@ public class InventoryEssentialsConfig {
         public final ForgeConfigSpec.BooleanValue enableBulkTransfer;
         public final ForgeConfigSpec.BooleanValue enableBulkTransferAll;
         public final ForgeConfigSpec.BooleanValue enableShiftDrag;
+        public final ForgeConfigSpec.BooleanValue allowBulkTransferAllOnEmptySlot;
 
         Client(ForgeConfigSpec.Builder builder) {
             builder.comment("Configuration for Inventory Essentials").push("client");
@@ -38,6 +39,11 @@ public class InventoryEssentialsConfig {
                     .comment("Should space-clicking an item move all items from that inventory at once?")
                     .translation("config.inventoryessentials.enableBulkTransferAll")
                     .define("enableBulkTransferAll", true);
+
+            allowBulkTransferAllOnEmptySlot = builder
+                    .comment("Should space-clicking move all items even if an empty slot was clicked?")
+                    .translation("config.inventoryessentials.allowBulkTransferAllOnEmptySlot")
+                    .define("allowBulkTransferAllOnEmptySlot", false);
 
             enableShiftDrag = builder
                     .comment("Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?")

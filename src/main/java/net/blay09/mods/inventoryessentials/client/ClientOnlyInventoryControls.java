@@ -1,5 +1,6 @@
 package net.blay09.mods.inventoryessentials.client;
 
+import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -8,6 +9,7 @@ import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.realms.IErrorConsumer;
 import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.ArrayList;
@@ -93,6 +95,10 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
     @Override
     public boolean bulkTransferAll(ContainerScreen<?> screen, Slot targetSlot) {
+        if (!InventoryEssentialsConfig.CLIENT.allowBulkTransferAllOnEmptySlot.get() && !targetSlot.getHasStack()) {
+            return false;
+        }
+
         PlayerEntity player = Minecraft.getInstance().player;
         Container container = screen.getContainer();
         boolean movedAny = false;
