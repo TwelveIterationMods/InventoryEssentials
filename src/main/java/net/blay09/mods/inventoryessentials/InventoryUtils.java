@@ -1,6 +1,7 @@
 package net.blay09.mods.inventoryessentials;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -27,4 +28,13 @@ public class InventoryUtils {
         return slot.isSameInventory(targetSlot);
     }
 
+    public static boolean containerContainsPlayerInventory(Container container) {
+        for (Slot slot : container.inventorySlots) {
+            if (slot.inventory instanceof PlayerInventory && slot.getSlotIndex() >= 9 && slot.getSlotIndex() < 37) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

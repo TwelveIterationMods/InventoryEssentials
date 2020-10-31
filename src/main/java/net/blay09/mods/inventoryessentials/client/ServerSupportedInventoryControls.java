@@ -26,14 +26,12 @@ public class ServerSupportedInventoryControls extends ClientOnlyInventoryControl
 
     @Override
     public boolean bulkTransferAll(ContainerScreen<?> screen, Slot clickedSlot) {
-        return super.bulkTransferAll(screen, clickedSlot);
-
-        /*PlayerEntity player = Minecraft.getInstance().player;
+        PlayerEntity player = Minecraft.getInstance().player;
         if (clickedSlot.canTakeStack(Objects.requireNonNull(player))) {
             NetworkHandler.channel.sendToServer(new BulkTransferAllMessage(clickedSlot.slotNumber));
             return true;
         }
 
-        return false;*/
+        return false;
     }
 }

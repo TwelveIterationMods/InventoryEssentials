@@ -103,13 +103,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         // If the clicked slot is *not* from the player inventory,
         if (!(clickedSlot.inventory instanceof PlayerInventory)) {
             // Search for any slot that belongs to the player inventory area (not hotbar)
-            for (Slot slot : container.inventorySlots) {
-                if (slot.inventory instanceof PlayerInventory && slot.getSlotIndex() >= 9 && slot.getSlotIndex() < 37) {
-                    // If we found one, this transfer should most likely go to the player inventory
-                    isProbablyMovingToPlayerInventory = true;
-                    break;
-                }
-            }
+            isProbablyMovingToPlayerInventory = InventoryUtils.containerContainsPlayerInventory(container);
         }
 
         boolean movedAny = false;
