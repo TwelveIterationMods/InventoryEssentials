@@ -16,6 +16,7 @@ public class NetworkHandler {
         }, it -> true);
 
         channel.registerMessage(0, SingleTransferMessage.class, SingleTransferMessage::encode, SingleTransferMessage::decode, SingleTransferMessage::handle);
+        channel.registerMessage(1, BulkTransferAllMessage.class, BulkTransferAllMessage::encode, BulkTransferAllMessage::decode, BulkTransferAllMessage::handle);
     }
 
 }

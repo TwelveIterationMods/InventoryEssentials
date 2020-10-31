@@ -5,16 +5,13 @@ import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.realms.IErrorConsumer;
-import net.minecraftforge.items.SlotItemHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ClientOnlyInventoryControls implements InventoryControls {
 
@@ -94,26 +91,121 @@ public class ClientOnlyInventoryControls implements InventoryControls {
     }
 
     @Override
-    public boolean bulkTransferAll(ContainerScreen<?> screen, Slot targetSlot) {
-        if (!InventoryEssentialsConfig.CLIENT.allowBulkTransferAllOnEmptySlot.get() && !targetSlot.getHasStack()) {
+    public boolean bulkTransferAll(ContainerScreen<?> screen, Slot clickedSlot) {
+        if (!InventoryEssentialsConfig.CLIENT.allowBulkTransferAllOnEmptySlot.get() && !clickedSlot.getHasStack()) {
             return false;
         }
 
         PlayerEntity player = Minecraft.getInstance().player;
         Container container = screen.getContainer();
-        boolean movedAny = false;
-        for (Slot slot : container.inventorySlots) {
-            if (!slot.canTakeStack(Objects.requireNonNull(player))) {
-                continue;
-            }
 
-            if (InventoryUtils.isSameInventory(slot, targetSlot, true)) {
-                slotClick(container, slot, 0, ClickType.QUICK_MOVE);
-                movedAny = true;
+        boolean isProbablyMovingToPlayerInventory = false;
+        // If the clicked slot is *not* from the player inventory,
+        if (!(clickedSlot.inventory instanceof PlayerInventory)) {
+            // Search for any slot that belongs to the player inventory area (not hotbar)
+            for (Slot slot : container.inventorySlots) {
+                if (slot.inventory instanceof PlayerInventory && slot.getSlotIndex() >= 9 && slot.getSlotIndex() < 37) {
+                    // If we found one, this transfer should most likely go to the player inventory
+                    isProbablyMovingToPlayerInventory = true;
+                    break;
+                }
             }
         }
 
+        boolean movedAny = false;
+
+        // If we're probably transferring to the player inventory, use transfer-to-inventory behaviour instead of just shift-clicking the items
+        if (isProbablyMovingToPlayerInventory) {
+            // To avoid O(n²), find empty and non-empty slots beforehand in one loop iteration
+            Deque<Slot> emptySlots = new ArrayDeque<>();
+            List<Slot> nonEmptySlots = new ArrayList<>();
+            for (Slot slot : container.inventorySlots) {
+                if (InventoryUtils.isSameInventory(slot, clickedSlot) || !(slot.inventory instanceof PlayerInventory)) {
+                    continue;
+                }
+
+                if (slot.getHasStack()) {
+                    nonEmptySlots.add(slot);
+                } else if (!PlayerInventory.isHotbar(slot.getSlotIndex())) {
+                    emptySlots.add(slot);
+                }
+            }
+
+            // Now go through each slot that is accessible and belongs to the same inventory as the clicked slot
+            for (Slot slot : container.inventorySlots) {
+                if (!slot.canTakeStack(Objects.requireNonNull(player))) {
+                    continue;
+                }
+
+                if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
+                    // and bulk-transfer each of them using the prefer-inventory behaviour
+                    if (bulkTransferPreferInventory(container, player.inventory, emptySlots, nonEmptySlots, slot)) {
+                        movedAny = true;
+                    }
+                }
+            }
+        } else {
+            // Just a normal inventory-to-inventory transfer, simply shift-click the items
+            for (Slot slot : container.inventorySlots) {
+                if (!slot.canTakeStack(Objects.requireNonNull(player))) {
+                    continue;
+                }
+
+                if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
+                    slotClick(container, slot, 0, ClickType.QUICK_MOVE);
+                    movedAny = true;
+                }
+            }
+
+        }
+
         return movedAny;
+    }
+
+    private boolean bulkTransferPreferInventory(Container container, PlayerInventory playerInventory, Deque<Slot> emptySlots, List<Slot> nonEmptySlots, Slot slot) {
+        ItemStack targetStack = slot.getStack();
+        if (targetStack.isEmpty()) {
+            return false;
+        }
+
+        slotClick(container, slot, 0, ClickType.PICKUP);
+
+        for (Slot nonEmptySlot : nonEmptySlots) {
+            ItemStack stack = slot.getStack();
+            if (ItemStack.areItemsEqualIgnoreDurability(targetStack, stack)) {
+                boolean hasSpaceLeft = stack.getCount() < Math.min(slot.getSlotStackLimit(), slot.getItemStackLimit(stack));
+                if (!hasSpaceLeft) {
+                    continue;
+                }
+
+                slotClick(container, nonEmptySlot, 0, ClickType.PICKUP);
+                ItemStack mouseItem = playerInventory.getItemStack();
+                if (mouseItem.isEmpty()) {
+                    return true;
+                }
+            }
+        }
+
+        for (Iterator<Slot> iterator = emptySlots.iterator(); iterator.hasNext(); ) {
+            Slot emptySlot = iterator.next();
+            slotClick(container, emptySlot, 0, ClickType.PICKUP);
+            if (emptySlot.getHasStack()) {
+                nonEmptySlots.add(emptySlot);
+                iterator.remove();
+            }
+
+            ItemStack mouseItem = playerInventory.getItemStack();
+            if (mouseItem.isEmpty()) {
+                return true;
+            }
+        }
+
+        ItemStack mouseItem = playerInventory.getItemStack();
+        if (!mouseItem.isEmpty()) {
+            slotClick(container, slot, 0, ClickType.PICKUP);
+        }
+
+        return false;
     }
 
     @Override
