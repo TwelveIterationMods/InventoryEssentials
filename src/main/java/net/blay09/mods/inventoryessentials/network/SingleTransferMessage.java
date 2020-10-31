@@ -38,6 +38,10 @@ public class SingleTransferMessage {
             Container container = player.openContainer;
             if (container != null && message.slotNumber >= 0 && message.slotNumber < container.inventorySlots.size()) {
                 Slot slot = container.inventorySlots.get(message.slotNumber);
+                if (!slot.canTakeStack(player)) {
+                    return;
+                }
+
                 ItemStack sourceStack = slot.getStack();
                 if (sourceStack.getCount() == 1) {
                     container.slotClick(message.slotNumber, 0, ClickType.QUICK_MOVE, player);
@@ -49,7 +53,7 @@ public class SingleTransferMessage {
                     if (!slot.getHasStack()) {
                         slot.putStack(copyStack);
                     } else {
-                        if(!player.addItemStackToInventory(copyStack)) {
+                        if (!player.addItemStackToInventory(copyStack)) {
                             player.dropItem(copyStack, false);
                         }
                     }
