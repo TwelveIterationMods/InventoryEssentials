@@ -1,5 +1,6 @@
 package net.blay09.mods.inventoryessentials.client;
 
+import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,7 +37,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         for (Slot slot : container.inventorySlots) {
             ItemStack stack = slot.getStack();
             // Skip the clicked slot, skip slots that do not accept the clicked item, skip slots that are of the same inventory (since we're moving between inventories), and skip slots that are already full
-            if (slot == targetSlot || !slot.isItemValid(targetStack) || isSameInventory(targetSlot, slot)
+            if (slot == targetSlot || !slot.isItemValid(targetStack) || InventoryUtils.isSameInventory(targetSlot, slot)
                     || stack.getCount() >= Math.min(slot.getSlotStackLimit(), slot.getItemStackLimit(stack))) {
                 continue;
             }
@@ -64,16 +65,8 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         return false;
     }
 
-    private boolean isSameInventory(Slot targetSlot, Slot slot) {
-        if (targetSlot instanceof SlotItemHandler && slot instanceof SlotItemHandler) {
-            return ((SlotItemHandler) targetSlot).getItemHandler() == ((SlotItemHandler) slot).getItemHandler();
-        }
-
-        return slot.isSameInventory(targetSlot);
-    }
-
     @Override
-    public boolean bulkTransfer(ContainerScreen<?> screen, Slot targetSlot) {
+    public boolean bulkTransferByType(ContainerScreen<?> screen, Slot targetSlot) {
         ItemStack targetStack = targetSlot.getStack().copy();
         Container container = screen.getContainer();
         List<Slot> transferSlots = new ArrayList<>();
@@ -83,7 +76,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
                 continue;
             }
 
-            if (isSameInventory(slot, targetSlot)) {
+            if (InventoryUtils.isSameInventory(slot, targetSlot)) {
                 ItemStack stack = slot.getStack();
                 if (ItemStack.areItemsEqualIgnoreDurability(targetStack, stack)) {
                     transferSlots.add(slot);
@@ -99,7 +92,26 @@ public class ClientOnlyInventoryControls implements InventoryControls {
     }
 
     @Override
-    public void dragBulkTransfer(ContainerScreen<?> screen, Slot targetSlot) {
+    public boolean bulkTransferAll(ContainerScreen<?> screen, Slot targetSlot) {
+        PlayerEntity player = Minecraft.getInstance().player;
+        Container container = screen.getContainer();
+        boolean movedAny = false;
+        for (Slot slot : container.inventorySlots) {
+            if (!slot.canTakeStack(Objects.requireNonNull(player))) {
+                continue;
+            }
+
+            if (InventoryUtils.isSameInventory(slot, targetSlot, true)) {
+                slotClick(container, slot, 0, ClickType.QUICK_MOVE);
+                movedAny = true;
+            }
+        }
+
+        return movedAny;
+    }
+
+    @Override
+    public void dragTransfer(ContainerScreen<?> screen, Slot targetSlot) {
         slotClick(screen.getContainer(), targetSlot, 0, ClickType.QUICK_MOVE);
     }
 

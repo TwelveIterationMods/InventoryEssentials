@@ -13,6 +13,7 @@ public class InventoryEssentialsConfig {
         public final ForgeConfigSpec.BooleanValue forceClientImplementation;
         public final ForgeConfigSpec.BooleanValue enableSingleTransfer;
         public final ForgeConfigSpec.BooleanValue enableBulkTransfer;
+        public final ForgeConfigSpec.BooleanValue enableBulkTransferAll;
         public final ForgeConfigSpec.BooleanValue enableShiftDrag;
 
         Client(ForgeConfigSpec.Builder builder) {
@@ -32,6 +33,11 @@ public class InventoryEssentialsConfig {
                     .comment("Should shift-ctrl-clicking move all items of the same type at once?")
                     .translation("config.inventoryessentials.enableBulkTransfer")
                     .define("enableBulkTransfer", true);
+
+            enableBulkTransferAll = builder
+                    .comment("Should space-clicking an item move all items from that inventory at once?")
+                    .translation("config.inventoryessentials.enableBulkTransferAll")
+                    .define("enableBulkTransferAll", true);
 
             enableShiftDrag = builder
                     .comment("Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?")

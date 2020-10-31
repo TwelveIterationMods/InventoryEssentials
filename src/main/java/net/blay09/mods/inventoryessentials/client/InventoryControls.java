@@ -5,6 +5,7 @@ import net.minecraft.inventory.container.Slot;
 
 public interface InventoryControls {
     boolean singleTransfer(ContainerScreen<?> screen, Slot targetSlot);
-    boolean bulkTransfer(ContainerScreen<?> screen, Slot targetSlot);
-    void dragBulkTransfer(ContainerScreen<?> screen, Slot targetSlot);
+    boolean bulkTransferByType(ContainerScreen<?> screen, Slot targetSlot);
+    boolean bulkTransferAll(ContainerScreen<?> screen, Slot targetSlot);
+    void dragTransfer(ContainerScreen<?> screen, Slot targetSlot);
 }
