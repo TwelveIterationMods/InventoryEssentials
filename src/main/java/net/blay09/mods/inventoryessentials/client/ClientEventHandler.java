@@ -64,6 +64,22 @@ public class ClientEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void onKeyPress(GuiScreenEvent.KeyboardKeyPressedEvent.Pre event) {
+        InventoryControls controls = getInventoryControls();
+        if (event.getGui() instanceof ContainerScreen<?>) {
+            ContainerScreen<?> screen = (ContainerScreen<?>) event.getGui();
+            Slot hoverSlot = screen.getSlotUnderMouse();
+            InputMappings.Input input = InputMappings.getInputByCode(event.getKeyCode(), event.getScanCode());
+
+            if (Screen.hasShiftDown() && Screen.hasControlDown() && Minecraft.getInstance().gameSettings.keyBindDrop.isActiveAndMatches(input) && InventoryEssentialsConfig.CLIENT.enableBulkDrop.get()) {
+                if (hoverSlot != null && controls.dropByType(screen, hoverSlot)) {
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
     private static boolean hasSpaceDown() {
         return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), GLFW.GLFW_KEY_SPACE);
     }
