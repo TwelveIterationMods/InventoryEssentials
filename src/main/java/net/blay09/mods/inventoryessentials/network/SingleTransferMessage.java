@@ -45,7 +45,7 @@ public class SingleTransferMessage {
                 ItemStack sourceStack = slot.getStack();
                 if (sourceStack.getCount() == 1) {
                     container.slotClick(message.slotNumber, 0, ClickType.QUICK_MOVE, player);
-                } else {
+                } else if (!sourceStack.isEmpty()) {
                     ItemStack copyStack = sourceStack.copy();
                     sourceStack.setCount(1);
                     copyStack.shrink(1);
