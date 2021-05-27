@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -48,6 +49,12 @@ public class ClientEventHandler {
         if (event.getGui() instanceof ContainerScreen<?>) {
             ContainerScreen<?> screen = (ContainerScreen<?>) event.getGui();
             Slot hoverSlot = screen.getSlotUnderMouse();
+
+            // Do not handle clicks on crafting result slots.
+            if (hoverSlot instanceof CraftingResultSlot) {
+                return;
+            }
+
             if (Screen.hasShiftDown() && Screen.hasControlDown() && InventoryEssentialsConfig.CLIENT.enableBulkTransfer.get()) {
                 if (hoverSlot != null && controls.bulkTransferByType(screen, hoverSlot)) {
                     event.setCanceled(true);
