@@ -3,7 +3,8 @@ package net.blay09.mods.inventoryessentials;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
-import net.minecraftforge.items.SlotItemHandler;
+
+import java.util.Optional;
 
 public class InventoryUtils {
 
@@ -21,9 +22,9 @@ public class InventoryUtils {
             return isHotBar == isTargetHotBar;
         }
 
-        // TODO port platform-specific
-        if (targetSlot instanceof SlotItemHandler && slot instanceof SlotItemHandler) {
-            return ((SlotItemHandler) targetSlot).getItemHandler() == ((SlotItemHandler) slot).getItemHandler();
+        Optional<Boolean> result = PlatformBindings.INSTANCE.isSameInventory(targetSlot, slot, treatHotBarAsSeparate);
+        if(result.isPresent()) {
+            return result.get();
         }
 
         return slot.isSameInventory(targetSlot);

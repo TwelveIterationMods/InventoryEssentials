@@ -1,6 +1,7 @@
 package net.blay09.mods.inventoryessentials.client;
 
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.network.BulkTransferAllMessage;
 import net.blay09.mods.inventoryessentials.network.SingleTransferMessage;
 import net.minecraft.client.Minecraft;
@@ -31,6 +32,11 @@ public class ServerSupportedInventoryControls extends ClientOnlyInventoryControl
         if (player == null) {
             return false;
         }
+
+        if (!clickedSlot.hasItem() && !InventoryEssentialsConfig.getActive ().allowBulkTransferAllOnEmptySlot) {
+            return false;
+        }
+
         if (clickedSlot.mayPickup(player)) {
             Balm.getNetworking().sendToServer(new BulkTransferAllMessage(clickedSlot.index));
             return true;

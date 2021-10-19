@@ -97,7 +97,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
     @Override
     public boolean bulkTransferAll(AbstractContainerScreen<?> screen, Slot clickedSlot) {
-        if (!InventoryEssentialsConfig.getActive().allowBulkTransferAllOnEmptySlot && !clickedSlot.hasItem()) {
+        if (!clickedSlot.hasItem() && !InventoryEssentialsConfig.getActive().allowBulkTransferAllOnEmptySlot) {
             return false;
         }
 

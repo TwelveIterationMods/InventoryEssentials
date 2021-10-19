@@ -1,6 +1,7 @@
 package net.blay09.mods.inventoryessentials.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.client.screen.ScreenKeyEvent;
 import net.blay09.mods.balm.api.event.client.screen.ScreenMouseEvent;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
@@ -12,18 +13,24 @@ import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.inventory.Slot;
 import org.lwjgl.glfw.GLFW;
 
-public class ClientEventHandler {
+public class InventoryEssentialsClient {
 
     private static final InventoryControls clientOnlyControls = new ClientOnlyInventoryControls();
     private static final InventoryControls serverSupportedControls = new ServerSupportedInventoryControls();
 
     private static Slot lastDragHoverSlot;
 
+    public static void initialize() {
+        Balm.getEvents().onEvent(ScreenMouseEvent.Drag.Pre.class, InventoryEssentialsClient::onMouseDrag);
+        Balm.getEvents().onEvent(ScreenMouseEvent.Click.Pre.class, InventoryEssentialsClient::onMouseClick);
+        Balm.getEvents().onEvent(ScreenKeyEvent.Press.Pre.class, InventoryEssentialsClient::onKeyPress);
+    }
+
     private static InventoryControls getInventoryControls() {
         return InventoryEssentials.isServerSideInstalled && !InventoryEssentialsConfig.getActive().forceClientImplementation ? serverSupportedControls : clientOnlyControls;
     }
 
-    public static void onMouseDrag(ScreenMouseEvent.Drag event) {
+    public static void onMouseDrag(ScreenMouseEvent.Drag.Pre event) {
         if (Screen.hasShiftDown() && InventoryEssentialsConfig.getActive().enableShiftDrag) {
             InventoryControls controls = getInventoryControls();
             if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
