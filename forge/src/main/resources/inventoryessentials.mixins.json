@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.blay09.mods.inventoryessentials.mixin",
+  "refmap": "refmap.inventoryessentials.json",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
   ],

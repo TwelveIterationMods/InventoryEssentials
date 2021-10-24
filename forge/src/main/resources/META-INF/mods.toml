@@ -2,6 +2,7 @@ modLoader="javafml"
 loaderVersion="[37,)"
 license="All rights reserved"
 issueTrackerURL="https://github.com/ModdingForBlockheads/InventoryEssentials/issues"
+
 [[mods]]
 modId="inventoryessentials"
 version="${file.jarVersion}"
@@ -11,8 +12,9 @@ logoFile="inventoryessentials-icon.png"
 credits="BlayTheNinth"
 authors="BlayTheNinth"
 description='''
-
+Basic inventory tweaks designed to supplement Inventory Sorter.
 '''
+
 [[dependencies.inventoryessentials]]
     modId="forge"
     mandatory=true
@@ -28,6 +30,6 @@ description='''
 [[dependencies.inventoryessentials]]
     modId="balm"
     mandatory=true
-    versionRange="[1.6.0,)"
+    versionRange="[1.7.0,)"
     ordering="NONE"
     side="BOTH"
