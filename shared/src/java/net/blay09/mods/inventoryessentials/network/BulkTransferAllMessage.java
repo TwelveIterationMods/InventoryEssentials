@@ -52,7 +52,7 @@ public class BulkTransferAllMessage {
 
                     if (slot.hasItem()) {
                         nonEmptySlots.add(slot);
-                    } else if (!Inventory.isHotbarSlot(slot.getSlotIndex())) {
+                    } else if (!Inventory.isHotbarSlot(slot.getContainerSlot())) {
                         emptySlots.add(slot);
                     }
                 }

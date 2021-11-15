@@ -14,25 +14,20 @@ public class InventoryUtils {
 
     public static boolean isSameInventory(Slot targetSlot, Slot slot, boolean treatHotBarAsSeparate) {
         boolean isTargetPlayerInventory = targetSlot.container instanceof Inventory;
-        boolean isTargetHotBar = isTargetPlayerInventory && Inventory.isHotbarSlot(targetSlot.getSlotIndex());
+        boolean isTargetHotBar = isTargetPlayerInventory && Inventory.isHotbarSlot(targetSlot.getContainerSlot());
         boolean isPlayerInventory = slot.container instanceof Inventory;
-        boolean isHotBar = isPlayerInventory && Inventory.isHotbarSlot(slot.getSlotIndex());
+        boolean isHotBar = isPlayerInventory && Inventory.isHotbarSlot(slot.getContainerSlot());
 
         if (isTargetPlayerInventory && isPlayerInventory && treatHotBarAsSeparate) {
             return isHotBar == isTargetHotBar;
         }
 
-        Optional<Boolean> result = PlatformBindings.INSTANCE.isSameInventory(targetSlot, slot, treatHotBarAsSeparate);
-        if(result.isPresent()) {
-            return result.get();
-        }
-
-        return slot.isSameInventory(targetSlot);
+        return PlatformBindings.INSTANCE.isSameInventory(targetSlot, slot);
     }
 
     public static boolean containerContainsPlayerInventory(AbstractContainerMenu menu) {
         for (Slot slot : menu.slots) {
-            if (slot.container instanceof Inventory && slot.getSlotIndex() >= 9 && slot.getSlotIndex() < 37) {
+            if (slot.container instanceof Inventory && slot.getContainerSlot() >= 9 && slot.getContainerSlot() < 37) {
                 return true;
             }
         }

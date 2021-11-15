@@ -2,10 +2,13 @@ package net.blay09.mods.inventoryessentials.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.api.client.BalmClient;
 import net.blay09.mods.balm.api.event.client.screen.ScreenKeyEvent;
 import net.blay09.mods.balm.api.event.client.screen.ScreenMouseEvent;
+import net.blay09.mods.balm.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -34,7 +37,7 @@ public class InventoryEssentialsClient {
         if (Screen.hasShiftDown() && InventoryEssentialsConfig.getActive().enableShiftDrag) {
             InventoryControls controls = getInventoryControls();
             if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
-                Slot hoverSlot = screen.getSlotUnderMouse();
+                Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
                 if (hoverSlot != null && hoverSlot.hasItem() && hoverSlot != lastDragHoverSlot) {
                     controls.dragTransfer(screen, hoverSlot);
                     lastDragHoverSlot = hoverSlot;
@@ -48,7 +51,7 @@ public class InventoryEssentialsClient {
     public static void onMouseClick(ScreenMouseEvent.Click.Pre event) {
         InventoryControls controls = getInventoryControls();
         if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
-            Slot hoverSlot = screen.getSlotUnderMouse();
+            Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
 
             // Do not handle clicks on crafting result slots.
             if (hoverSlot instanceof ResultSlot) {
@@ -74,10 +77,10 @@ public class InventoryEssentialsClient {
     public static void onKeyPress(ScreenKeyEvent.Press.Pre event) {
         InventoryControls controls = getInventoryControls();
         if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
-            Slot hoverSlot = screen.getSlotUnderMouse();
-            InputConstants.Key input = InputConstants.getKey(event.getKey(), event.getScanCode());
+            Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
 
-            if (Screen.hasShiftDown() && Screen.hasControlDown() && Minecraft.getInstance().options.keyDrop.isActiveAndMatches(input) && InventoryEssentialsConfig.getActive().enableBulkDrop) {
+            KeyMapping keyDrop = Minecraft.getInstance().options.keyDrop;
+            if (Screen.hasShiftDown() && Screen.hasControlDown() && BalmClient.getKeyMappings().isActiveAndMatches(keyDrop, event.getKey(), event.getScanCode()) && InventoryEssentialsConfig.getActive().enableBulkDrop) {
                 if (hoverSlot != null && controls.dropByType(screen, hoverSlot)) {
                     event.setCanceled(true);
                 }

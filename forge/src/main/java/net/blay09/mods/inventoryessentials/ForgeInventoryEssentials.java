@@ -12,20 +12,18 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fmllegacy.network.FMLNetworkConstants;
 import net.minecraftforge.items.SlotItemHandler;
 
-import java.util.Optional;
-
 @Mod(InventoryEssentials.MOD_ID)
 public class ForgeInventoryEssentials {
 
     public ForgeInventoryEssentials() {
         PlatformBindings.INSTANCE = new PlatformBindings() {
             @Override
-            public Optional<Boolean> isSameInventory(Slot targetSlot, Slot slot, boolean treatHotBarAsSeparate) {
+            public boolean isSameInventory(Slot targetSlot, Slot slot) {
                 if (targetSlot instanceof SlotItemHandler && slot instanceof SlotItemHandler) {
-                    return Optional.of(((SlotItemHandler) targetSlot).getItemHandler() == ((SlotItemHandler) slot).getItemHandler());
+                    return ((SlotItemHandler) targetSlot).getItemHandler() == ((SlotItemHandler) slot).getItemHandler();
                 }
 
-                return Optional.empty();
+                return slot.isSameInventory(targetSlot);
             }
         };
 

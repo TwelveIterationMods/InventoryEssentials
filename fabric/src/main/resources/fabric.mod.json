@@ -1,44 +1,40 @@
 {
   "schemaVersion": 1,
-  "id": "cookingforblockheads",
+  "id": "inventoryessentials",
   "version": "${version}",
 
-  "name": "Cooking for Blockheads",
-  "description": "Adds a cooking book and multiblock kitchens that only shows recipes you can make with what you currently have in your inventory.",
+  "name": "Inventory Essentials",
+  "description": "Basic inventory tweaks designed to supplement Inventory Sorter.",
   "authors": [
-    "BlayTheNinth",
-    "ZerotS"
+    "BlayTheNinth"
   ],
   "contact": {
-    "homepage": "https://blay09.net/mods/cookingforblockheads",
-    "sources": "https://github.com/ModdingForBlockheads/CookingForBlockheads",
-    "issues": "https://github.com/ModdingForBlockheads/CookingForBlockheads/issues"
+    "homepage": "https://blay09.net/mods/inventoryessentials",
+    "sources": "https://github.com/ModdingForBlockheads/InventoryEssentials",
+    "issues": "https://github.com/ModdingForBlockheads/InventoryEssentials/issues"
   },
 
   "license": "All Rights Reserved",
-  "icon": "cookingforblockheads-icon.png",
+  "icon": "inventoryessentials-icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.blay09.mods.craftingtweaks.FabricCookingForBlockheads"
+      "net.blay09.mods.inventoryessentials.FabricInventoryEssentials"
     ],
     "client": [
-      "net.blay09.mods.craftingtweaks.client.FabricCookingForBlockheadsClient"
+      "net.blay09.mods.inventoryessentials.client.FabricInventoryEssentialsClient"
     ],
     "modmenu": [
-      "net.blay09.mods.craftingtweaks.compat.ModMenuIntegration"
-    ],
-    "rei_plugins": [
-      "net.blay09.mods.craftingtweaks.compat.RoughlyEnoughItemsIntegration"
+      "net.blay09.mods.inventoryessentials.compat.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "cookingforblockheads.mixins.json"
+    "inventoryessentials.mixins.json"
   ],
   "depends": {
     "cloth-config2": ">=5.0.34",
-    "balm-fabric": ">=1.1.0",
+    "balm-fabric": ">=1.8.0",
     "fabricloader": ">=0.11.3",
     "fabric": "*",
     "minecraft": "1.17.x",
