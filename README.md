@@ -13,8 +13,8 @@ This mod is available for both Forge and Fabric (starting Minecraft 1.17).
 
 #### Fabric
 
-[![Versions](http://cf.way2muchnoise.eu/versions/_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/inventory-essentials-fabric)
-[![Downloads](http://cf.way2muchnoise.eu/full__downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/inventory-essentials-fabric)
+[![Versions](http://cf.way2muchnoise.eu/versions/547699_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/inventory-essentials-fabric)
+[![Downloads](http://cf.way2muchnoise.eu/full_547699_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/inventory-essentials-fabric)
 
 ## Contributing
 
