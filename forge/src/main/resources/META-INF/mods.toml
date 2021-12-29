@@ -30,6 +30,6 @@ Basic inventory tweaks. Lightweight and compatible.
 [[dependencies.inventoryessentials]]
     modId="balm"
     mandatory=true
-    versionRange="[2.1.0,)"
+    versionRange="[2.4.0,)"
     ordering="NONE"
     side="BOTH"

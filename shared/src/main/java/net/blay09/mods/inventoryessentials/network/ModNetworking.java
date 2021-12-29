@@ -7,6 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 public class ModNetworking {
 
     public static void initialize(BalmNetworking networking) {
+        networking.allowClientAndServerOnly(InventoryEssentials.MOD_ID);
+
         networking.registerClientboundPacket(id("hello"), HelloMessage.class, HelloMessage::encode, HelloMessage::decode, HelloMessage::handle);
 
         networking.registerServerboundPacket(id("single_transfer"), SingleTransferMessage.class, SingleTransferMessage::encode, SingleTransferMessage::decode, SingleTransferMessage::handle);
