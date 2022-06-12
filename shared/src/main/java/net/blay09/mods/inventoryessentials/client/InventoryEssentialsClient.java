@@ -38,6 +38,12 @@ public class InventoryEssentialsClient {
             InventoryControls controls = getInventoryControls();
             if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
                 Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
+
+                // Do not handle drags on crafting result slots.
+                if (hoverSlot instanceof ResultSlot) {
+                    return;
+                }
+
                 if (hoverSlot != null && hoverSlot.hasItem() && hoverSlot != lastDragHoverSlot) {
                     controls.dragTransfer(screen, hoverSlot);
                     lastDragHoverSlot = hoverSlot;
