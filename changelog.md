@@ -1,3 +1,8 @@
+### Version 4.0.2 for Minecraft 1.18.2
+
+- Fixed accidental additional crafting when shift-clicking from the crafting result slot
+- Fixed potential crash on mods with weird custom slots 
+
 ### Version 4.0.1 for Minecraft 1.18.x
 
 - Fixed being unable to join a server without the mod installed (or vice-versa)
