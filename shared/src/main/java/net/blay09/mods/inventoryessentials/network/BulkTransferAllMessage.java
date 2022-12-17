@@ -94,7 +94,7 @@ public class BulkTransferAllMessage {
 
         for (Slot nonEmptySlot : nonEmptySlots) {
             ItemStack stack = slot.getItem();
-            if (ItemStack.isSameIgnoreDurability(targetStack, stack)) {
+            if (ItemStack.isSame(targetStack, stack)) {
                 boolean hasSpaceLeft = stack.getCount() < Math.min(slot.getMaxStackSize(), slot.getMaxStackSize(stack));
                 if (!hasSpaceLeft) {
                     continue;
