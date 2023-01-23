@@ -36,15 +36,19 @@ public class SingleTransferMessage {
             if (sourceStack.getCount() == 1) {
                 menu.clicked(message.slotNumber, 0, ClickType.QUICK_MOVE, player);
             } else if (!sourceStack.isEmpty()) {
-                ItemStack copyStack = sourceStack.copy();
+                ItemStack restStack = sourceStack.copy();
                 sourceStack.setCount(1);
-                copyStack.shrink(1);
+
+                // We specifically set the slot stack as some mods return transient copies in getItem that will not be reflected back to the inventory
+                slot.set(sourceStack);
+
+                restStack.shrink(1);
                 menu.clicked(message.slotNumber, 0, ClickType.QUICK_MOVE, player);
                 if (!slot.hasItem()) {
-                    slot.set(copyStack);
+                    slot.set(restStack);
                 } else {
-                    if (!player.addItem(copyStack)) {
-                        player.drop(copyStack, false);
+                    if (!player.addItem(restStack)) {
+                        player.drop(restStack, false);
                     }
                 }
             }
