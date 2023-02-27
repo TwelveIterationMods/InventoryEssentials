@@ -1,1 +1,1 @@
-- Fixed item duplication with Quark Oddities backpack, Modern Industrialization and possibly other mods
+- Fixed weird behaviour when shift-clicking in the creative mode screen while dragging the mouse
