@@ -30,6 +30,7 @@
     ]
   },
   "mixins": [
+    "inventoryessentials.mixins.json"
   ],
   "depends": {
     "cloth-config": ">=9.0.0",
