@@ -1,1 +1,1 @@
-- Fixed weird behaviour when shift-clicking in the creative mode screen while dragging the mouse
+- Updated to Minecraft 1.19.4
