@@ -30,6 +30,7 @@
     ]
   },
   "mixins": [
+    "inventoryessentials.mixins.json"
   ],
   "depends": {
     "cloth-config": ">=9.0.0",
@@ -45,7 +46,7 @@
   "custom": {
     "modmenu": {
       "links": {
-        "modmenu.discord": "https://discord.gg/scGAfXC"
+        "modmenu.discord": "https://discord.gg/VAfZ2Nau6j"
       }
     }
   }

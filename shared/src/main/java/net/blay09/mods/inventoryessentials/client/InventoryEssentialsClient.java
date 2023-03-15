@@ -8,6 +8,7 @@ import net.blay09.mods.balm.api.event.client.screen.ScreenMouseEvent;
 import net.blay09.mods.balm.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
+import net.blay09.mods.inventoryessentials.mixin.CreativeModeInventoryScreenAccessor;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -38,13 +39,22 @@ public class InventoryEssentialsClient {
             InventoryControls controls = getInventoryControls();
             if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
                 Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
+                if (hoverSlot == null) {
+                    return;
+                }
 
-                // Do not handle drags on crafting result slots.
+                // Do not handle drags on crafting result slots
                 if (hoverSlot instanceof ResultSlot) {
                     return;
                 }
 
-                if (hoverSlot != null && hoverSlot.hasItem() && hoverSlot != lastDragHoverSlot) {
+                if (event.getScreen() instanceof CreativeModeInventoryScreenAccessor accessor) {
+                    if (hoverSlot.container == accessor.getCONTAINER()) {
+                        return;
+                    }
+                }
+
+                if (hoverSlot.hasItem() && hoverSlot != lastDragHoverSlot) {
                     controls.dragTransfer(screen, hoverSlot);
                     lastDragHoverSlot = hoverSlot;
                 }
@@ -86,7 +96,8 @@ public class InventoryEssentialsClient {
             Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
 
             KeyMapping keyDrop = Minecraft.getInstance().options.keyDrop;
-            if (Screen.hasShiftDown() && Screen.hasControlDown() && BalmClient.getKeyMappings().isActiveAndMatches(keyDrop, event.getKey(), event.getScanCode()) && InventoryEssentialsConfig.getActive().enableBulkDrop) {
+            if (Screen.hasShiftDown() && Screen.hasControlDown() && BalmClient.getKeyMappings()
+                    .isActiveAndMatches(keyDrop, event.getKey(), event.getScanCode()) && InventoryEssentialsConfig.getActive().enableBulkDrop) {
                 if (hoverSlot != null && controls.dropByType(screen, hoverSlot)) {
                     event.setCanceled(true);
                 }
