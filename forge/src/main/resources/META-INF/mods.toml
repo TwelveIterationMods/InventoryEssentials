@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/TwelveIterationMods/InventoryEssentials/issu
 
 [[mods]]
 modId="inventoryessentials"
-version="${file.jarVersion}"
+version="${mod_version}"
 displayName="Inventory Essentials"
 displayURL="https://mods.twelveiterations.com/mc/inventoryessentials"
 logoFile="inventoryessentials-icon.png"

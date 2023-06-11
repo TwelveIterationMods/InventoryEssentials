@@ -1,10 +1,10 @@
 package net.blay09.mods.inventoryessentials;
 
-import me.shedaniel.autoconfig.annotation.Config;
 import net.blay09.mods.balm.api.config.BalmConfigData;
 import net.blay09.mods.balm.api.config.Comment;
+import net.blay09.mods.balm.api.config.Config;
 
-@Config(name = InventoryEssentials.MOD_ID)
+@Config(InventoryEssentials.MOD_ID)
 public class InventoryEssentialsConfigData implements BalmConfigData {
 
     @Comment("Use the client implementation even on servers that have the mod installed - only useful for development purposes.")
