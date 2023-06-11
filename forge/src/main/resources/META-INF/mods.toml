@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[44,)"
+loaderVersion="${forge_loader_version_range}"
 license="All rights reserved"
 issueTrackerURL="https://github.com/TwelveIterationMods/InventoryEssentials/issues"
 
@@ -7,7 +7,7 @@ issueTrackerURL="https://github.com/TwelveIterationMods/InventoryEssentials/issu
 modId="inventoryessentials"
 version="${file.jarVersion}"
 displayName="Inventory Essentials"
-displayURL="https://blay09.net/mods/inventoryessentials"
+displayURL="https://mods.twelveiterations.com/mc/inventoryessentials"
 logoFile="inventoryessentials-icon.png"
 credits="BlayTheNinth"
 authors="BlayTheNinth"
@@ -18,18 +18,18 @@ Basic inventory tweaks. Lightweight and compatible.
 [[dependencies.inventoryessentials]]
     modId="forge"
     mandatory=true
-    versionRange="[44,)"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
 [[dependencies.inventoryessentials]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.3,1.20)"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 [[dependencies.inventoryessentials]]
     modId="balm"
     mandatory=true
-    versionRange="[5.0.0,)"
+    versionRange="${balm_version_range}"
     ordering="NONE"
     side="BOTH"
