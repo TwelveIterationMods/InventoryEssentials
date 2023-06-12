@@ -1,11 +1,17 @@
 {
-  "text.autoconfig.inventoryessentials.title": "Inventory Essentials",
-  "text.autoconfig.inventoryessentials.option.forceClientImplementation": "Force Client Implementation (dev only)",
-  "text.autoconfig.inventoryessentials.option.forceClientImplementation.tooltip": "teststst",
-  "text.autoconfig.inventoryessentials.option.enableSingleTransfer": "Enable Single Transfer",
-  "text.autoconfig.inventoryessentials.option.enableBulkTransfer": "Enable Bulk Transfer",
-  "text.autoconfig.inventoryessentials.option.enableBulkTransferAll": "Enable Transfer All",
-  "text.autoconfig.inventoryessentials.option.enableBulkDrop": "Enable Bulk Drop",
-  "text.autoconfig.inventoryessentials.option.allowBulkTransferAllOnEmptySlot": "Allow Transfer All on Empty Slot",
-  "text.autoconfig.inventoryessentials.option.enableShiftDrag": "Enable Shift Drag"
+  "config.inventoryessentials.title": "Inventory Essentials",
+  "config.inventoryessentials.forceClientImplementation": "Force Client Implementation (dev only)",
+  "config.inventoryessentials.forceClientImplementation.tooltip": "Use the client implementation even on servers that have the mod installed - only useful for development purposes.",
+  "config.inventoryessentials.enableSingleTransfer": "Enable Single Transfer",
+  "config.inventoryessentials.enableSingleTransfer.tooltip": "Should ctrl-clicking only move one item at a time instead of the full stack?",
+  "config.inventoryessentials.enableBulkTransfer": "Enable Bulk Transfer",
+  "config.inventoryessentials.enableBulkTransfer.tooltip": "Should shift-ctrl-clicking move all items of the same type at once?",
+  "config.inventoryessentials.enableBulkTransferAll": "Enable Transfer All",
+  "config.inventoryessentials.enableBulkTransferAll.tooltip": "Should space-clicking an item move all items from that inventory at once?",
+  "config.inventoryessentials.enableBulkDrop": "Enable Bulk Drop",
+  "config.inventoryessentials.enableBulkDrop.tooltip": "Should shift-ctrl-drop-clicking drop all items of the same type at once?",
+  "config.inventoryessentials.allowBulkTransferAllOnEmptySlot": "Allow Transfer All on Empty Slot",
+  "config.inventoryessentials.allowBulkTransferAllOnEmptySlot.tooltip": "Should space-clicking move all items even if an empty slot was clicked?",
+  "config.inventoryessentials.enableShiftDrag": "Enable Shift Drag",
+  "config.inventoryessentials.enableShiftDrag.tooltip": "Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?"
 }
