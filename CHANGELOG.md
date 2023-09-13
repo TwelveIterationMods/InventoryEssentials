@@ -1,1 +1,3 @@
-- Updated to Minecraft 1.20
+- Added enableScreenBulkDrop option (default: on), which allows holding shift while dropping an item out of the screen to drop all items of that type
+- Changed the special controls to only trigger on left-clicks, resolving possible compatibility conflicts with mods adding special handling to right-clicks
+- Fixed bulk transferring all items to the inventory resulting in items being reordered
