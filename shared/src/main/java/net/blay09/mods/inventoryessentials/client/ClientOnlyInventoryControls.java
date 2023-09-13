@@ -264,7 +264,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         List<Slot> transferSlots = new ArrayList<>();
         for (Slot slot : menu.slots) {
             ItemStack stack = slot.getItem();
-            if (ItemStack.isSameItem(targetStack, stack)) {
+            if (ItemStack.isSameIgnoreDurability(targetStack, stack)) {
                 transferSlots.add(slot);
             }
         }
