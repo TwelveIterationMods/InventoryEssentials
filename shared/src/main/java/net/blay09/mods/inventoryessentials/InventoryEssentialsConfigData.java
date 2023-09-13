@@ -22,6 +22,9 @@ public class InventoryEssentialsConfigData implements BalmConfigData {
     @Comment("Should shift-ctrl-drop-clicking drop all items of the same type at once?")
     public boolean enableBulkDrop = true;
 
+    @Comment("Should shift-clicking outside of the screen drop all items of the same type at once?")
+    public boolean enableScreenBulkDrop = true;
+
     @Comment("Should space-clicking move all items even if an empty slot was clicked?")
     public boolean allowBulkTransferAllOnEmptySlot = false;
 
