@@ -85,7 +85,7 @@ public class BulkTransferAllMessage {
 
     private static boolean bulkTransferPreferInventory(Player player, AbstractContainerMenu menu, Deque<Slot> emptySlots, List<Slot> nonEmptySlots, Slot slot) {
         Inventory playerInventory = player.getInventory();
-        ItemStack targetStack = slot.getItem();
+        ItemStack targetStack = slot.getItem().copy();
         if (targetStack.isEmpty()) {
             return false;
         }
