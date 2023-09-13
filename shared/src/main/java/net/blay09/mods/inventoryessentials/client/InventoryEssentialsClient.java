@@ -65,44 +65,52 @@ public class InventoryEssentialsClient {
     }
 
     public static void onMouseClick(ScreenMouseEvent.Click.Pre event) {
-        InventoryControls controls = getInventoryControls();
-        if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
-            Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
-
-            // Do not handle clicks on crafting result slots.
-            if (hoverSlot instanceof ResultSlot) {
-                return;
-            }
-
-            if (Screen.hasShiftDown() && Screen.hasControlDown() && InventoryEssentialsConfig.getActive().enableBulkTransfer) {
-                if (hoverSlot != null && controls.bulkTransferByType(screen, hoverSlot)) {
-                    event.setCanceled(true);
-                }
-            } else if (Screen.hasControlDown() && InventoryEssentialsConfig.getActive().enableSingleTransfer) {
-                if (hoverSlot != null && controls.singleTransfer(screen, hoverSlot)) {
-                    event.setCanceled(true);
-                }
-            } else if (hasSpaceDown() && InventoryEssentialsConfig.getActive().enableBulkTransferAll) {
-                if (hoverSlot != null && controls.bulkTransferAll(screen, hoverSlot)) {
-                    event.setCanceled(true);
-                }
-            }
+        if (onInput(event.getScreen(), InputConstants.Type.MOUSE.getOrCreate(event.getButton()))) {
+            event.setCanceled(true);
         }
     }
 
     public static void onKeyPress(ScreenKeyEvent.Press.Pre event) {
+        if (onInput(event.getScreen(), InputConstants.getKey(event.getKey(), event.getScanCode()))) {
+            event.setCanceled(true);
+        }
+    }
+
+    public static boolean onInput(Screen screen, InputConstants.Key key) {
         InventoryControls controls = getInventoryControls();
-        if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
-            Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
+        if (screen instanceof AbstractContainerScreen<?> containerScreen) {
+            Slot hoverSlot = ((AbstractContainerScreenAccessor) containerScreen).getHoveredSlot();
+
+            // Do not handle clicks on crafting result slots.
+            if (hoverSlot instanceof ResultSlot) {
+                return false;
+            }
+
+            if (key.getType() == InputConstants.Type.MOUSE && key.getValue() == InputConstants.MOUSE_BUTTON_LEFT) {
+                if (Screen.hasShiftDown() && Screen.hasControlDown() && InventoryEssentialsConfig.getActive().enableBulkTransfer) {
+                    if (hoverSlot != null && controls.bulkTransferByType(containerScreen, hoverSlot)) {
+                        return true;
+                    }
+                } else if (Screen.hasControlDown() && InventoryEssentialsConfig.getActive().enableSingleTransfer) {
+                    if (hoverSlot != null && controls.singleTransfer(containerScreen, hoverSlot)) {
+                        return true;
+                    }
+                } else if (hasSpaceDown() && InventoryEssentialsConfig.getActive().enableBulkTransferAll) {
+                    if (hoverSlot != null && controls.bulkTransferAll(containerScreen, hoverSlot)) {
+                        return true;
+                    }
+                }
+            }
 
             KeyMapping keyDrop = Minecraft.getInstance().options.keyDrop;
             if (Screen.hasShiftDown() && Screen.hasControlDown() && BalmClient.getKeyMappings()
-                    .isActiveAndMatches(keyDrop, event.getKey(), event.getScanCode()) && InventoryEssentialsConfig.getActive().enableBulkDrop) {
-                if (hoverSlot != null && controls.dropByType(screen, hoverSlot)) {
-                    event.setCanceled(true);
+                    .isActiveAndMatches(keyDrop, key) && InventoryEssentialsConfig.getActive().enableBulkDrop) {
+                if (hoverSlot != null && controls.dropByType(containerScreen, hoverSlot)) {
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     private static boolean hasSpaceDown() {
