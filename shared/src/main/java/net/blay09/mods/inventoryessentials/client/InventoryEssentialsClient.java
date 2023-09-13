@@ -5,9 +5,9 @@ import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.client.BalmClient;
 import net.blay09.mods.balm.api.event.client.screen.ScreenKeyEvent;
 import net.blay09.mods.balm.api.event.client.screen.ScreenMouseEvent;
-import net.blay09.mods.balm.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
+import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.inventoryessentials.mixin.CreativeModeInventoryScreenAccessor;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -65,21 +65,22 @@ public class InventoryEssentialsClient {
     }
 
     public static void onMouseClick(ScreenMouseEvent.Click.Pre event) {
-        if (onInput(event.getScreen(), InputConstants.Type.MOUSE.getOrCreate(event.getButton()))) {
+        if (onInput(event.getScreen(), InputConstants.Type.MOUSE.getOrCreate(event.getButton()), event.getMouseX(), event.getMouseY())) {
             event.setCanceled(true);
         }
     }
 
     public static void onKeyPress(ScreenKeyEvent.Press.Pre event) {
-        if (onInput(event.getScreen(), InputConstants.getKey(event.getKey(), event.getScanCode()))) {
+        if (onInput(event.getScreen(), InputConstants.getKey(event.getKey(), event.getScanCode()), 0, 0)) {
             event.setCanceled(true);
         }
     }
 
-    public static boolean onInput(Screen screen, InputConstants.Key key) {
+    public static boolean onInput(Screen screen, InputConstants.Key key, double mouseX, double mouseY) {
         InventoryControls controls = getInventoryControls();
         if (screen instanceof AbstractContainerScreen<?> containerScreen) {
-            Slot hoverSlot = ((AbstractContainerScreenAccessor) containerScreen).getHoveredSlot();
+            AbstractContainerScreenAccessor accessor = (AbstractContainerScreenAccessor) containerScreen;
+            Slot hoverSlot = accessor.getHoveredSlot();
 
             // Do not handle clicks on crafting result slots.
             if (hoverSlot instanceof ResultSlot) {
@@ -97,6 +98,12 @@ public class InventoryEssentialsClient {
                     }
                 } else if (hasSpaceDown() && InventoryEssentialsConfig.getActive().enableBulkTransferAll) {
                     if (hoverSlot != null && controls.bulkTransferAll(containerScreen, hoverSlot)) {
+                        return true;
+                    }
+                } else if (Screen.hasShiftDown() && InventoryEssentialsConfig.getActive().enableScreenBulkDrop) {
+                    if (accessor.callHasClickedOutside(mouseX, mouseY, accessor.getLeftPos(), accessor.getTopPos(), key.getValue()) && controls.dropByType(
+                            containerScreen,
+                            containerScreen.getMenu().getCarried())) {
                         return true;
                     }
                 }

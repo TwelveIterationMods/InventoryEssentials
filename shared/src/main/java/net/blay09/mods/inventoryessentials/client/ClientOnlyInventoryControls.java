@@ -217,10 +217,14 @@ public class ClientOnlyInventoryControls implements InventoryControls {
     }
 
     private void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType) {
+        slotClick(menu, slot.index, mouseButton, clickType);
+    }
+
+    private void slotClick(AbstractContainerMenu menu, int slotIndex, int mouseButton, ClickType clickType) {
         Player player = Minecraft.getInstance().player;
         MultiPlayerGameMode gameMode = Minecraft.getInstance().gameMode;
-        if (player != null && gameMode != null && slot.index >= 0 && slot.index < menu.slots.size()) {
-            gameMode.handleInventoryMouseClick(menu.containerId, slot.index, mouseButton, clickType, player);
+        if (player != null && gameMode != null && (slotIndex >= 0 && slotIndex < menu.slots.size() || slotIndex == -999)) {
+            gameMode.handleInventoryMouseClick(menu.containerId, slotIndex, mouseButton, clickType, player);
         }
     }
 
@@ -243,6 +247,29 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
         }
 
+        for (Slot transferSlot : transferSlots) {
+            slotClick(menu, transferSlot, 1, ClickType.THROW);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean dropByType(AbstractContainerScreen<?> screen, ItemStack targetStack) {
+        if (targetStack.isEmpty()) {
+            return false;
+        }
+
+        AbstractContainerMenu menu = screen.getMenu();
+        List<Slot> transferSlots = new ArrayList<>();
+        for (Slot slot : menu.slots) {
+            ItemStack stack = slot.getItem();
+            if (ItemStack.isSameItem(targetStack, stack)) {
+                transferSlots.add(slot);
+            }
+        }
+
+        slotClick(menu, -999, 0, ClickType.PICKUP);
         for (Slot transferSlot : transferSlots) {
             slotClick(menu, transferSlot, 1, ClickType.THROW);
         }
