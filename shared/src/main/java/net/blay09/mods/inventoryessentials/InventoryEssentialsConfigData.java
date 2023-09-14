@@ -10,26 +10,11 @@ public class InventoryEssentialsConfigData implements BalmConfigData {
     @Comment("Use the client implementation even on servers that have the mod installed - only useful for development purposes.")
     public boolean forceClientImplementation;
 
-    @Comment("Should ctrl-clicking only move one item at a time instead of the full stack?")
-    public boolean enableSingleTransfer = true;
-
-    @Comment("Should shift-ctrl-clicking move all items of the same type at once?")
-    public boolean enableBulkTransfer = true;
-
-    @Comment("Should space-clicking an item move all items from that inventory at once?")
-    public boolean enableBulkTransferAll = true;
-
-    @Comment("Should shift-ctrl-drop-clicking drop all items of the same type at once?")
-    public boolean enableBulkDrop = true;
-
-    @Comment("Should shift-clicking outside of the screen drop all items of the same type at once?")
-    public boolean enableScreenBulkDrop = true;
-
     @Comment("Should space-clicking move all items even if an empty slot was clicked?")
     public boolean allowBulkTransferAllOnEmptySlot = false;
 
-    @Comment("Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?")
-    public boolean enableShiftDrag = true;
+    @Comment("You can now go into your Controls and unbind the respective Inventory Essentials keys instead!")
+    public boolean whereDidTheConfigsGo = true;
 
 }
 

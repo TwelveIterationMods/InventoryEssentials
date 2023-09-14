@@ -9,13 +9,10 @@ import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.inventoryessentials.mixin.CreativeModeInventoryScreenAccessor;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.inventory.Slot;
-import org.lwjgl.glfw.GLFW;
 
 public class InventoryEssentialsClient {
 
@@ -25,6 +22,8 @@ public class InventoryEssentialsClient {
     private static Slot lastDragHoverSlot;
 
     public static void initialize() {
+        ModKeyMappings.initialize(BalmClient.getKeyMappings());
+
         Balm.getEvents().onEvent(ScreenMouseEvent.Drag.Pre.class, InventoryEssentialsClient::onMouseDrag);
         Balm.getEvents().onEvent(ScreenMouseEvent.Click.Pre.class, InventoryEssentialsClient::onMouseClick);
         Balm.getEvents().onEvent(ScreenKeyEvent.Press.Pre.class, InventoryEssentialsClient::onKeyPress);
@@ -35,7 +34,7 @@ public class InventoryEssentialsClient {
     }
 
     public static void onMouseDrag(ScreenMouseEvent.Drag.Pre event) {
-        if (Screen.hasShiftDown() && InventoryEssentialsConfig.getActive().enableShiftDrag) {
+        if (BalmClient.getKeyMappings().isActiveAndKeyDown(ModKeyMappings.keyDragTransfer)) {
             InventoryControls controls = getInventoryControls();
             if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
                 Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
@@ -87,41 +86,31 @@ public class InventoryEssentialsClient {
                 return false;
             }
 
-            if (key.getType() == InputConstants.Type.MOUSE && key.getValue() == InputConstants.MOUSE_BUTTON_LEFT) {
-                if (Screen.hasShiftDown() && Screen.hasControlDown() && InventoryEssentialsConfig.getActive().enableBulkTransfer) {
-                    if (hoverSlot != null && controls.bulkTransferByType(containerScreen, hoverSlot)) {
-                        return true;
-                    }
-                } else if (Screen.hasControlDown() && InventoryEssentialsConfig.getActive().enableSingleTransfer) {
-                    if (hoverSlot != null && controls.singleTransfer(containerScreen, hoverSlot)) {
-                        return true;
-                    }
-                } else if (hasSpaceDown() && InventoryEssentialsConfig.getActive().enableBulkTransferAll) {
-                    if (hoverSlot != null && controls.bulkTransferAll(containerScreen, hoverSlot)) {
-                        return true;
-                    }
-                } else if (Screen.hasShiftDown() && InventoryEssentialsConfig.getActive().enableScreenBulkDrop) {
-                    if (accessor.callHasClickedOutside(mouseX, mouseY, accessor.getLeftPos(), accessor.getTopPos(), key.getValue()) && controls.dropByType(
-                            containerScreen,
-                            containerScreen.getMenu().getCarried())) {
-                        return true;
-                    }
+            if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keyBulkTransfer, key)) {
+                if (hoverSlot != null && controls.bulkTransferByType(containerScreen, hoverSlot)) {
+                    return true;
                 }
-            }
-
-            KeyMapping keyDrop = Minecraft.getInstance().options.keyDrop;
-            if (Screen.hasShiftDown() && Screen.hasControlDown() && BalmClient.getKeyMappings()
-                    .isActiveAndMatches(keyDrop, key) && InventoryEssentialsConfig.getActive().enableBulkDrop) {
+            } else if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keySingleTransfer, key)) {
+                if (hoverSlot != null && controls.singleTransfer(containerScreen, hoverSlot)) {
+                    return true;
+                }
+            } else if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keyBulkTransferAll, key)) {
+                if (hoverSlot != null && controls.bulkTransferAll(containerScreen, hoverSlot)) {
+                    return true;
+                }
+            } else if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keyScreenBulkDrop, key)) {
+                if (accessor.callHasClickedOutside(mouseX, mouseY, accessor.getLeftPos(), accessor.getTopPos(), key.getValue()) && controls.dropByType(
+                        containerScreen,
+                        containerScreen.getMenu().getCarried())) {
+                    return true;
+                }
+            } else if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keyBulkDrop, key)) {
                 if (hoverSlot != null && controls.dropByType(containerScreen, hoverSlot)) {
                     return true;
                 }
             }
         }
         return false;
-    }
-
-    private static boolean hasSpaceDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_SPACE);
     }
 
 }
