@@ -57,5 +57,12 @@ public class ModKeyMappings {
                 KeyModifier.NONE,
                 InputConstants.KEY_LSHIFT,
                 category);
+
+        keyMappings.ignoreConflicts(keySingleTransfer);
+        keyMappings.ignoreConflicts(keyBulkTransfer);
+        keyMappings.ignoreConflicts(keyBulkTransferAll);
+        keyMappings.ignoreConflicts(keyBulkDrop);
+        keyMappings.ignoreConflicts(keyScreenBulkDrop);
+        keyMappings.ignoreConflicts(keyDragTransfer);
     }
 }
