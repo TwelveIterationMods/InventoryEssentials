@@ -10,7 +10,8 @@
   "key.inventoryessentials.bulk_drop": "Bulk Drop",
   "key.inventoryessentials.bulk_drop_modifier": "Bulk Drop (Hold)",
   "key.inventoryessentials.bulk_drop_modifier_1": "Bulk Drop (Hold)",
-  "key.inventoryessentials.screen_bulk_drop": "Bulk Drop out of Screen (Hold)",
+  "key.inventoryessentials.screen_bulk_drop": "Bulk Drop out of Screen",
+  "key.inventoryessentials.screen_bulk_drop_modifier": "Bulk Drop out of Screen (Hold)",
   "key.inventoryessentials.drag_transfer": "Transfer on Hover (Hold)",
 
   "config.inventoryessentials.title": "Inventory Essentials",
