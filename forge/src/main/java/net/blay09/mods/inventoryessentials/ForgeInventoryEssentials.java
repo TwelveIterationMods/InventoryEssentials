@@ -10,7 +10,6 @@ import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.network.NetworkConstants;
 
 @Mod(InventoryEssentials.MOD_ID)
 public class ForgeInventoryEssentials {
@@ -30,7 +29,7 @@ public class ForgeInventoryEssentials {
         Balm.initialize(InventoryEssentials.MOD_ID, InventoryEssentials::initialize);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> BalmClient.initialize(InventoryEssentials.MOD_ID, InventoryEssentialsClient::initialize));
 
-        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> IExtensionPoint.DisplayTest.IGNORESERVERONLY, (a, b) -> true));
     }
 
 }
