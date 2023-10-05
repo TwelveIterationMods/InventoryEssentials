@@ -48,7 +48,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
 
             // Prefer inputting into an existing stack if the items match
-            if (ItemStack.isSameItem(targetStack, stack)) {
+            if (ItemStack.isSameItemSameTags(targetStack, stack)) {
                 slotClick(menu, clickedSlot, 1, ClickType.PICKUP);
                 slotClick(menu, slot, 1, ClickType.PICKUP);
                 slotClick(menu, clickedSlot, 0, ClickType.PICKUP);
@@ -83,7 +83,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
             if (InventoryUtils.isSameInventory(slot, clickedSlot)) {
                 ItemStack stack = slot.getItem();
-                if (ItemStack.isSameItem(targetStack, stack)) {
+                if (ItemStack.isSameItemSameTags(targetStack, stack)) {
                     transferSlots.add(slot);
                 }
             }
@@ -178,7 +178,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
         for (Slot nonEmptySlot : nonEmptySlots) {
             ItemStack stack = nonEmptySlot.getItem();
-            if (ItemStack.isSameItem(targetStack, stack)) {
+            if (ItemStack.isSameItemSameTags(targetStack, stack)) {
                 boolean hasSpaceLeft = stack.getCount() < Math.min(slot.getMaxStackSize(), slot.getMaxStackSize(stack));
                 if (!hasSpaceLeft) {
                     continue;
@@ -244,7 +244,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
             if (InventoryUtils.isSameInventory(slot, hoverSlot)) {
                 ItemStack stack = slot.getItem();
-                if (ItemStack.isSameItem(targetStack, stack)) {
+                if (ItemStack.isSameItemSameTags(targetStack, stack)) {
                     transferSlots.add(slot);
                 }
             }
@@ -267,7 +267,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         List<Slot> transferSlots = new ArrayList<>();
         for (Slot slot : menu.slots) {
             ItemStack stack = slot.getItem();
-            if (ItemStack.isSameItem(targetStack, stack)) {
+            if (ItemStack.isSameItemSameTags(targetStack, stack)) {
                 transferSlots.add(slot);
             }
         }
