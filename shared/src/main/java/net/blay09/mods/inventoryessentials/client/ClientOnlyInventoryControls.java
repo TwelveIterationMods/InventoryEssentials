@@ -41,7 +41,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         for (Slot slot : menu.slots) {
             ItemStack stack = slot.getItem();
             // Skip the clicked slot, skip slots that do not accept the clicked item, skip slots that are of the same inventory (since we're moving between inventories), and skip slots that are already full
-            if (slot == clickedSlot || !slot.mayPlace(targetStack) || InventoryUtils.isSameInventory(clickedSlot, slot)
+            if (!isValidTargetSlot(slot) || slot == clickedSlot || !slot.mayPlace(targetStack) || InventoryUtils.isSameInventory(clickedSlot, slot)
                     || stack.getCount() >= Math.min(slot.getMaxStackSize(), slot.getMaxStackSize(stack))) {
                 continue;
             }
@@ -76,7 +76,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         List<Slot> transferSlots = new ArrayList<>();
         transferSlots.add(clickedSlot);
         for (Slot slot : menu.slots) {
-            if (slot == clickedSlot) {
+            if (slot == clickedSlot || !isValidTargetSlot(slot)) {
                 continue;
             }
 
@@ -123,7 +123,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             Deque<Slot> emptySlots = new ArrayDeque<>();
             List<Slot> nonEmptySlots = new ArrayList<>();
             for (Slot slot : menu.slots) {
-                if (InventoryUtils.isSameInventory(slot, clickedSlot) || !(slot.container instanceof Inventory)) {
+                if (InventoryUtils.isSameInventory(slot, clickedSlot) || !(slot.container instanceof Inventory) || !isValidTargetSlot(slot)) {
                     continue;
                 }
 
@@ -150,7 +150,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         } else {
             // Just a normal inventory-to-inventory transfer, simply shift-click the items
             for (Slot slot : menu.slots) {
-                if (!slot.mayPickup(player)) {
+                if (!slot.mayPickup(player) || !isValidTargetSlot(slot)) {
                     continue;
                 }
 
@@ -216,11 +216,11 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         slotClick(screen.getMenu(), clickedSlot, 0, ClickType.QUICK_MOVE);
     }
 
-    private void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType) {
+    protected void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType) {
         slotClick(menu, slot.index, mouseButton, clickType);
     }
 
-    private void slotClick(AbstractContainerMenu menu, int slotIndex, int mouseButton, ClickType clickType) {
+    protected void slotClick(AbstractContainerMenu menu, int slotIndex, int mouseButton, ClickType clickType) {
         Player player = Minecraft.getInstance().player;
         MultiPlayerGameMode gameMode = Minecraft.getInstance().gameMode;
         if (player != null && gameMode != null && (slotIndex >= 0 && slotIndex < menu.slots.size() || slotIndex == -999)) {
@@ -235,7 +235,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         List<Slot> transferSlots = new ArrayList<>();
         transferSlots.add(hoverSlot);
         for (Slot slot : menu.slots) {
-            if (slot == hoverSlot) {
+            if (slot == hoverSlot || !isValidTargetSlot(slot)) {
                 continue;
             }
 
@@ -264,7 +264,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         List<Slot> transferSlots = new ArrayList<>();
         for (Slot slot : menu.slots) {
             ItemStack stack = slot.getItem();
-            if (ItemStack.isSameItemSameTags(targetStack, stack)) {
+            if (ItemStack.isSameItemSameTags(targetStack, stack) && isValidTargetSlot(slot)) {
                 transferSlots.add(slot);
             }
         }
@@ -274,6 +274,10 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             slotClick(menu, transferSlot, 1, ClickType.THROW);
         }
 
+        return true;
+    }
+
+    protected boolean isValidTargetSlot(Slot slot) {
         return true;
     }
 }

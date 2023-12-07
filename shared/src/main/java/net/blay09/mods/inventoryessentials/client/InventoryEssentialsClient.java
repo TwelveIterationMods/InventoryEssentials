@@ -11,12 +11,14 @@ import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor
 import net.blay09.mods.inventoryessentials.mixin.CreativeModeInventoryScreenAccessor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.inventory.Slot;
 
 public class InventoryEssentialsClient {
 
     private static final InventoryControls clientOnlyControls = new ClientOnlyInventoryControls();
+    private static final InventoryControls creativeControls = new CreativeInventoryControls();
     private static final InventoryControls serverSupportedControls = new ServerSupportedInventoryControls();
 
     private static Slot lastDragHoverSlot;
@@ -29,7 +31,11 @@ public class InventoryEssentialsClient {
         Balm.getEvents().onEvent(ScreenKeyEvent.Press.Pre.class, InventoryEssentialsClient::onKeyPress);
     }
 
-    private static InventoryControls getInventoryControls() {
+    private static InventoryControls getInventoryControls(AbstractContainerScreen<?> screen) {
+        if (screen instanceof CreativeModeInventoryScreenAccessor) {
+            return creativeControls;
+        }
+
         return InventoryEssentials.isServerSideInstalled && !InventoryEssentialsConfig.getActive().forceClientImplementation ? serverSupportedControls : clientOnlyControls;
     }
 
@@ -42,7 +48,7 @@ public class InventoryEssentialsClient {
         }
 
         if (screen instanceof CreativeModeInventoryScreenAccessor accessor) {
-            return hoverSlot == null || hoverSlot.container != accessor.getCONTAINER();
+            return hoverSlot == null || hoverSlot.container instanceof Inventory || hoverSlot.container != accessor.getCONTAINER();
         }
 
         return true;
@@ -50,7 +56,6 @@ public class InventoryEssentialsClient {
 
     public static void onMouseDrag(ScreenMouseEvent.Drag.Pre event) {
         if (BalmClient.getKeyMappings().isActiveAndKeyDown(ModKeyMappings.keyDragTransfer)) {
-            InventoryControls controls = getInventoryControls();
             if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
                 Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
                 if (hoverSlot == null || !shouldHandleInput(screen)) {
@@ -58,6 +63,7 @@ public class InventoryEssentialsClient {
                 }
 
                 if (hoverSlot.hasItem() && hoverSlot != lastDragHoverSlot) {
+                    InventoryControls controls = getInventoryControls(screen);
                     controls.dragTransfer(screen, hoverSlot);
                     lastDragHoverSlot = hoverSlot;
                 }
@@ -80,7 +86,6 @@ public class InventoryEssentialsClient {
     }
 
     public static boolean onInput(Screen screen, InputConstants.Key key, double mouseX, double mouseY) {
-        InventoryControls controls = getInventoryControls();
         if (screen instanceof AbstractContainerScreen<?> containerScreen) {
             AbstractContainerScreenAccessor accessor = (AbstractContainerScreenAccessor) containerScreen;
             Slot hoverSlot = accessor.getHoveredSlot();
@@ -88,6 +93,7 @@ public class InventoryEssentialsClient {
                 return false;
             }
 
+            InventoryControls controls = getInventoryControls(containerScreen);
             if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keyBulkTransfer, key)) {
                 return hoverSlot != null && controls.bulkTransferByType(containerScreen, hoverSlot);
             } else if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keySingleTransfer, key)) {
