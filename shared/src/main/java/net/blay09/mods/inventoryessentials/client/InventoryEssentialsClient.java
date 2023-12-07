@@ -33,24 +33,28 @@ public class InventoryEssentialsClient {
         return InventoryEssentials.isServerSideInstalled && !InventoryEssentialsConfig.getActive().forceClientImplementation ? serverSupportedControls : clientOnlyControls;
     }
 
+    private static boolean shouldHandleInput(AbstractContainerScreen<?> screen) {
+        final var hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
+
+        // Do not handle drags on crafting result slots
+        if (hoverSlot instanceof ResultSlot) {
+            return false;
+        }
+
+        if (screen instanceof CreativeModeInventoryScreenAccessor accessor) {
+            return hoverSlot == null || hoverSlot.container != accessor.getCONTAINER();
+        }
+
+        return true;
+    }
+
     public static void onMouseDrag(ScreenMouseEvent.Drag.Pre event) {
         if (BalmClient.getKeyMappings().isActiveAndKeyDown(ModKeyMappings.keyDragTransfer)) {
             InventoryControls controls = getInventoryControls();
             if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
                 Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
-                if (hoverSlot == null) {
+                if (hoverSlot == null || !shouldHandleInput(screen)) {
                     return;
-                }
-
-                // Do not handle drags on crafting result slots
-                if (hoverSlot instanceof ResultSlot) {
-                    return;
-                }
-
-                if (event.getScreen() instanceof CreativeModeInventoryScreenAccessor accessor) {
-                    if (hoverSlot.container == accessor.getCONTAINER()) {
-                        return;
-                    }
                 }
 
                 if (hoverSlot.hasItem() && hoverSlot != lastDragHoverSlot) {
@@ -80,34 +84,21 @@ public class InventoryEssentialsClient {
         if (screen instanceof AbstractContainerScreen<?> containerScreen) {
             AbstractContainerScreenAccessor accessor = (AbstractContainerScreenAccessor) containerScreen;
             Slot hoverSlot = accessor.getHoveredSlot();
-
-            // Do not handle clicks on crafting result slots.
-            if (hoverSlot instanceof ResultSlot) {
+            if (!shouldHandleInput(containerScreen)) {
                 return false;
             }
 
             if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keyBulkTransfer, key)) {
-                if (hoverSlot != null && controls.bulkTransferByType(containerScreen, hoverSlot)) {
-                    return true;
-                }
+                return hoverSlot != null && controls.bulkTransferByType(containerScreen, hoverSlot);
             } else if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keySingleTransfer, key)) {
-                if (hoverSlot != null && controls.singleTransfer(containerScreen, hoverSlot)) {
-                    return true;
-                }
+                return hoverSlot != null && controls.singleTransfer(containerScreen, hoverSlot);
             } else if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keyBulkTransferAll, key)) {
-                if (hoverSlot != null && controls.bulkTransferAll(containerScreen, hoverSlot)) {
-                    return true;
-                }
+                return hoverSlot != null && controls.bulkTransferAll(containerScreen, hoverSlot);
             } else if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keyScreenBulkDrop, key)) {
-                if (accessor.callHasClickedOutside(mouseX, mouseY, accessor.getLeftPos(), accessor.getTopPos(), key.getValue()) && controls.dropByType(
-                        containerScreen,
-                        containerScreen.getMenu().getCarried())) {
-                    return true;
-                }
+                final var clickedOutside = accessor.callHasClickedOutside(mouseX, mouseY, accessor.getLeftPos(), accessor.getTopPos(), key.getValue());
+                return clickedOutside && controls.dropByType(containerScreen, containerScreen.getMenu().getCarried());
             } else if (BalmClient.getKeyMappings().isActiveAndMatches(ModKeyMappings.keyBulkDrop, key)) {
-                if (hoverSlot != null && controls.dropByType(containerScreen, hoverSlot)) {
-                    return true;
-                }
+                return hoverSlot != null && controls.dropByType(containerScreen, hoverSlot);
             }
         }
         return false;
