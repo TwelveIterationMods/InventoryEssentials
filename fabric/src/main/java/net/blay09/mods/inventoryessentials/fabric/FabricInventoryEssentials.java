@@ -1,6 +1,8 @@
-package net.blay09.mods.inventoryessentials;
+package net.blay09.mods.inventoryessentials.fabric;
 
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.inventoryessentials.InventoryEssentials;
+import net.blay09.mods.inventoryessentials.PlatformBindings;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.world.inventory.Slot;
 
