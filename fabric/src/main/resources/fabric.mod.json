@@ -20,18 +20,18 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.blay09.mods.${mod_id}.fabric.Fabric${mod_main}"
+      "net.blay09.mods.inventoryessentials.fabric.FabricInventoryEssentials"
     ],
     "client": [
-      "net.blay09.mods.${mod_id}.fabric.client.Fabric${mod_main}Client"
+      "net.blay09.mods.inventoryessentials.fabric.client.FabricInventoryEssentialsClient"
     ],
     "modmenu": [
-      "net.blay09.mods.${mod_id}.fabric.compat.ModMenuIntegration"
+      "net.blay09.mods.inventoryessentials.fabric.compat.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "${mod_id}.mixins.json",
-    "${mod_id}.fabric.mixins.json"
+    "inventoryessentials.mixins.json",
+    "inventoryessentials.fabric.mixins.json"
   ],
 
   "depends": {
