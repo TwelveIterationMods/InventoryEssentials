@@ -1,1 +1,2 @@
-- Updated to Minecraft 1.20.2
+- Fixed crash when shift-dragging in creative mode
+- Fixed bulk transfer to inventory reversing the item order when the mod is used in client-only mode
