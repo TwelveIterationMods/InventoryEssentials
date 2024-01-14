@@ -5,6 +5,7 @@ import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -135,7 +136,9 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
 
             // Now go through each slot that is accessible and belongs to the same inventory as the clicked slot
-            for (Slot slot : menu.slots) {
+            NonNullList<Slot> slots = menu.slots;
+            for (int i = slots.size() - 1; i >= 0; i--) {
+                Slot slot = slots.get(i);
                 if (!slot.mayPickup(player)) {
                     continue;
                 }
