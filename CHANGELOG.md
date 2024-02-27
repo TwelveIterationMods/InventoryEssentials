@@ -1,6 +1,4 @@
-- Fixed incorrect default key binding on single transfer (update Balm!)
-- Added ability to configure key bindings for the inventory controls (config options were removed since you can now unbind the keys)
-- Added support for Amecs key modifiers
-- Added enableScreenBulkDrop option (default: on), which allows holding shift while dropping an item out of the screen to drop all items of that type
-- Changed the special controls to only trigger on left-clicks, resolving possible compatibility conflicts with mods adding special handling to right-clicks
-- Fixed bulk transferring all items to the inventory resulting in items being reordered
+- Fixed viewing cell being moved unexpectedly when shift-dragging over Applied Energistics slots
+- Fixed other potential compatibility issues with some fake slots
+- Fixed bulk transfer to inventory shifting the hotbar by a row
+- Fixed bulk transfer to inventory reversing the item order when the mod is used in client-only mode
