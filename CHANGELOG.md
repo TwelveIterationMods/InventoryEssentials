@@ -1,2 +1,3 @@
-- Fixed crash when shift-dragging in creative mode
-- Fixed bulk transfer to inventory reversing the item order when the mod is used in client-only mode
+- Fixed viewing cell being moved unexpectedly when shift-dragging over Applied Energistics slots
+- Fixed other potential compatibility issues with some fake slots
+- Fixed bulk transfer to inventory shifting the hotbar by a row
