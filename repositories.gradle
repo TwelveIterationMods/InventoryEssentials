@@ -56,4 +56,11 @@ repositories {
             includeGroup "us.dynmap"
         }
     }
+
+    maven {
+        url "https://modmaven.dev/"
+        content {
+            includeGroup 'appeng'
+        }
+    }
 }
