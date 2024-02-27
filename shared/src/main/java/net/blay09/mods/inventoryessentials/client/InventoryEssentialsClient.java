@@ -58,7 +58,7 @@ public class InventoryEssentialsClient {
         if (BalmClient.getKeyMappings().isActiveAndKeyDown(ModKeyMappings.keyDragTransfer)) {
             if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
                 Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
-                if (hoverSlot == null || !shouldHandleInput(screen)) {
+                if (hoverSlot == null || !shouldHandleInput(screen) || !shouldHandleSlot(hoverSlot)) {
                     return;
                 }
 
@@ -71,6 +71,16 @@ public class InventoryEssentialsClient {
         } else {
             lastDragHoverSlot = null;
         }
+    }
+
+    private static boolean shouldHandleSlot(Slot slot) {
+        // Try to detect fake slots and ignore them
+        //noinspection ConstantValue
+        if (slot.container == null || slot.container.getContainerSize() == 0) {
+            return false;
+        }
+
+        return true;
     }
 
     public static void onMouseClick(ScreenMouseEvent.Click.Pre event) {
