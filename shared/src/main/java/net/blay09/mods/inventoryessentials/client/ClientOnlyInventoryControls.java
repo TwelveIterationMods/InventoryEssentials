@@ -169,7 +169,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
     }
 
     private boolean bulkTransferPreferInventory(AbstractContainerMenu menu, Inventory inventory, Deque<Slot> emptySlots, List<Slot> nonEmptySlots, Slot slot) {
-        ItemStack targetStack = slot.getItem();
+        ItemStack targetStack = slot.getItem().copy();
         if (targetStack.isEmpty()) {
             return false;
         }
@@ -177,7 +177,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         slotClick(menu, slot, 0, ClickType.PICKUP);
 
         for (Slot nonEmptySlot : nonEmptySlots) {
-            ItemStack stack = slot.getItem();
+            ItemStack stack = nonEmptySlot.getItem();
             if (ItemStack.isSameItem(targetStack, stack)) {
                 boolean hasSpaceLeft = stack.getCount() < Math.min(slot.getMaxStackSize(), slot.getMaxStackSize(stack));
                 if (!hasSpaceLeft) {
@@ -192,7 +192,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
         }
 
-        for (Iterator<Slot> iterator = emptySlots.iterator(); iterator.hasNext(); ) {
+        for (Iterator<Slot> iterator = emptySlots.descendingIterator(); iterator.hasNext(); ) {
             Slot emptySlot = iterator.next();
             slotClick(menu, emptySlot, 0, ClickType.PICKUP);
             if (emptySlot.hasItem()) {
