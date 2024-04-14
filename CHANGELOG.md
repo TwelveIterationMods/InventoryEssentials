@@ -1,3 +1,1 @@
-- Fixed viewing cell being moved unexpectedly when shift-dragging over Applied Energistics slots
-- Fixed other potential compatibility issues with some fake slots
-- Fixed bulk transfer to inventory shifting the hotbar by a row
+- Fixed mod menu integration not working correctly
