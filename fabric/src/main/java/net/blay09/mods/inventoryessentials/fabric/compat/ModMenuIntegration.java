@@ -1,4 +1,4 @@
-package net.blay09.mods.inventoryessentials.compat;
+package net.blay09.mods.inventoryessentials.fabric.compat;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
