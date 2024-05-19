@@ -1,14 +1,18 @@
 package net.blay09.mods.inventoryessentials.network;
 
+import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-public class SingleTransferMessage {
+public class SingleTransferMessage implements CustomPacketPayload {
 
+    public static CustomPacketPayload.Type<SingleTransferMessage> TYPE = new CustomPacketPayload.Type<>(new ResourceLocation(InventoryEssentials.MOD_ID, "single_transfer"));
     private final int slotNumber;
 
     public SingleTransferMessage(int slotNumber) {
@@ -20,7 +24,7 @@ public class SingleTransferMessage {
         return new SingleTransferMessage(slotNumber);
     }
 
-    public static void encode(SingleTransferMessage message, FriendlyByteBuf buf) {
+    public static void encode(FriendlyByteBuf buf, SingleTransferMessage message) {
         buf.writeByte(message.slotNumber);
     }
 
@@ -53,5 +57,10 @@ public class SingleTransferMessage {
                 }
             }
         }
+    }
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

@@ -1,7 +1,10 @@
 package net.blay09.mods.inventoryessentials.network;
 
+import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,8 +15,10 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 
-public class BulkTransferAllMessage {
+public class BulkTransferAllMessage implements CustomPacketPayload {
 
+    public static final CustomPacketPayload.Type<BulkTransferAllMessage> TYPE = new CustomPacketPayload.Type<>(new ResourceLocation(InventoryEssentials.MOD_ID,
+            "bulk_transfer_all"));
     private final int slotNumber;
 
     public BulkTransferAllMessage(int slotNumber) {
@@ -25,7 +30,7 @@ public class BulkTransferAllMessage {
         return new BulkTransferAllMessage(slotNumber);
     }
 
-    public static void encode(BulkTransferAllMessage message, FriendlyByteBuf buf) {
+    public static void encode(FriendlyByteBuf buf, BulkTransferAllMessage message) {
         buf.writeByte(message.slotNumber);
     }
 
@@ -94,7 +99,7 @@ public class BulkTransferAllMessage {
 
         for (Slot nonEmptySlot : nonEmptySlots) {
             ItemStack stack = slot.getItem();
-            if (ItemStack.isSameItemSameTags(targetStack, stack)) {
+            if (ItemStack.isSameItemSameComponents(targetStack, stack)) {
                 boolean hasSpaceLeft = stack.getCount() < Math.min(slot.getMaxStackSize(), slot.getMaxStackSize(stack));
                 if (!hasSpaceLeft) {
                     continue;
@@ -128,5 +133,10 @@ public class BulkTransferAllMessage {
         }
 
         return false;
+    }
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

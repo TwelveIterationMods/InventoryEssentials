@@ -1,5 +1,6 @@
 package net.blay09.mods.inventoryessentials.fabric.client;
 
+import net.blay09.mods.balm.api.EmptyLoadContext;
 import net.blay09.mods.balm.api.client.BalmClient;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.blay09.mods.inventoryessentials.client.InventoryEssentialsClient;
@@ -9,6 +10,6 @@ public class FabricInventoryEssentialsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        BalmClient.initialize(InventoryEssentials.MOD_ID, InventoryEssentialsClient::initialize);
+        BalmClient.initialize(InventoryEssentials.MOD_ID, EmptyLoadContext.INSTANCE, InventoryEssentialsClient::initialize);
     }
 }
