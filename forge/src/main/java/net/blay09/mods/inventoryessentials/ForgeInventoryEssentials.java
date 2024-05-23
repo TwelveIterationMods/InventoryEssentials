@@ -1,6 +1,7 @@
 package net.blay09.mods.inventoryessentials;
 
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.api.EmptyLoadContext;
 import net.blay09.mods.balm.api.client.BalmClient;
 import net.blay09.mods.inventoryessentials.client.InventoryEssentialsClient;
 import net.minecraft.world.inventory.Slot;
@@ -26,8 +27,8 @@ public class ForgeInventoryEssentials {
             }
         };
 
-        Balm.initialize(InventoryEssentials.MOD_ID, InventoryEssentials::initialize);
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> BalmClient.initialize(InventoryEssentials.MOD_ID, InventoryEssentialsClient::initialize));
+        Balm.initialize(InventoryEssentials.MOD_ID, EmptyLoadContext.INSTANCE, InventoryEssentials::initialize);
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> BalmClient.initialize(InventoryEssentials.MOD_ID, EmptyLoadContext.INSTANCE, InventoryEssentialsClient::initialize));
 
         ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> IExtensionPoint.DisplayTest.IGNORESERVERONLY, (a, b) -> true));
     }
