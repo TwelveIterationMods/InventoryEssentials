@@ -1,68 +1,92 @@
 package net.blay09.mods.inventoryessentials.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.blay09.mods.balm.api.client.keymappings.BalmKeyMappings;
-import net.blay09.mods.balm.api.client.keymappings.KeyConflictContext;
-import net.blay09.mods.balm.api.client.keymappings.KeyModifier;
-import net.blay09.mods.balm.api.client.keymappings.KeyModifiers;
-import net.minecraft.client.KeyMapping;
+import net.blay09.mods.inventoryessentials.InventoryEssentials;
+import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor;
+import net.blay09.mods.kuma.api.*;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.Slot;
+
+import java.util.function.BiFunction;
 
 public class ModKeyMappings {
 
-    public static KeyMapping keySingleTransfer;
-    public static KeyMapping keyBulkTransfer;
-    public static KeyMapping keyBulkTransferAll;
-    public static KeyMapping keyBulkDrop;
-    public static KeyMapping keyScreenBulkDrop;
-    public static KeyMapping keyDragTransfer;
+    public static ManagedKeyMapping keySingleTransfer;
+    public static ManagedKeyMapping keyBulkTransfer;
+    public static ManagedKeyMapping keyBulkTransferAll;
+    public static ManagedKeyMapping keyBulkDrop;
+    public static ManagedKeyMapping keyScreenBulkDrop;
+    public static ManagedKeyMapping keyDragTransfer;
 
-    public static void initialize(BalmKeyMappings keyMappings) {
-        final var category = "key.categories.inventoryessentials";
-        keySingleTransfer = keyMappings.registerKeyMapping("key.inventoryessentials.single_transfer",
-                KeyConflictContext.GUI,
-                KeyModifier.CONTROL,
-                InputConstants.Type.MOUSE,
-                InputConstants.MOUSE_BUTTON_LEFT,
-                category);
+    public static void initialize() {
+        keySingleTransfer = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "single_transfer"))
+                .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.of(KeyModifier.CONTROL)))
+                .handleScreenInput(event -> handleSlotInput(event,
+                        (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).singleTransfer(screen, slot)))
+                .build();
 
-        keyBulkTransfer = keyMappings.registerKeyMapping("key.inventoryessentials.bulk_transfer",
-                KeyConflictContext.GUI,
-                KeyModifiers.of(KeyModifier.SHIFT, KeyModifier.CONTROL),
-                InputConstants.Type.MOUSE,
-                InputConstants.MOUSE_BUTTON_LEFT,
-                category);
+        keyBulkTransfer = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "bulk_transfer"))
+                .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.of(KeyModifier.SHIFT, KeyModifier.CONTROL)))
+                .handleScreenInput(event -> handleSlotInput(event,
+                        (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).bulkTransferByType(screen, slot)))
+                .build();
 
-        keyBulkTransferAll = keyMappings.registerKeyMapping("key.inventoryessentials.bulk_transfer_all",
-                KeyConflictContext.GUI,
-                KeyModifiers.ofCustom(InputConstants.Type.KEYSYM.getOrCreate(InputConstants.KEY_SPACE)),
-                InputConstants.Type.MOUSE,
-                InputConstants.MOUSE_BUTTON_LEFT,
-                category);
+        keyBulkTransferAll = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "bulk_transfer_all"))
+                .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.ofCustom(InputConstants.getKey(InputConstants.KEY_SPACE, -1))))
+                .handleScreenInput(event -> handleSlotInput(event,
+                        (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).bulkTransferAll(screen, slot)))
+                .build();
 
-        keyBulkDrop = keyMappings.registerKeyMapping("key.inventoryessentials.bulk_drop",
-                KeyConflictContext.GUI,
-                KeyModifiers.of(KeyModifier.SHIFT, KeyModifier.CONTROL),
-                InputConstants.KEY_Q,
-                category);
+        keyBulkDrop = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "bulk_drop"))
+                .withDefault(InputBinding.key(InputConstants.KEY_Q, KeyModifiers.of(KeyModifier.SHIFT, KeyModifier.CONTROL)))
+                .handleScreenInput(event -> handleSlotInput(event,
+                        (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).dropByType(screen, slot)))
+                .build();
 
-        keyScreenBulkDrop = keyMappings.registerKeyMapping("key.inventoryessentials.screen_bulk_drop",
-                KeyConflictContext.GUI,
-                KeyModifier.SHIFT,
-                InputConstants.Type.MOUSE,
-                InputConstants.MOUSE_BUTTON_LEFT,
-                category);
+        keyScreenBulkDrop = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "screen_bulk_drop"))
+                .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.of(KeyModifier.SHIFT)))
+                .handleScreenInput(event -> {
+                    if (!InventoryEssentialsClient.shouldHandleInput(event.screen())) {
+                        return false;
+                    }
 
-        keyDragTransfer = keyMappings.registerKeyMapping("key.inventoryessentials.drag_transfer",
-                KeyConflictContext.GUI,
-                KeyModifier.NONE,
-                InputConstants.KEY_LSHIFT,
-                category);
+                    if (!(event.screen() instanceof AbstractContainerScreen<?> containerScreen)) {
+                        return false;
+                    }
 
-        keyMappings.ignoreConflicts(keySingleTransfer);
-        keyMappings.ignoreConflicts(keyBulkTransfer);
-        keyMappings.ignoreConflicts(keyBulkTransferAll);
-        keyMappings.ignoreConflicts(keyBulkDrop);
-        keyMappings.ignoreConflicts(keyScreenBulkDrop);
-        keyMappings.ignoreConflicts(keyDragTransfer);
+                    final var accessor = (AbstractContainerScreenAccessor) containerScreen;
+                    int button = keyScreenBulkDrop.getBinding().key().getValue();
+                    final var clickedOutside = accessor.callHasClickedOutside(event.mouseX(),
+                            event.mouseY(),
+                            accessor.getLeftPos(),
+                            accessor.getTopPos(),
+                            button);
+                    return clickedOutside && InventoryEssentialsClient.getInventoryControls(containerScreen)
+                            .dropByType(containerScreen, containerScreen.getMenu().getCarried());
+                })
+                .build();
+
+        keyDragTransfer = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "drag_transfer"))
+                .withDefault(InputBinding.key(InputConstants.KEY_LSHIFT))
+                .withContext(KeyConflictContext.SCREEN)
+                .build();
+    }
+
+    private static boolean handleSlotInput(ScreenInputEvent event, BiFunction<AbstractContainerScreen<?>, Slot, Boolean> handler) {
+        if (!InventoryEssentialsClient.shouldHandleInput(event.screen())) {
+            return false;
+        }
+
+        if (!(event.screen() instanceof AbstractContainerScreen<?> containerScreen)) {
+            return false;
+        }
+
+        final var hoverSlot = ((AbstractContainerScreenAccessor) containerScreen).getHoveredSlot();
+        if (hoverSlot != null) {
+            return handler.apply(containerScreen, hoverSlot);
+        }
+
+        return false;
     }
 }
