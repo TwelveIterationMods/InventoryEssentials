@@ -70,6 +70,7 @@ public class ModKeyMappings {
         keyDragTransfer = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "drag_transfer"))
                 .withDefault(InputBinding.key(InputConstants.KEY_LSHIFT))
                 .withContext(KeyConflictContext.SCREEN)
+                .forceVirtual()
                 .build();
     }
 
