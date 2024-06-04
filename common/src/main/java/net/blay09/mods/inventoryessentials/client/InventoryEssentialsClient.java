@@ -35,15 +35,19 @@ public class InventoryEssentialsClient {
     }
 
     public static boolean shouldHandleInput(Screen screen) {
-        final var hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
+        if (!(screen instanceof AbstractContainerScreenAccessor accessor)) {
+            return false;
+        }
+
+        final var hoverSlot = accessor.getHoveredSlot();
 
         // Do not handle drags on crafting result slots
         if (hoverSlot instanceof ResultSlot) {
             return false;
         }
 
-        if (screen instanceof CreativeModeInventoryScreenAccessor accessor) {
-            return hoverSlot == null || hoverSlot.container instanceof Inventory || hoverSlot.container != accessor.getCONTAINER();
+        if (screen instanceof CreativeModeInventoryScreenAccessor creativeAccessor) {
+            return hoverSlot == null || hoverSlot.container instanceof Inventory || hoverSlot.container != creativeAccessor.getCONTAINER();
         }
 
         return true;
