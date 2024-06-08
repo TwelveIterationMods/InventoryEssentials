@@ -20,31 +20,31 @@ public class ModKeyMappings {
     public static ManagedKeyMapping keyDragTransfer;
 
     public static void initialize() {
-        keySingleTransfer = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "single_transfer"))
+        keySingleTransfer = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "single_transfer"))
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.of(KeyModifier.CONTROL)))
                 .handleScreenInput(event -> handleSlotInput(event,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).singleTransfer(screen, slot)))
                 .build();
 
-        keyBulkTransfer = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "bulk_transfer"))
+        keyBulkTransfer = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "bulk_transfer"))
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.of(KeyModifier.SHIFT, KeyModifier.CONTROL)))
                 .handleScreenInput(event -> handleSlotInput(event,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).bulkTransferByType(screen, slot)))
                 .build();
 
-        keyBulkTransferAll = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "bulk_transfer_all"))
+        keyBulkTransferAll = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "bulk_transfer_all"))
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.ofCustom(InputConstants.getKey(InputConstants.KEY_SPACE, -1))))
                 .handleScreenInput(event -> handleSlotInput(event,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).bulkTransferAll(screen, slot)))
                 .build();
 
-        keyBulkDrop = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "bulk_drop"))
+        keyBulkDrop = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "bulk_drop"))
                 .withDefault(InputBinding.key(InputConstants.KEY_Q, KeyModifiers.of(KeyModifier.SHIFT, KeyModifier.CONTROL)))
                 .handleScreenInput(event -> handleSlotInput(event,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).dropByType(screen, slot)))
                 .build();
 
-        keyScreenBulkDrop = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "screen_bulk_drop"))
+        keyScreenBulkDrop = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "screen_bulk_drop"))
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.of(KeyModifier.SHIFT)))
                 .handleScreenInput(event -> {
                     if (!InventoryEssentialsClient.shouldHandleInput(event.screen())) {
@@ -67,7 +67,7 @@ public class ModKeyMappings {
                 })
                 .build();
 
-        keyDragTransfer = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "drag_transfer"))
+        keyDragTransfer = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "drag_transfer"))
                 .withDefault(InputBinding.key(InputConstants.KEY_LSHIFT))
                 .withContext(KeyConflictContext.SCREEN)
                 .forceVirtual()

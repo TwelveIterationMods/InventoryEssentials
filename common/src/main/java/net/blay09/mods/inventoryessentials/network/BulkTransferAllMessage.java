@@ -17,7 +17,7 @@ import java.util.*;
 
 public class BulkTransferAllMessage implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<BulkTransferAllMessage> TYPE = new CustomPacketPayload.Type<>(new ResourceLocation(InventoryEssentials.MOD_ID,
+    public static final CustomPacketPayload.Type<BulkTransferAllMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID,
             "bulk_transfer_all"));
     private final int slotNumber;
 

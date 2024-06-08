@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class SingleTransferMessage implements CustomPacketPayload {
 
-    public static CustomPacketPayload.Type<SingleTransferMessage> TYPE = new CustomPacketPayload.Type<>(new ResourceLocation(InventoryEssentials.MOD_ID, "single_transfer"));
+    public static CustomPacketPayload.Type<SingleTransferMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "single_transfer"));
     private final int slotNumber;
 
     public SingleTransferMessage(int slotNumber) {
