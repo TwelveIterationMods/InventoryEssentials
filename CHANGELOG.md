@@ -1,1 +1,2 @@
 - Updated to Minecraft 1.21.1
+- Removed outdated config comment about key mappings
