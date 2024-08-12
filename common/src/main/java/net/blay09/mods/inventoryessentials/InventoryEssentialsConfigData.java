@@ -13,8 +13,5 @@ public class InventoryEssentialsConfigData implements BalmConfigData {
     @Comment("Should space-clicking move all items even if an empty slot was clicked?")
     public boolean allowBulkTransferAllOnEmptySlot = false;
 
-    @Comment("You can now go into your Controls and unbind the respective Inventory Essentials keys instead!")
-    public boolean whereDidTheConfigsGo = true;
-
 }
 
