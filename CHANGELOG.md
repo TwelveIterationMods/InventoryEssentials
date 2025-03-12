@@ -1,1 +1,1 @@
-- Added `bulkTransferArmorSets` option to quickly swap armor sets through space-click
+- Updated to Minecraft 1.21.5

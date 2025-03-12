@@ -4,7 +4,9 @@ import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,24 +21,16 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 
-public class BulkTransferAllMessage implements CustomPacketPayload {
+public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<BulkTransferAllMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID,
             "bulk_transfer_all"));
-    private final int slotNumber;
 
-    public BulkTransferAllMessage(int slotNumber) {
-        this.slotNumber = slotNumber;
-    }
-
-    public static BulkTransferAllMessage decode(FriendlyByteBuf buf) {
-        int slotNumber = buf.readByte();
-        return new BulkTransferAllMessage(slotNumber);
-    }
-
-    public static void encode(FriendlyByteBuf buf, BulkTransferAllMessage message) {
-        buf.writeByte(message.slotNumber);
-    }
+    public static final StreamCodec<RegistryFriendlyByteBuf, BulkTransferAllMessage> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT,
+            BulkTransferAllMessage::slotNumber,
+            BulkTransferAllMessage::new
+    );
 
     public static void handle(ServerPlayer player, BulkTransferAllMessage message) {
         AbstractContainerMenu menu = player.containerMenu;

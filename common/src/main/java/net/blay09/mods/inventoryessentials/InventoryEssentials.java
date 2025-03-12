@@ -16,7 +16,7 @@ public class InventoryEssentials {
         InventoryEssentialsConfig.initialize();
         ModNetworking.initialize(Balm.getNetworking());
 
-        Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), new HelloMessage()));
+        Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), HelloMessage.INSTANCE));
         Balm.getEvents().onEvent(DisconnectedFromServerEvent.class, event -> isServerSideInstalled = false);
     }
 

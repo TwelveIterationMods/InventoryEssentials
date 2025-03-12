@@ -1,7 +1,9 @@
 package net.blay09.mods.inventoryessentials.network;
 
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,23 +12,17 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-public class SingleTransferMessage implements CustomPacketPayload {
+public record SingleTransferMessage(int slotNumber) implements CustomPacketPayload {
 
-    public static CustomPacketPayload.Type<SingleTransferMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "single_transfer"));
-    private final int slotNumber;
+    public static CustomPacketPayload.Type<SingleTransferMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(
+            InventoryEssentials.MOD_ID,
+            "single_transfer"));
 
-    public SingleTransferMessage(int slotNumber) {
-        this.slotNumber = slotNumber;
-    }
-
-    public static SingleTransferMessage decode(FriendlyByteBuf buf) {
-        int slotNumber = buf.readByte();
-        return new SingleTransferMessage(slotNumber);
-    }
-
-    public static void encode(FriendlyByteBuf buf, SingleTransferMessage message) {
-        buf.writeByte(message.slotNumber);
-    }
+    public static final StreamCodec<RegistryFriendlyByteBuf, SingleTransferMessage> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT,
+            SingleTransferMessage::slotNumber,
+            SingleTransferMessage::new
+    );
 
     public static void handle(ServerPlayer player, SingleTransferMessage message) {
         AbstractContainerMenu menu = player.containerMenu;
