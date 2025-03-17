@@ -24,9 +24,6 @@
     ],
     "client": [
       "net.blay09.mods.inventoryessentials.fabric.client.FabricInventoryEssentialsClient"
-    ],
-    "modmenu": [
-      "net.blay09.mods.inventoryessentials.fabric.compat.ModMenuIntegration"
     ]
   },
   "mixins": [
