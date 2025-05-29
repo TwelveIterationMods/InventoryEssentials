@@ -10,6 +10,6 @@ public class FabricInventoryEssentialsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        BalmClient.initialize(InventoryEssentials.MOD_ID, EmptyLoadContext.INSTANCE, InventoryEssentialsClient::initialize);
+        BalmClient.initializeMod(InventoryEssentials.MOD_ID, EmptyLoadContext.INSTANCE, InventoryEssentialsClient::initialize);
     }
 }

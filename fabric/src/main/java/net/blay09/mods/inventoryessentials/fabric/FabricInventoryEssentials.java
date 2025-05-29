@@ -17,6 +17,6 @@ public class FabricInventoryEssentials implements ModInitializer {
             }
         };
 
-        Balm.initialize(InventoryEssentials.MOD_ID, EmptyLoadContext.INSTANCE, InventoryEssentials::initialize);
+        Balm.initializeMod(InventoryEssentials.MOD_ID, EmptyLoadContext.INSTANCE, InventoryEssentials::initialize);
     }
 }
