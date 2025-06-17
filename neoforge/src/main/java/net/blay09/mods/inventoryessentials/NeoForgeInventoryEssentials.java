@@ -23,7 +23,7 @@ public class NeoForgeInventoryEssentials {
         };
 
         final var context = new NeoForgeLoadContext(modEventBus);
-        Balm.initialize(InventoryEssentials.MOD_ID, context, InventoryEssentials::initialize);
+        Balm.initializeMod(InventoryEssentials.MOD_ID, context, InventoryEssentials::initialize);
     }
 
 }

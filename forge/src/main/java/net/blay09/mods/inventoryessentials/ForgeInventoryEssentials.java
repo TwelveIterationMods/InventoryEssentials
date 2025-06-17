@@ -27,7 +27,7 @@ public class ForgeInventoryEssentials {
             }
         };
 
-        Balm.initialize(InventoryEssentials.MOD_ID, loadContext, InventoryEssentials::initialize);
+        Balm.initializeMod(InventoryEssentials.MOD_ID, loadContext, InventoryEssentials::initialize);
         if (FMLEnvironment.dist.isClient()) {
             BalmClient.initialize(InventoryEssentials.MOD_ID, loadContext, InventoryEssentialsClient::initialize);
         }
