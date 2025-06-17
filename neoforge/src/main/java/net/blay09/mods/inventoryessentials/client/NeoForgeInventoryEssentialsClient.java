@@ -12,7 +12,7 @@ public class NeoForgeInventoryEssentialsClient {
 
     public NeoForgeInventoryEssentialsClient(IEventBus modEventBus) {
         final var context = new NeoForgeLoadContext(modEventBus);
-        BalmClient.initialize(InventoryEssentials.MOD_ID, context, InventoryEssentialsClient::initialize);
+        BalmClient.initializeMod(InventoryEssentials.MOD_ID, context, InventoryEssentialsClient::initialize);
     }
 
 }
