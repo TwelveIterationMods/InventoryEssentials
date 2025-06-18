@@ -15,7 +15,7 @@ import net.minecraftforge.items.SlotItemHandler;
 public class ForgeInventoryEssentials {
 
     public ForgeInventoryEssentials(FMLJavaModLoadingContext context) {
-        final var loadContext = new ForgeLoadContext(context.getModEventBus());
+        final var loadContext = new ForgeLoadContext(context.getModBusGroup());
         PlatformBindings.INSTANCE = new PlatformBindings() {
             @Override
             public boolean isSameInventory(Slot targetSlot, Slot slot) {
