@@ -1,1 +1,2 @@
-- Added `bulkTransferArmorSets` option to quickly swap armor sets through space-click
+- Re-added config options `enableSingleTransfer`, `enableBulkTransfer`, `enableBulkTransferAll`, `enableBulkDrop`, `enableShiftDrag`
+    - These were previously removed when keybinds were made configurable, but due to Minecraft limitations these keybinds had to be removed again for the time being 
