@@ -1,6 +1,7 @@
 dependencies {
-    implementation("net.blay09.mods:kuma-api-neoforge:20.6.2-SNAPSHOT")
+    implementation("net.blay09.mods:kuma-api-neoforge:${kuma_version}")
     implementation("net.blay09.mods:balm-neoforge:${balm_version}") {
         changing = balm_version.contains("SNAPSHOT")
     }
+    implementation("curse.maven:gregtechceu-modern-890405:6764550")
 }
