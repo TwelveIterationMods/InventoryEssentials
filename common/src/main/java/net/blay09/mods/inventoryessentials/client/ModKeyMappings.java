@@ -2,6 +2,7 @@ package net.blay09.mods.inventoryessentials.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
+import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.kuma.api.*;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -9,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
 
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 public class ModKeyMappings {
 
@@ -22,31 +24,35 @@ public class ModKeyMappings {
     public static void initialize() {
         keySingleTransfer = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "single_transfer"))
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.of(KeyModifier.CONTROL)))
-                .handleScreenInput(event -> handleSlotInput(event,
+                .handleScreenInput(event -> handleSlotInput(event, () -> InventoryEssentialsConfig.getActive().enableSingleTransfer,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).singleTransfer(screen, slot)))
                 .build();
 
         keyBulkTransfer = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "bulk_transfer"))
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.of(KeyModifier.SHIFT, KeyModifier.CONTROL)))
-                .handleScreenInput(event -> handleSlotInput(event,
+                .handleScreenInput(event -> handleSlotInput(event, () -> InventoryEssentialsConfig.getActive().enableBulkTransfer,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).bulkTransferByType(screen, slot)))
                 .build();
 
         keyBulkTransferAll = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "bulk_transfer_all"))
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.ofCustom(InputConstants.getKey(InputConstants.KEY_SPACE, -1))))
-                .handleScreenInput(event -> handleSlotInput(event,
+                .handleScreenInput(event -> handleSlotInput(event, () -> InventoryEssentialsConfig.getActive().enableBulkTransferAll,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).bulkTransferAll(screen, slot)))
                 .build();
 
         keyBulkDrop = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "bulk_drop"))
                 .withDefault(InputBinding.key(InputConstants.KEY_Q, KeyModifiers.of(KeyModifier.SHIFT, KeyModifier.CONTROL)))
-                .handleScreenInput(event -> handleSlotInput(event,
+                .handleScreenInput(event -> handleSlotInput(event, () -> InventoryEssentialsConfig.getActive().enableBulkDrop,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).dropByType(screen, slot)))
                 .build();
 
         keyScreenBulkDrop = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "screen_bulk_drop"))
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.of(KeyModifier.SHIFT)))
                 .handleScreenInput(event -> {
+                    if (!InventoryEssentialsConfig.getActive().enableBulkDrop) {
+                        return false;
+                    }
+
                     if (!InventoryEssentialsClient.shouldHandleInput(event.screen())) {
                         return false;
                     }
@@ -74,7 +80,11 @@ public class ModKeyMappings {
                 .build();
     }
 
-    private static boolean handleSlotInput(ScreenInputEvent event, BiFunction<AbstractContainerScreen<?>, Slot, Boolean> handler) {
+    private static boolean handleSlotInput(ScreenInputEvent event, Supplier<Boolean> predicate, BiFunction<AbstractContainerScreen<?>, Slot, Boolean> handler) {
+        if (!predicate.get()) {
+            return false;
+        }
+
         if (!InventoryEssentialsClient.shouldHandleInput(event.screen())) {
             return false;
         }
