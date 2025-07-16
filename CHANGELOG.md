@@ -1,1 +1,2 @@
-- Updated to Minecraft 1.21.5
+- Re-added config options `enableSingleTransfer`, `enableBulkTransfer`, `enableBulkTransferAll`, `enableBulkDrop`, `enableShiftDrag`
+    - These were previously removed when keybinds were made configurable, but due to Minecraft limitations these keybinds had to be removed again for the time being 
