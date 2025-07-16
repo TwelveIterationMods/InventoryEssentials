@@ -63,7 +63,9 @@ public class InventoryEssentialsClient {
 
                 if (hoverSlot.hasItem() && hoverSlot != lastDragHoverSlot) {
                     InventoryControls controls = getInventoryControls(screen);
-                    controls.dragTransfer(screen, hoverSlot);
+                    if (InventoryEssentialsConfig.getActive().enableShiftDrag) {
+                        controls.dragTransfer(screen, hoverSlot);
+                    }
                     lastDragHoverSlot = hoverSlot;
                 }
             }
