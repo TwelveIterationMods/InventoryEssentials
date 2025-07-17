@@ -75,7 +75,8 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
     @Override
     public boolean bulkTransferByType(AbstractContainerScreen<?> screen, Slot clickedSlot) {
-        ItemStack targetStack = clickedSlot.getItem().copy();
+        ItemStack clickedStackCopy = clickedSlot.getItem().copy();
+        clickedStackCopy.setDamageValue(0);
         AbstractContainerMenu menu = screen.getMenu();
         List<Slot> transferSlots = new ArrayList<>();
         transferSlots.add(clickedSlot);
@@ -85,8 +86,9 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
 
             if (InventoryUtils.isSameInventory(slot, clickedSlot)) {
-                ItemStack stack = slot.getItem();
-                if (ItemStack.isSameItemSameComponents(targetStack, stack)) {
+                ItemStack slotStackCopy = slot.getItem();
+                slotStackCopy.setDamageValue(0);
+                if (ItemStack.isSameItemSameComponents(clickedStackCopy, slotStackCopy)) {
                     transferSlots.add(slot);
                 }
             }
