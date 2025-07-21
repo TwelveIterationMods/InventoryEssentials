@@ -3,7 +3,9 @@ package net.blay09.mods.inventoryessentials.network;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.InventoryUtils;
+import net.blay09.mods.inventoryessentials.ServerInventoryTransfers;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -21,18 +23,27 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 
-public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayload {
+public record BulkTransferSingleMessage(int slotNumber) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<BulkTransferAllMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID,
-            "bulk_transfer_all"));
+    public static final CustomPacketPayload.Type<BulkTransferSingleMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID,
+            "bulk_transfer_single"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, BulkTransferAllMessage> STREAM_CODEC = StreamCodec.composite(
+    public static final StreamCodec<RegistryFriendlyByteBuf, BulkTransferSingleMessage> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT,
-            BulkTransferAllMessage::slotNumber,
-            BulkTransferAllMessage::new
+            BulkTransferSingleMessage::slotNumber,
+            BulkTransferSingleMessage::new
     );
 
-    public static void handle(ServerPlayer player, BulkTransferAllMessage message) {
+    public static BulkTransferSingleMessage decode(FriendlyByteBuf buf) {
+        int slotNumber = buf.readByte();
+        return new BulkTransferSingleMessage(slotNumber);
+    }
+
+    public static void encode(FriendlyByteBuf buf, BulkTransferSingleMessage message) {
+        buf.writeByte(message.slotNumber);
+    }
+
+    public static void handle(ServerPlayer player, BulkTransferSingleMessage message) {
         AbstractContainerMenu menu = player.containerMenu;
         if (menu != null && message.slotNumber >= 0 && message.slotNumber < menu.slots.size()) {
             Slot clickedSlot = menu.slots.get(message.slotNumber);
@@ -72,7 +83,7 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
 
                     if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
                         // and bulk-transfer each of them using the prefer-inventory behaviour
-                        bulkTransferPreferInventory(player, menu, emptySlots, nonEmptySlots, slot);
+                        quickTransferSingle(player, menu, emptySlots, nonEmptySlots, slot);
                     }
                 }
             } else if (clickedAnArmorItem && isInsideInventory) {
@@ -108,32 +119,33 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
                     }
 
                     if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
-                        menu.clicked(slot.index, 0, ClickType.QUICK_MOVE, player);
+                        ServerInventoryTransfers.singleTransfer(player, menu, slot);
                     }
                 }
             }
         }
     }
 
-    private static boolean bulkTransferPreferInventory(Player player, AbstractContainerMenu menu, Deque<Slot> emptySlots, List<Slot> nonEmptySlots, Slot slot) {
-        ItemStack targetStack = slot.getItem().copy();
+    private static boolean quickTransferSingle(Player player, AbstractContainerMenu menu, Deque<Slot> emptySlots, List<Slot> nonEmptySlots, Slot slot) {
+        final var targetStack = slot.getItem().copy();
         if (targetStack.isEmpty()) {
             return false;
         }
 
         menu.clicked(slot.index, 0, ClickType.PICKUP, player);
 
-        for (Slot nonEmptySlot : nonEmptySlots) {
-            ItemStack stack = nonEmptySlot.getItem();
+        for (final var nonEmptySlot : nonEmptySlots) {
+            final var stack = nonEmptySlot.getItem();
             if (ItemStack.isSameItemSameComponents(targetStack, stack)) {
                 boolean hasSpaceLeft = stack.getCount() < Math.min(nonEmptySlot.getMaxStackSize(), nonEmptySlot.getMaxStackSize(stack));
                 if (!hasSpaceLeft) {
                     continue;
                 }
 
-                menu.clicked(nonEmptySlot.index, 0, ClickType.PICKUP, player);
+                menu.clicked(nonEmptySlot.index, 1, ClickType.PICKUP, player);
                 ItemStack mouseItem = menu.getCarried();
-                if (mouseItem.isEmpty()) {
+                if (mouseItem.getCount() < targetStack.getCount()) {
+                    menu.clicked(slot.index, 0, ClickType.PICKUP, player);
                     return true;
                 }
             }
@@ -141,14 +153,15 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
 
         for (Iterator<Slot> iterator = emptySlots.iterator(); iterator.hasNext(); ) {
             Slot emptySlot = iterator.next();
-            menu.clicked(emptySlot.index, 0, ClickType.PICKUP, player);
+            menu.clicked(emptySlot.index, 1, ClickType.PICKUP, player);
             if (emptySlot.hasItem()) {
                 nonEmptySlots.add(emptySlot);
                 iterator.remove();
             }
 
             ItemStack mouseItem = menu.getCarried();
-            if (mouseItem.isEmpty()) {
+            if (mouseItem.getCount() < targetStack.getCount()) {
+                menu.clicked(slot.index, 0, ClickType.PICKUP, player);
                 return true;
             }
         }
