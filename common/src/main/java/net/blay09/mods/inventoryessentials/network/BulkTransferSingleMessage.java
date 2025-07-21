@@ -4,6 +4,7 @@ import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.blay09.mods.inventoryessentials.ServerInventoryTransfers;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +16,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
@@ -52,7 +52,8 @@ public class BulkTransferSingleMessage implements CustomPacketPayload {
                 isProbablyMovingToPlayerInventory = InventoryUtils.containerContainsPlayerInventory(menu);
             }
 
-            boolean clickedAnArmorItem = clickedSlot.getItem().getItem() instanceof Equipable equipable && equipable.getEquipmentSlot().isArmor();
+            final var clickedEquippable = clickedSlot.getItem().get(DataComponents.EQUIPPABLE);
+            boolean clickedAnArmorItem = clickedEquippable != null && clickedEquippable.slot().isArmor();
             boolean isInsideInventory = menu instanceof InventoryMenu;
 
             if (isProbablyMovingToPlayerInventory) {

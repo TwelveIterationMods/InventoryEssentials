@@ -227,7 +227,8 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             isProbablyMovingToPlayerInventory = InventoryUtils.containerContainsPlayerInventory(menu);
         }
 
-        boolean clickedAnArmorItem = clickedSlot.getItem().getItem() instanceof Equipable equipable && equipable.getEquipmentSlot().isArmor();
+        final var clickedEquippable = clickedSlot.getItem().get(DataComponents.EQUIPPABLE);
+        boolean clickedAnArmorItem = clickedEquippable != null && clickedEquippable.slot().isArmor();
         boolean isInsideInventory = menu instanceof InventoryMenu;
 
         boolean movedAny = false;
