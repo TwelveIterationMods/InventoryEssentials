@@ -1,3 +1,3 @@
-- Changed bulk transfer by type to also move items with differing durability
-- Re-added config options `enableSingleTransfer`, `enableBulkTransfer`, `enableBulkTransferAll`, `enableBulkDrop`, `enableShiftDrag`
-  - These were previously removed when keybinds were made configurable, but due to Minecraft limitations these keybinds had to be removed again for the time being 
+- Added `enableBulkTransferSingle` (default: true), allowing SPACE+RIGHTCLICK to bulk transfer one of each item in the container
+- Fixed potential bugs with stacking items in bulk transfer
+- Fixed client-only bulk transfer messing up item positions
