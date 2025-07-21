@@ -9,6 +9,8 @@ public interface InventoryControls {
 
     boolean bulkTransferByType(AbstractContainerScreen<?> screen, Slot clickedSlot);
 
+    boolean bulkTransferSingle(AbstractContainerScreen<?> screen, Slot clickedSlot);
+
     boolean bulkTransferAll(AbstractContainerScreen<?> screen, Slot clickedSlot);
 
     void dragTransfer(AbstractContainerScreen<?> screen, Slot clickedSlot);

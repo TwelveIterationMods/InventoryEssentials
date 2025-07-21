@@ -13,5 +13,6 @@ public class ModNetworking {
 
         networking.registerServerboundPacket(SingleTransferMessage.TYPE, SingleTransferMessage.class, SingleTransferMessage::encode, SingleTransferMessage::decode, SingleTransferMessage::handle);
         networking.registerServerboundPacket(BulkTransferAllMessage.TYPE, BulkTransferAllMessage.class, BulkTransferAllMessage::encode, BulkTransferAllMessage::decode, BulkTransferAllMessage::handle);
+        networking.registerServerboundPacket(BulkTransferSingleMessage.TYPE, BulkTransferSingleMessage.class, BulkTransferSingleMessage::encode, BulkTransferSingleMessage::decode, BulkTransferSingleMessage::handle);
     }
 }

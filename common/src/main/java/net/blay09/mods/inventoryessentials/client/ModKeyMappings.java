@@ -16,6 +16,7 @@ public class ModKeyMappings {
 
     public static ManagedKeyMapping keySingleTransfer;
     public static ManagedKeyMapping keyBulkTransfer;
+    public static ManagedKeyMapping keyBulkTransferSingle;
     public static ManagedKeyMapping keyBulkTransferAll;
     public static ManagedKeyMapping keyBulkDrop;
     public static ManagedKeyMapping keyScreenBulkDrop;
@@ -32,6 +33,12 @@ public class ModKeyMappings {
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.of(KeyModifier.SHIFT, KeyModifier.CONTROL)))
                 .handleScreenInput(event -> handleSlotInput(event, () -> InventoryEssentialsConfig.getActive().enableBulkTransfer,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).bulkTransferByType(screen, slot)))
+                .build();
+
+        keyBulkTransferSingle = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "bulk_transfer_single"))
+                .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_RIGHT, KeyModifiers.ofCustom(InputConstants.getKey(InputConstants.KEY_SPACE, -1))))
+                .handleScreenInput(event -> handleSlotInput(event, () -> InventoryEssentialsConfig.getActive().enableBulkTransferSingle,
+                        (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).bulkTransferSingle(screen, slot)))
                 .build();
 
         keyBulkTransferAll = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "bulk_transfer_all"))
