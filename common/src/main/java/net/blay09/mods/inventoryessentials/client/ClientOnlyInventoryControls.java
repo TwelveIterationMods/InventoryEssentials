@@ -145,9 +145,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
 
             // Now go through each slot that is accessible and belongs to the same inventory as the clicked slot
-            NonNullList<Slot> slots = menu.slots;
-            for (int i = slots.size() - 1; i >= 0; i--) {
-                Slot slot = slots.get(i);
+            for (Slot slot : menu.slots) {
                 if (!slot.mayPickup(player)) {
                     continue;
                 }
@@ -253,9 +251,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
 
             // Now go through each slot that is accessible and belongs to the same inventory as the clicked slot
-            NonNullList<Slot> slots = menu.slots;
-            for (int i = slots.size() - 1; i >= 0; i--) {
-                Slot slot = slots.get(i);
+            for (Slot slot : menu.slots) {
                 if (!slot.mayPickup(player)) {
                     continue;
                 }
@@ -341,7 +337,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
         }
 
-        for (Iterator<Slot> iterator = emptySlots.descendingIterator(); iterator.hasNext(); ) {
+        for (Iterator<Slot> iterator = emptySlots.iterator(); iterator.hasNext(); ) {
             Slot emptySlot = iterator.next();
             slotClick(menu, emptySlot, 0, ClickType.PICKUP);
             if (emptySlot.hasItem()) {
@@ -388,7 +384,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
         }
 
-        for (Iterator<Slot> iterator = emptySlots.descendingIterator(); iterator.hasNext(); ) {
+        for (Iterator<Slot> iterator = emptySlots.iterator(); iterator.hasNext(); ) {
             Slot emptySlot = iterator.next();
             slotClick(menu, emptySlot, 1, ClickType.PICKUP);
             if (emptySlot.hasItem()) {
