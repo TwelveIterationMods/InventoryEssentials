@@ -22,6 +22,9 @@ public class InventoryEssentialsConfigData implements BalmConfigData {
     @Comment("Should shift-ctrl-clicking move all items of the same type at once?")
     public boolean enableBulkTransfer = true;
 
+    @Comment("Should control-space-clicking an item move one of each item from that inventory at once?")
+    public boolean enableBulkTransferSingle = true;
+
     @Comment("Should space-clicking an item move all items from that inventory at once?")
     public boolean enableBulkTransferAll = true;
 
