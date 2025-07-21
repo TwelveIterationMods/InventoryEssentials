@@ -102,7 +102,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
     }
 
     @Override
-    public boolean bulkTransferAll(AbstractContainerScreen<?> screen, Slot clickedSlot) {
+    public boolean bulkTransferSingle(AbstractContainerScreen<?> screen, Slot clickedSlot) {
         if (!clickedSlot.hasItem() && !InventoryEssentialsConfig.getActive().allowBulkTransferAllOnEmptySlot) {
             return false;
         }
@@ -153,7 +153,114 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
                 if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
                     // and bulk-transfer each of them using the prefer-inventory behaviour
-                    if (bulkTransferPreferInventory(menu, player.getInventory(), emptySlots, nonEmptySlots, slot)) {
+                    if (quickTransferSingle(menu, emptySlots, nonEmptySlots, slot)) {
+                        movedAny = true;
+                    }
+                }
+            }
+        } else if (clickedAnArmorItem && isInsideInventory) {
+            if (!InventoryEssentialsConfig.getActive().bulkTransferArmorSets) {
+                return false;
+            }
+
+            // If holding an item in hand already, do nothing
+            if (!menu.getCarried().isEmpty()) {
+                return false;
+            }
+
+            // When clicking an equipped armor, un-equip all
+            if (clickedSlot.index >= InventoryMenu.ARMOR_SLOT_START && clickedSlot.index < InventoryMenu.ARMOR_SLOT_END) {
+                for (int i = InventoryMenu.ARMOR_SLOT_START; i < InventoryMenu.ARMOR_SLOT_END; i++) {
+                    slotClick(menu, i, 0, ClickType.QUICK_MOVE);
+                }
+                return true;
+            }
+
+            // Swap current armor with clicked armor set
+            final var armorSlots = InventoryUtils.findMatchingArmorSetSlots(menu, clickedSlot);
+            final var equipmentSlots = List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
+            for (int i = InventoryMenu.ARMOR_SLOT_START; i < InventoryMenu.ARMOR_SLOT_END; i++) {
+                final var equipmentSlot = equipmentSlots.get(i - InventoryMenu.ARMOR_SLOT_START);
+                final var swapSlot = armorSlots.get(equipmentSlot);
+                if (swapSlot != null) {
+                    slotClick(menu, i, 0, ClickType.PICKUP);
+                    slotClick(menu, swapSlot, 0, ClickType.PICKUP);
+                    slotClick(menu, i, 0, ClickType.PICKUP);
+                }
+            }
+
+            movedAny = true;
+        } else {
+            // Just a normal inventory-to-inventory transfer, simply shift-click the items
+            for (Slot slot : menu.slots) {
+                if (!slot.mayPickup(player) || !isValidTargetSlot(slot)) {
+                    continue;
+                }
+
+                if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
+                    singleTransfer(screen, slot);
+                    movedAny = true;
+                }
+            }
+
+        }
+
+        return movedAny;
+    }
+
+    @Override
+    public boolean bulkTransferAll(AbstractContainerScreen<?> screen, Slot clickedSlot) {
+        if (!clickedSlot.hasItem() && !InventoryEssentialsConfig.getActive().allowBulkTransferAllOnEmptySlot) {
+            return false;
+        }
+
+        final var player = Minecraft.getInstance().player;
+        if (player == null) {
+            return false;
+        }
+
+        final var menu = screen.getMenu();
+
+        boolean isProbablyMovingToPlayerInventory = false;
+        // If the clicked slot is *not* from the player inventory,
+        if (!(clickedSlot.container instanceof Inventory)) {
+            // Search for any slot that belongs to the player inventory area (not hotbar)
+            isProbablyMovingToPlayerInventory = InventoryUtils.containerContainsPlayerInventory(menu);
+        }
+
+        boolean clickedAnArmorItem = clickedSlot.getItem().getItem() instanceof Equipable equipable && equipable.getEquipmentSlot().isArmor();
+        boolean isInsideInventory = menu instanceof InventoryMenu;
+
+        boolean movedAny = false;
+
+        // If we're probably transferring to the player inventory, use transfer-to-inventory behaviour instead of just shift-clicking the items
+        if (isProbablyMovingToPlayerInventory) {
+            // To avoid O(n²), find empty and non-empty slots beforehand in one loop iteration
+            Deque<Slot> emptySlots = new ArrayDeque<>();
+            List<Slot> nonEmptySlots = new ArrayList<>();
+            for (Slot slot : menu.slots) {
+                if (InventoryUtils.isSameInventory(slot, clickedSlot) || !(slot.container instanceof Inventory) || !isValidTargetSlot(slot)) {
+                    continue;
+                }
+
+                if (slot.hasItem()) {
+                    nonEmptySlots.add(slot);
+                } else if (!Inventory.isHotbarSlot(slot.getContainerSlot())) {
+                    emptySlots.add(slot);
+                }
+            }
+
+            // Now go through each slot that is accessible and belongs to the same inventory as the clicked slot
+            NonNullList<Slot> slots = menu.slots;
+            for (int i = slots.size() - 1; i >= 0; i--) {
+                Slot slot = slots.get(i);
+                if (!slot.mayPickup(player)) {
+                    continue;
+                }
+
+                if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
+                    // and bulk-transfer each of them using the prefer-inventory behaviour
+                    if (quickTransferStack(menu, emptySlots, nonEmptySlots, slot)) {
                         movedAny = true;
                     }
                 }
@@ -208,7 +315,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         return movedAny;
     }
 
-    private boolean bulkTransferPreferInventory(AbstractContainerMenu menu, Inventory inventory, Deque<Slot> emptySlots, List<Slot> nonEmptySlots, Slot slot) {
+    private boolean quickTransferStack(AbstractContainerMenu menu, Deque<Slot> emptySlots, List<Slot> nonEmptySlots, Slot slot) {
         ItemStack targetStack = slot.getItem().copy();
         if (targetStack.isEmpty()) {
             return false;
@@ -219,7 +326,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         for (Slot nonEmptySlot : nonEmptySlots) {
             ItemStack stack = nonEmptySlot.getItem();
             if (ItemStack.isSameItemSameTags(targetStack, stack)) {
-                boolean hasSpaceLeft = stack.getCount() < Math.min(slot.getMaxStackSize(), slot.getMaxStackSize(stack));
+                boolean hasSpaceLeft = stack.getCount() < Math.min(nonEmptySlot.getMaxStackSize(), nonEmptySlot.getMaxStackSize(stack));
                 if (!hasSpaceLeft) {
                     continue;
                 }
@@ -242,6 +349,54 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
             ItemStack mouseItem = menu.getCarried();
             if (mouseItem.isEmpty()) {
+                return true;
+            }
+        }
+
+        ItemStack mouseItem = menu.getCarried();
+        if (!mouseItem.isEmpty()) {
+            slotClick(menu, slot, 0, ClickType.PICKUP);
+        }
+
+        return false;
+    }
+
+    private boolean quickTransferSingle(AbstractContainerMenu menu, Deque<Slot> emptySlots, List<Slot> nonEmptySlots, Slot slot) {
+        ItemStack targetStack = slot.getItem().copy();
+        if (targetStack.isEmpty()) {
+            return false;
+        }
+
+        slotClick(menu, slot, 0, ClickType.PICKUP);
+
+        for (Slot nonEmptySlot : nonEmptySlots) {
+            ItemStack stack = nonEmptySlot.getItem();
+            if (ItemStack.isSameItemSameTags(targetStack, stack)) {
+                boolean hasSpaceLeft = stack.getCount() < Math.min(nonEmptySlot.getMaxStackSize(), nonEmptySlot.getMaxStackSize(stack));
+                if (!hasSpaceLeft) {
+                    continue;
+                }
+
+                slotClick(menu, nonEmptySlot, 1, ClickType.PICKUP);
+                ItemStack mouseItem = menu.getCarried();
+                if (mouseItem.getCount() < targetStack.getCount()) {
+                    slotClick(menu, slot, 0, ClickType.PICKUP);
+                    return true;
+                }
+            }
+        }
+
+        for (Iterator<Slot> iterator = emptySlots.descendingIterator(); iterator.hasNext(); ) {
+            Slot emptySlot = iterator.next();
+            slotClick(menu, emptySlot, 1, ClickType.PICKUP);
+            if (emptySlot.hasItem()) {
+                nonEmptySlots.add(emptySlot);
+                iterator.remove();
+            }
+
+            ItemStack mouseItem = menu.getCarried();
+            if (mouseItem.getCount() < targetStack.getCount()) {
+                slotClick(menu, slot, 0, ClickType.PICKUP);
                 return true;
             }
         }

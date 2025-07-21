@@ -13,6 +13,7 @@ public class ModNetworking {
 
         networking.registerServerboundPacket(id("single_transfer"), SingleTransferMessage.class, SingleTransferMessage::encode, SingleTransferMessage::decode, SingleTransferMessage::handle);
         networking.registerServerboundPacket(id("bulk_transfer_all"), BulkTransferAllMessage.class, BulkTransferAllMessage::encode, BulkTransferAllMessage::decode, BulkTransferAllMessage::handle);
+        networking.registerServerboundPacket(id("bulk_transfer_single"), BulkTransferSingleMessage.class, BulkTransferSingleMessage::encode, BulkTransferSingleMessage::decode, BulkTransferSingleMessage::handle);
     }
 
     private static ResourceLocation id(String path) {
