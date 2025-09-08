@@ -84,7 +84,7 @@ public class InventoryEssentialsIgnores {
 
     public static void addIgnoredData(IgnoredData ignoredData) {
         ignoredData.ignoredMenuClasses.forEach(InventoryEssentialsIgnores::addIgnoredMenuClass);
-        ignoredData.ignoredMenuTypes.stream().map(ResourceLocation::parse).forEach(InventoryEssentialsIgnores::addIgnoredMenuType);
+        ignoredData.ignoredMenuTypes.stream().map(ResourceLocation::new).forEach(InventoryEssentialsIgnores::addIgnoredMenuType);
         ignoredData.ignoredScreenClasses.forEach(InventoryEssentialsIgnores::addIgnoredScreenClass);
         ignoredData.ignoredSlotClasses.forEach(InventoryEssentialsIgnores::addIgnoredSlotClass);
     }
