@@ -1,6 +1,7 @@
 package net.blay09.mods.inventoryessentials;
 
 import net.blay09.mods.inventoryessentials.data.IgnoredData;
+import net.blay09.mods.inventoryessentials.mixin.AbstractContainerMenuAccessor;
 import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.inventoryessentials.mixin.CreativeModeInventoryScreenAccessor;
 import net.minecraft.client.gui.screens.Screen;
@@ -36,9 +37,10 @@ public class InventoryEssentialsIgnores {
             return true;
         }
 
-        final var typeId = BuiltInRegistries.MENU.getKey(menu.getType());
+        final var menuType = ((AbstractContainerMenuAccessor) menu).balm$getMenuType();
+        final var typeId = menuType != null ? BuiltInRegistries.MENU.getKey(menuType) : null;
         //noinspection RedundantIfStatement
-        if (ignoredMenuTypes.contains(typeId)) {
+        if (typeId != null && ignoredMenuTypes.contains(typeId)) {
             return true;
         }
 
