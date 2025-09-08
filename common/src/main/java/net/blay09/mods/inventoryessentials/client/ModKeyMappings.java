@@ -2,6 +2,7 @@ package net.blay09.mods.inventoryessentials.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
+import net.blay09.mods.inventoryessentials.InventoryEssentialsIgnores;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.kuma.api.*;
@@ -60,7 +61,7 @@ public class ModKeyMappings {
                         return false;
                     }
 
-                    if (!InventoryEssentialsClient.shouldHandleInput(event.screen())) {
+                    if (InventoryEssentialsIgnores.shouldIgnoreScreen(event.screen())) {
                         return false;
                     }
 
@@ -92,7 +93,7 @@ public class ModKeyMappings {
             return false;
         }
 
-        if (!InventoryEssentialsClient.shouldHandleInput(event.screen())) {
+        if (InventoryEssentialsIgnores.shouldIgnoreScreen(event.screen())) {
             return false;
         }
 
@@ -101,10 +102,10 @@ public class ModKeyMappings {
         }
 
         final var hoverSlot = ((AbstractContainerScreenAccessor) containerScreen).getHoveredSlot();
-        if (hoverSlot != null) {
-            return handler.apply(containerScreen, hoverSlot);
+        if (InventoryEssentialsIgnores.shouldIgnoreSlot(containerScreen, hoverSlot)) {
+            return false;
         }
 
-        return false;
+        return handler.apply(containerScreen, hoverSlot);
     }
 }
