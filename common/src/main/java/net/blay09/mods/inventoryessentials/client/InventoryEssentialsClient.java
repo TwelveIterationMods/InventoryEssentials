@@ -3,13 +3,12 @@ package net.blay09.mods.inventoryessentials.client;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.client.screen.ScreenMouseEvent;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
+import net.blay09.mods.inventoryessentials.InventoryEssentialsIgnores;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.inventoryessentials.mixin.CreativeModeInventoryScreenAccessor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.inventory.Slot;
 
 public class InventoryEssentialsClient {
@@ -34,30 +33,11 @@ public class InventoryEssentialsClient {
         return InventoryEssentials.isServerSideInstalled && !InventoryEssentialsConfig.getActive().forceClientImplementation ? serverSupportedControls : clientOnlyControls;
     }
 
-    public static boolean shouldHandleInput(Screen screen) {
-        if (!(screen instanceof AbstractContainerScreenAccessor accessor)) {
-            return false;
-        }
-
-        final var hoverSlot = accessor.getHoveredSlot();
-
-        // Do not handle drags on crafting result slots
-        if (hoverSlot instanceof ResultSlot) {
-            return false;
-        }
-
-        if (screen instanceof CreativeModeInventoryScreenAccessor creativeAccessor) {
-            return hoverSlot == null || hoverSlot.container instanceof Inventory || hoverSlot.container != creativeAccessor.getCONTAINER();
-        }
-
-        return true;
-    }
-
     public static void onMouseDrag(ScreenMouseEvent.Drag.Pre event) {
         if (ModKeyMappings.keyDragTransfer.isActiveAndDown() && (event.getButton() == 0 || event.getButton() == 1)) {
             if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
                 Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
-                if (hoverSlot == null || !shouldHandleInput(screen)) {
+                if (hoverSlot == null || InventoryEssentialsIgnores.shouldIgnoreScreen(screen) || InventoryEssentialsIgnores.shouldIgnoreSlot(screen, hoverSlot)) {
                     return;
                 }
 
