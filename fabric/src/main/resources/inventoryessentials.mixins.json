@@ -7,6 +7,7 @@
   ],
   "client": [
     "AbstractContainerScreenAccessor",
+    "AbstractContainerMenuAccessor",
     "CreativeModeInventoryScreenAccessor",
     "SlotWrapperAccessor"
   ],
