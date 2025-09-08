@@ -54,7 +54,7 @@ public class InventoryEssentialsClient {
     }
 
     public static void onMouseDrag(ScreenMouseEvent.Drag.Pre event) {
-        if (ModKeyMappings.keyDragTransfer.isActiveAndDown()) {
+        if (ModKeyMappings.keyDragTransfer.isActiveAndDown() && (event.getButton() == 0 || event.getButton() == 1)) {
             if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
                 Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
                 if (hoverSlot == null || !shouldHandleInput(screen) || !shouldHandleSlot(hoverSlot)) {
