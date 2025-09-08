@@ -1,3 +1,1 @@
-- Added `enableBulkTransferSingle` (default: true), allowing SPACE+RIGHTCLICK to bulk transfer one of each item in the container
-- Fixed potential bugs with stacking items in bulk transfer
-- Fixed client-only bulk transfer messing up item positions
+- Fixed drag transfer activating even on mouse buttons other than left and right click
