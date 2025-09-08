@@ -4,6 +4,8 @@ import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.PlayerLoginEvent;
 import net.blay09.mods.balm.api.event.client.ConnectedToServerEvent;
 import net.blay09.mods.balm.api.event.client.DisconnectedFromServerEvent;
+import net.blay09.mods.inventoryessentials.data.ConfigJsonCompatLoader;
+import net.blay09.mods.inventoryessentials.data.ModFileJsonCompatLoader;
 import net.blay09.mods.inventoryessentials.network.HelloMessage;
 import net.blay09.mods.inventoryessentials.network.ModNetworking;
 
@@ -18,6 +20,11 @@ public class InventoryEssentials {
 
         Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), HelloMessage.INSTANCE));
         Balm.getEvents().onEvent(DisconnectedFromServerEvent.class, event -> isServerSideInstalled = false);
+
+        Balm.getConfig().onConfigAvailable(InventoryEssentialsConfig.class, config -> {
+            ModFileJsonCompatLoader.load();
+            ConfigJsonCompatLoader.load();
+        });
     }
 
 }
