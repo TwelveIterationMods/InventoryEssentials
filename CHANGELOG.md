@@ -1,3 +1,5 @@
+- Hofix: Fixed crash on screens with no real menu behind them
+
 - Added a way to ignore screens, slots or menus by type/class either in a mod or in config folder
     - Place a json file under `config/inventoryessentials/ignores/example.json` with the fields `ignoredScreenClasses`,
       `ignoredMenuClasses`, `ignoredSlotClasses` or `ignoredMenuTypes` (each a string array)
