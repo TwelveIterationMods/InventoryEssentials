@@ -21,7 +21,7 @@ public class InventoryEssentials {
         Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), new HelloMessage()));
         Balm.getEvents().onEvent(DisconnectedFromServerEvent.class, event -> isServerSideInstalled = false);
 
-        Balm.getConfig().onConfigAvailable(InventoryEssentialsConfig.class, config -> {
+        Balm.getConfig().onConfigAvailable(InventoryEssentialsConfigData.class, config -> {
             ModFileJsonCompatLoader.load();
             ConfigJsonCompatLoader.load();
         });
