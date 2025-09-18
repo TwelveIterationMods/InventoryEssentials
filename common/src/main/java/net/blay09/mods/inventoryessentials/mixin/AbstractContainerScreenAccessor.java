@@ -19,5 +19,5 @@ public interface AbstractContainerScreenAccessor {
     Slot getHoveredSlot();
 
     @Invoker
-    boolean callHasClickedOutside(double x, double y, int left, int top, int button);
+    boolean callHasClickedOutside(double x, double y, int left, int top);
 }

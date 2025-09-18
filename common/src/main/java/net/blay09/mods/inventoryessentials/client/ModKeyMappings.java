@@ -70,12 +70,10 @@ public class ModKeyMappings {
                     }
 
                     final var accessor = (AbstractContainerScreenAccessor) containerScreen;
-                    int button = keyScreenBulkDrop.getBinding().key().getValue();
                     final var clickedOutside = accessor.callHasClickedOutside(event.mouseX(),
                             event.mouseY(),
                             accessor.getLeftPos(),
-                            accessor.getTopPos(),
-                            button);
+                            accessor.getTopPos());
                     return clickedOutside && InventoryEssentialsClient.getInventoryControls(containerScreen)
                             .dropByType(containerScreen, containerScreen.getMenu().getCarried());
                 })
