@@ -15,28 +15,18 @@ public class ModFileJsonCompatLoader {
     private static final Gson gson = new Gson();
 
     public static void load() {
-        final var modPaths = Balm.lookupAllModPaths("inventoryessentials/ignores");
-        modPaths.forEach((key, value) -> {
-            try {
-                try (final var walker = Files.walk(value)) {
-                    walker.forEach(file -> {
-                        if (file.toString().endsWith(".json")) {
-                            try (final var reader = Files.newBufferedReader(file)) {
-                                final var ignoredData = gson.fromJson(reader, IgnoredData.class);
-                                if (ignoredData != null) {
-                                    InventoryEssentialsIgnores.addIgnoredData(ignoredData);
-                                }
-                            } catch (IOException e) {
-                                logger.error("Failed to load InventoryEssentials file {}", file, e);
-                            }
-
-                        }
-                    });
+        Balm.getLoadedPrimaryModIds().forEach(modId -> Balm.visitModResources("inventoryessentials/ignores", modId, (resource) -> {
+            if (resource.extension().equals("json")) {
+                try (final var reader = resource.bufferedReader()) {
+                    final var ignoredData = gson.fromJson(reader, IgnoredData.class);
+                    if (ignoredData != null) {
+                        InventoryEssentialsIgnores.addIgnoredData(ignoredData);
+                    }
+                } catch (IOException e) {
+                    logger.error("Failed to load InventoryEssentials file {}", resource.name(), e);
                 }
-            } catch (IOException e) {
-                logger.error("Failed to load InventoryEssentials files from mod {}", key, e);
             }
-        });
+        }));
     }
 
 }
