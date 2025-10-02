@@ -15,7 +15,7 @@ public class ModFileJsonCompatLoader {
     private static final Gson gson = new Gson();
 
     public static void load() {
-        Balm.getLoadedPrimaryModIds().forEach(modId -> Balm.visitModResources("inventoryessentials/ignores", modId, (resource) -> {
+        Balm.getLoadedPrimaryModIds().forEach(modId -> Balm.visitModResources(modId, "inventoryessentials/ignores", (resource) -> {
             if (resource.extension().equals("json")) {
                 try (final var reader = resource.bufferedReader()) {
                     final var ignoredData = gson.fromJson(reader, IgnoredData.class);
