@@ -32,7 +32,7 @@ public class CreativeInventoryControls extends ClientOnlyInventoryControls {
         final var player = Minecraft.getInstance().player;
         if (player != null) {
             menu.clicked(slotIndex, mouseButton, clickType, player);
-            menu.broadcastChanges();
+            player.inventoryMenu.broadcastChanges();
         }
     }
 }
