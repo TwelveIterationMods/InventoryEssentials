@@ -1,1 +1,1 @@
-- Updated to Minecraft 1.21.10
+- Fixed items reappearing when shift-dragged in creative inventory
