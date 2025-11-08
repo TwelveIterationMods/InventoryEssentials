@@ -6,6 +6,7 @@
   "key.inventoryessentials.bulk_drop": "Bulk Drop",
   "key.inventoryessentials.screen_bulk_drop": "Bulk Drop out of Screen",
   "key.inventoryessentials.drag_transfer": "Transfer on Hover (Hold)",
+  "key.inventoryessentials.sort_inventory": "Sort Inventory",
 
   "inventoryessentials.configuration.title": "Inventory Essentials",
   "inventoryessentials.configuration.forceClientImplementation": "Force Client Implementation (dev only)",
@@ -27,5 +28,7 @@
   "inventoryessentials.configuration.enableShiftDrag": "Enable Shift Drag",
   "inventoryessentials.configuration.enableShiftDrag.tooltip": "Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?",
   "inventoryessentials.configuration.enableBundleDrag": "Enable Bundle Drag",
-  "inventoryessentials.configuration.enableBundleDrag.tooltip": "Should holding click or right-click with a bundle empty or insert hovered slots?"
+  "inventoryessentials.configuration.enableBundleDrag.tooltip": "Should holding click or right-click with a bundle empty or insert hovered slots?",
+  "inventoryessentials.configuration.enableMiddleClickSort": "Enable Middle Click Sort",
+  "inventoryessentials.configuration.enableMiddleClickSort.tooltip": "Enable sorting on middle click"
 }

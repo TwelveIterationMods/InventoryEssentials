@@ -20,4 +20,6 @@ public interface InventoryControls {
     boolean dropByType(AbstractContainerScreen<?> screen, Slot hoverSlot);
 
     boolean dropByType(AbstractContainerScreen<?> screen, ItemStack itemStack);
+
+    boolean sort(AbstractContainerScreen<?> screen, Slot hoverSlot);
 }
