@@ -34,6 +34,8 @@ public class InventoryEssentialsConfigData implements BalmConfigData {
     @Comment("Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?")
     public boolean enableShiftDrag = true;
 
+    @Comment("Should middle-clicking a slot sort the inventory?")
+    public boolean enableMiddleClickSort = true;
 
 }
 
