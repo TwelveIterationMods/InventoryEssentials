@@ -13,6 +13,7 @@
   "key.inventoryessentials.screen_bulk_drop": "Bulk Drop out of Screen",
   "key.inventoryessentials.screen_bulk_drop_modifier": "Bulk Drop out of Screen (Hold)",
   "key.inventoryessentials.drag_transfer": "Transfer on Hover (Hold)",
+  "key.inventoryessentials.sort_inventory": "Sort Inventory",
 
   "config.inventoryessentials.title": "Inventory Essentials",
   "config.inventoryessentials.forceClientImplementation": "Force Client Implementation (dev only)",

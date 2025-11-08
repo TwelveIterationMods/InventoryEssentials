@@ -5,7 +5,6 @@ import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -408,6 +407,12 @@ public class ClientOnlyInventoryControls implements InventoryControls {
     @Override
     public void dragTransfer(AbstractContainerScreen<?> screen, Slot clickedSlot) {
         slotClick(screen.getMenu(), clickedSlot, 0, ClickType.QUICK_MOVE);
+    }
+
+    @Override
+    public boolean sort(AbstractContainerScreen<?> screen, Slot baseSlot) {
+        final var menu = screen.getMenu();
+        return ClientInventorySorting.sort(menu, baseSlot, this::slotClick);
     }
 
     protected void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType) {

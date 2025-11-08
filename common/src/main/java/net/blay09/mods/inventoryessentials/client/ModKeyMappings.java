@@ -22,6 +22,7 @@ public class ModKeyMappings {
     public static ManagedKeyMapping keyBulkDrop;
     public static ManagedKeyMapping keyScreenBulkDrop;
     public static ManagedKeyMapping keyDragTransfer;
+    public static ManagedKeyMapping keySortInventory;
 
     public static void initialize() {
         keySingleTransfer = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "single_transfer"))
@@ -86,6 +87,12 @@ public class ModKeyMappings {
                 .withContext(KeyConflictContext.SCREEN)
                 .forceVirtual()
                 .build();
+
+        keySortInventory = Kuma.createKeyMapping(new ResourceLocation(InventoryEssentials.MOD_ID, "sort_inventory"))
+                .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_MIDDLE))
+                .handleScreenInput(event -> handleSlotInput(event, () -> InventoryEssentialsConfig.getActive().enableMiddleClickSort,
+                        (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).sort(screen, slot)))
+                .build();
     }
 
     private static boolean handleSlotInput(ScreenInputEvent event, Supplier<Boolean> predicate, BiFunction<AbstractContainerScreen<?>, Slot, Boolean> handler) {
@@ -109,3 +116,4 @@ public class ModKeyMappings {
         return handler.apply(containerScreen, hoverSlot);
     }
 }
+
