@@ -34,6 +34,9 @@ public class InventoryEssentialsConfig {
     @Comment("Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?")
     public boolean enableShiftDrag = true;
 
+    @Comment("Should holding click or right-click with a bundle empty or insert hovered items?")
+    public boolean enableBundleDrag = true;
+
     public static InventoryEssentialsConfig getActive() {
         return Balm.getConfig().getActiveConfig(InventoryEssentialsConfig.class);
     }

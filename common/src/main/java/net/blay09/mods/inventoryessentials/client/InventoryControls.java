@@ -15,6 +15,8 @@ public interface InventoryControls {
 
     void dragTransfer(AbstractContainerScreen<?> screen, Slot clickedSlot);
 
+    void dragClick(AbstractContainerScreen<?> screen, Slot hoveredSlot, int mouseButton);
+
     boolean dropByType(AbstractContainerScreen<?> screen, Slot hoverSlot);
 
     boolean dropByType(AbstractContainerScreen<?> screen, ItemStack itemStack);

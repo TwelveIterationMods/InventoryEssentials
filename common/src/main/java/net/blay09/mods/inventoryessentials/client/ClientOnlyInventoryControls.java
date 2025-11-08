@@ -412,6 +412,11 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         slotClick(screen.getMenu(), clickedSlot, 0, ClickType.QUICK_MOVE);
     }
 
+    @Override
+    public void dragClick(AbstractContainerScreen<?> screen, Slot hoveredSlot, int mouseButton) {
+        slotClick(screen.getMenu(), hoveredSlot, mouseButton, ClickType.PICKUP);
+    }
+
     protected void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType) {
         slotClick(menu, slot.index, mouseButton, clickType);
     }

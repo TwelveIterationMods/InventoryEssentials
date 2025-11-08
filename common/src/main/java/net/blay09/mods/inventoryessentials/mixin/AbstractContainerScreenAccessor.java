@@ -20,4 +20,7 @@ public interface AbstractContainerScreenAccessor {
 
     @Invoker
     boolean callHasClickedOutside(double x, double y, int left, int top);
+
+    @Accessor
+    void setIsQuickCrafting(boolean isQuickCrafting);
 }
