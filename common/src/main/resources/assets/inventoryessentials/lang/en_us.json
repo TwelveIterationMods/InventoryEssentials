@@ -13,5 +13,19 @@
   "inventoryessentials.configuration.allowBulkTransferAllOnEmptySlot": "Allow Transfer All on Empty Slot",
   "inventoryessentials.configuration.allowBulkTransferAllOnEmptySlot.tooltip": "Should Transfer All move all items even if an empty slot was clicked?",
   "inventoryessentials.configuration.bulkTransferArmorSets": "Bulk Transfer Armor Sets",
-  "inventoryessentials.configuration.bulkTransferArmorSets.tooltip": "Should space-clicking armor in the inventory swap to all matching armor?"
+  "inventoryessentials.configuration.bulkTransferArmorSets.tooltip": "Should space-clicking armor in the inventory swap to all matching armor?",
+  "inventoryessentials.configuration.enableSingleTransfer": "Enable Single Transfer",
+  "inventoryessentials.configuration.enableSingleTransfer.tooltip": "Should ctrl-clicking only move one item at a time instead of the full stack?",
+  "inventoryessentials.configuration.enableBulkTransfer": "Enable Bulk Transfer",
+  "inventoryessentials.configuration.enableBulkTransfer.tooltip": "Should shift-ctrl-clicking move all items of the same type at once?",
+  "inventoryessentials.configuration.enableBulkTransferSingle": "Enable Bulk Transfer (One of Each)",
+  "inventoryessentials.configuration.enableBulkTransferSingle.tooltip": "Should control-space-clicking an item move one of each item from that inventory at once?",
+  "inventoryessentials.configuration.enableBulkTransferAll": "Enable Bulk Transfer (All)",
+  "inventoryessentials.configuration.enableBulkTransferAll.tooltip": "Should space-clicking an item move all items from that inventory at once?",
+  "inventoryessentials.configuration.enableBulkDrop": "Enable Bulk Drop",
+  "inventoryessentials.configuration.enableBulkDrop.tooltip": "Should shift-ctrl-drop-clicking drop all items of the same type at once?",
+  "inventoryessentials.configuration.enableShiftDrag": "Enable Shift Drag",
+  "inventoryessentials.configuration.enableShiftDrag.tooltip": "Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?",
+  "inventoryessentials.configuration.enableBundleDrag": "Enable Bundle Drag",
+  "inventoryessentials.configuration.enableBundleDrag.tooltip": "Should holding click or right-click with a bundle empty or insert hovered slots?"
 }
