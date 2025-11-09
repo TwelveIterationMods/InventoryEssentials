@@ -1,5 +1,5 @@
 {
-  "key.categories.inventoryessentials": "Inventory Essentials",
+  "key.category.inventoryessentials.default": "Inventory Essentials",
   "key.inventoryessentials.single_transfer": "Transfer one",
   "key.inventoryessentials.bulk_transfer": "Transfer all of type",
   "key.inventoryessentials.bulk_transfer_all": "Transfer all",
