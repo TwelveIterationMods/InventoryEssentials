@@ -93,6 +93,15 @@ public class ClientInventorySorting {
             final var firstStack = firstSlot.getItem();
             final var secondStack = secondSlot.getItem();
 
+            // If one of the two slots is empty, we just have to do a simple move
+            if (!firstSlot.hasItem() || !secondSlot.hasItem()) {
+                final var fromSlot = firstSlot.hasItem() ? firstSlot : secondSlot;
+                final var toSlot = firstSlot.hasItem() ? secondSlot : firstSlot;
+                clicker.click(menu, fromSlot, 0, ClickType.PICKUP);
+                clicker.click(menu, toSlot, 0, ClickType.PICKUP);
+                return;
+            }
+
             // We can't swap with a bundle normally because clicking it would insert the item - try another way
             if (firstStack.is(ItemTags.BUNDLES) || secondStack.is(ItemTags.BUNDLES)) {
                 Slot emptyBufferSlot = null;

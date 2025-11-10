@@ -37,7 +37,7 @@ public class InventoryEssentialsConfig {
     @Comment("Should holding click or right-click with a bundle empty or insert hovered slots?")
     public boolean enableBundleDrag = true;
 
-    @Comment("Enable sorting on middle click")
+    @Comment("Should middle-clicking a slot sort the inventory?")
     public boolean enableMiddleClickSort = true;
 
     public static InventoryEssentialsConfig getActive() {

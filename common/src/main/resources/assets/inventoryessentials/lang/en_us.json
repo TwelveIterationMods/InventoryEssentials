@@ -30,5 +30,5 @@
   "inventoryessentials.configuration.enableBundleDrag": "Enable Bundle Drag",
   "inventoryessentials.configuration.enableBundleDrag.tooltip": "Should holding click or right-click with a bundle empty or insert hovered slots?",
   "inventoryessentials.configuration.enableMiddleClickSort": "Enable Middle Click Sort",
-  "inventoryessentials.configuration.enableMiddleClickSort.tooltip": "Enable sorting on middle click"
+  "inventoryessentials.configuration.enableMiddleClickSort.tooltip": "Should middle-clicking a slot sort the inventory?"
 }
