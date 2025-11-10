@@ -18,8 +18,9 @@ public class ClientInventorySorting {
     private static final Comparator<ItemStack> defaultComparator =
             Comparator.comparing((ItemStack itemStack) -> itemStack.getHoverName().getString(), String.CASE_INSENSITIVE_ORDER)
                     .thenComparing(Comparator.comparingInt(ItemStack::getCount).reversed())
+                    .thenComparing(itemStack -> itemStack.isEnchanted() ? 0 : 1)
+                    .thenComparingInt(ItemStack::getDamageValue)
                     .thenComparing(itemStack -> Objects.toString(itemStack.getComponents(), ""));
-    ;
 
     @FunctionalInterface
     public interface SlotClicker {
