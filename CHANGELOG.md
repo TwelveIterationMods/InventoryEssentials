@@ -1,1 +1,2 @@
-- Fixed items reappearing when shift-dragged in creative inventory
+- Added basic Inventory Sorting on middle click (`enableMiddleClickSort` option, enabled by default)
+- Fixed various i18n keys
