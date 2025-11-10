@@ -6,6 +6,7 @@ import net.blay09.mods.inventoryessentials.InventoryEssentials;
 public class ModNetworking {
 
     public static void initialize(BalmNetworking networking) {
+        networking.defineNetworkVersion(InventoryEssentials.MOD_ID, "1");
         networking.allowClientAndServerOnly(InventoryEssentials.MOD_ID);
 
         networking.registerClientboundPacket(HelloMessage.TYPE, HelloMessage.class, HelloMessage.STREAM_CODEC, HelloMessage::handle);
