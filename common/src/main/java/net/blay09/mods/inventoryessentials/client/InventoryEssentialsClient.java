@@ -72,7 +72,7 @@ public class InventoryEssentialsClient {
             // If dragging mouse button while holding a bundle, perform drag clicks
             if (InventoryEssentialsConfig.getActive().enableBundleDrag) {
                 final var carriedStack = screen.getMenu().getCarried();
-                if (!carriedStack.isEmpty() && carriedStack.is(ItemTags.BUNDLES)) {
+                if (carriedStack.is(ItemTags.BUNDLES)) {
                     if (hoverSlot != lastDragHoverSlot) {
                         if ((event.getButton() == 0 && hoverSlot.hasItem()) || (event.getButton() == 1 && !hoverSlot.hasItem())) {
                             final var controls = getInventoryControls(screen);
