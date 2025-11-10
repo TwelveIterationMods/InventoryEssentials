@@ -1,6 +1,7 @@
 package net.blay09.mods.inventoryessentials.client;
 
 import net.blay09.mods.inventoryessentials.InventoryUtils;
+import net.blay09.mods.inventoryessentials.tags.ModItemTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -89,6 +90,8 @@ public class ClientInventorySorting {
         if (firstIndex != secondIndex) {
             final var firstSlot = slots.get(firstIndex);
             final var secondSlot = slots.get(secondIndex);
+            final var firstStack = firstSlot.getItem();
+            final var secondStack = secondSlot.getItem();
 
             // If one of the two slots is empty, we just have to do a simple move
             if (!firstSlot.hasItem() || !secondSlot.hasItem()) {
@@ -99,9 +102,30 @@ public class ClientInventorySorting {
                 return;
             }
 
-            clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
-            clicker.click(menu, secondSlot, 0, ClickType.PICKUP);
-            clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
+            // We can't swap with a bundle normally because clicking it would insert the item - try another way
+            if (firstStack.is(ModItemTags.BUNDLES) || secondStack.is(ModItemTags.BUNDLES)) {
+                Slot emptyBufferSlot = null;
+                for (final var candidate : slots) {
+                    if (!candidate.hasItem()) {
+                        emptyBufferSlot = candidate;
+                        break;
+                    }
+                }
+
+                // If we found an empty slot to use as a buffer, use it to swap the two slots; otherwise just leave the bundle untouched
+                if (emptyBufferSlot != null) {
+                    clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
+                    clicker.click(menu, emptyBufferSlot, 0, ClickType.PICKUP);
+                    clicker.click(menu, secondSlot, 0, ClickType.PICKUP);
+                    clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
+                    clicker.click(menu, emptyBufferSlot, 0, ClickType.PICKUP);
+                    clicker.click(menu, secondSlot, 0, ClickType.PICKUP);
+                }
+            } else {
+                clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
+                clicker.click(menu, secondSlot, 0, ClickType.PICKUP);
+                clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
+            }
         }
     }
 
@@ -116,6 +140,12 @@ public class ClientInventorySorting {
             for (int j = i + 1; j < slots.size(); j++) {
                 final var otherSlot = slots.get(j);
                 final var otherStack = otherSlot.getItem();
+
+                // We ignore bundles because clicking them would insert the item into the bundle
+                if (thisStack.is(ModItemTags.BUNDLES) || otherStack.is(ModItemTags.BUNDLES)) {
+                    continue;
+                }
+
                 if (!otherStack.isEmpty() && ItemStack.isSameItemSameComponents(thisStack, otherStack)) {
                     clicker.click(menu, otherSlot, 0, ClickType.PICKUP);
                     clicker.click(menu, thisSlot, 0, ClickType.PICKUP);
@@ -145,4 +175,5 @@ public class ClientInventorySorting {
         // We only sort the most standard slots you would find in your inventory or chests
         return slot.getClass() == Slot.class;
     }
+
 }
