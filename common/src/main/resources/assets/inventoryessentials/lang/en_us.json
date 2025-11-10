@@ -34,8 +34,6 @@
   "config.inventoryessentials.enableBulkDrop.tooltip": "Should shift-ctrl-drop-clicking drop all items of the same type at once?",
   "config.inventoryessentials.enableShiftDrag": "Enable Shift Drag",
   "config.inventoryessentials.enableShiftDrag.tooltip": "Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?",
-  "config.inventoryessentials.enableBundleDrag": "Enable Bundle Drag",
-  "config.inventoryessentials.enableBundleDrag.tooltip": "Should holding click or right-click with a bundle empty or insert hovered slots?",
   "config.inventoryessentials.enableMiddleClickSort": "Enable Middle Click Sort",
   "config.inventoryessentials.enableMiddleClickSort.tooltip": "Should middle-clicking a slot sort the inventory?"
 }
