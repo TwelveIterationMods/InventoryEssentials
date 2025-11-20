@@ -1,3 +1,1 @@
-- Added basic Inventory Sorting on middle click (`enableMiddleClickSort` option, enabled by default)
-- Added ability to drag bundle with left or right click held to quickly insert or withdraw items (`enableBundleDrag` option, enabled by default)
-- Fixed various i18n keys
+- Updated to Minecraft 1.21.11

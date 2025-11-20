@@ -1,6 +1,6 @@
 package net.blay09.mods.inventoryessentials.client;
 
-import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.Balm;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.network.BulkTransferAllMessage;
 import net.blay09.mods.inventoryessentials.network.BulkTransferSingleMessage;
@@ -20,7 +20,7 @@ public class ServerSupportedInventoryControls extends ClientOnlyInventoryControl
         }
 
         if (clickedSlot.mayPickup(player)) {
-            Balm.getNetworking().sendToServer(new SingleTransferMessage(clickedSlot.index));
+            Balm.networking().sendToServer(new SingleTransferMessage(clickedSlot.index));
             return true;
         }
 
@@ -39,7 +39,7 @@ public class ServerSupportedInventoryControls extends ClientOnlyInventoryControl
         }
 
         if (clickedSlot.mayPickup(player)) {
-            Balm.getNetworking().sendToServer(new BulkTransferSingleMessage(clickedSlot.index));
+            Balm.networking().sendToServer(new BulkTransferSingleMessage(clickedSlot.index));
             return true;
         }
 
@@ -58,7 +58,7 @@ public class ServerSupportedInventoryControls extends ClientOnlyInventoryControl
         }
 
         if (clickedSlot.mayPickup(player)) {
-            Balm.getNetworking().sendToServer(new BulkTransferAllMessage(clickedSlot.index));
+            Balm.networking().sendToServer(new BulkTransferAllMessage(clickedSlot.index));
             return true;
         }
 

@@ -10,7 +10,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,7 +25,7 @@ import java.util.*;
 
 public record BulkTransferSingleMessage(int slotNumber) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<BulkTransferSingleMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID,
+    public static final CustomPacketPayload.Type<BulkTransferSingleMessage> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(InventoryEssentials.MOD_ID,
             "bulk_transfer_single"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, BulkTransferSingleMessage> STREAM_CODEC = StreamCodec.composite(

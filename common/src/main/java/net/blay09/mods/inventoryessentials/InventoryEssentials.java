@@ -1,9 +1,8 @@
 package net.blay09.mods.inventoryessentials;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.PlayerLoginEvent;
-import net.blay09.mods.balm.api.event.client.ConnectedToServerEvent;
-import net.blay09.mods.balm.api.event.client.DisconnectedFromServerEvent;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.core.BalmRegistrars;
+import net.blay09.mods.balm.platform.event.callback.ServerPlayerCallback;
 import net.blay09.mods.inventoryessentials.data.ConfigJsonCompatLoader;
 import net.blay09.mods.inventoryessentials.data.ModFileJsonCompatLoader;
 import net.blay09.mods.inventoryessentials.network.HelloMessage;
@@ -14,14 +13,13 @@ public class InventoryEssentials {
     public static final String MOD_ID = "inventoryessentials";
     public static boolean isServerSideInstalled;
 
-    public static void initialize() {
+    public static void initialize(BalmRegistrars registrars) {
         InventoryEssentialsConfig.initialize();
-        ModNetworking.initialize(Balm.getNetworking());
+        ModNetworking.initialize(Balm.networking());
 
-        Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), HelloMessage.INSTANCE));
-        Balm.getEvents().onEvent(DisconnectedFromServerEvent.class, event -> isServerSideInstalled = false);
+        ServerPlayerCallback.Login.EVENT.register(player -> Balm.networking().sendTo(player, HelloMessage.INSTANCE));
 
-        Balm.getConfig().onConfigAvailable(InventoryEssentialsConfig.class, config -> {
+        Balm.config().onConfigAvailable(InventoryEssentialsConfig.class, config -> {
             ModFileJsonCompatLoader.load();
             ConfigJsonCompatLoader.load();
         });

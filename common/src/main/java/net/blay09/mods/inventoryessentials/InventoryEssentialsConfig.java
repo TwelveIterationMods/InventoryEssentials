@@ -1,8 +1,8 @@
 package net.blay09.mods.inventoryessentials;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.config.reflection.Comment;
-import net.blay09.mods.balm.api.config.reflection.Config;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.config.reflection.Comment;
+import net.blay09.mods.balm.platform.config.reflection.Config;
 
 @Config(InventoryEssentials.MOD_ID)
 public class InventoryEssentialsConfig {
@@ -41,11 +41,11 @@ public class InventoryEssentialsConfig {
     public boolean enableMiddleClickSort = true;
 
     public static InventoryEssentialsConfig getActive() {
-        return Balm.getConfig().getActiveConfig(InventoryEssentialsConfig.class);
+        return Balm.config().getActiveConfig(InventoryEssentialsConfig.class);
     }
 
     public static void initialize() {
-        Balm.getConfig().registerConfig(InventoryEssentialsConfig.class);
+        Balm.config().registerConfig(InventoryEssentialsConfig.class);
     }
 }
 

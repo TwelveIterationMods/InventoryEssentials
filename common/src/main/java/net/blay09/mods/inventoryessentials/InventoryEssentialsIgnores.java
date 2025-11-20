@@ -7,7 +7,7 @@ import net.blay09.mods.inventoryessentials.mixin.CreativeModeInventoryScreenAcce
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.inventory.Slot;
@@ -21,7 +21,7 @@ public class InventoryEssentialsIgnores {
     private static final Set<String> ignoredScreenClasses = new HashSet<>();
     private static final Set<String> ignoredMenuClasses = new HashSet<>();
     private static final Set<String> ignored = new HashSet<>();
-    private static final Set<ResourceLocation> ignoredMenuTypes = new HashSet<>();
+    private static final Set<Identifier> ignoredMenuTypes = new HashSet<>();
 
     public static boolean shouldIgnoreScreen(Screen screen) {
         if (!(screen instanceof AbstractContainerScreenAccessor)) {
@@ -68,7 +68,7 @@ public class InventoryEssentialsIgnores {
         return false;
     }
 
-    public static void addIgnoredMenuType(ResourceLocation menuId) {
+    public static void addIgnoredMenuType(Identifier menuId) {
         ignoredMenuTypes.add(menuId);
     }
 
@@ -86,7 +86,7 @@ public class InventoryEssentialsIgnores {
 
     public static void addIgnoredData(IgnoredData ignoredData) {
         ignoredData.ignoredMenuClasses.forEach(InventoryEssentialsIgnores::addIgnoredMenuClass);
-        ignoredData.ignoredMenuTypes.stream().map(ResourceLocation::parse).forEach(InventoryEssentialsIgnores::addIgnoredMenuType);
+        ignoredData.ignoredMenuTypes.stream().map(Identifier::parse).forEach(InventoryEssentialsIgnores::addIgnoredMenuType);
         ignoredData.ignoredScreenClasses.forEach(InventoryEssentialsIgnores::addIgnoredScreenClass);
         ignoredData.ignoredSlotClasses.forEach(InventoryEssentialsIgnores::addIgnoredSlotClass);
     }
