@@ -27,8 +27,8 @@ public class InventoryEssentialsClient {
 
         ModKeyMappings.initialize();
 
-        ScreenCallback.MouseDrag.BEFORE.register(InventoryEssentialsClient::onMouseDrag);
-        ScreenCallback.MouseRelease.BEFORE.register(InventoryEssentialsClient::onMouseRelease);
+        ScreenCallback.MouseDrag.Before.EVENT.register(InventoryEssentialsClient::onMouseDrag);
+        ScreenCallback.MouseRelease.Before.EVENT.register(InventoryEssentialsClient::onMouseRelease);
     }
 
     public static InventoryControls getInventoryControls(Screen screen) {
@@ -39,7 +39,7 @@ public class InventoryEssentialsClient {
         return InventoryEssentials.isServerSideInstalled && !InventoryEssentialsConfig.getActive().forceClientImplementation ? serverSupportedControls : clientOnlyControls;
     }
 
-    public static boolean onMouseRelease(Screen screen, double mouseX, double mouseY, int button, boolean consumed) {
+    public static boolean onMouseRelease(Screen screen, double mouseX, double mouseY, int button) {
         if (screen instanceof AbstractContainerScreen<?> containerScreen) {
             Slot hoverSlot = ((AbstractContainerScreenAccessor) containerScreen).getHoveredSlot();
             if (hoverSlot == null || InventoryEssentialsIgnores.shouldIgnoreScreen(containerScreen) || InventoryEssentialsIgnores.shouldIgnoreSlot(containerScreen, hoverSlot)) {
@@ -54,7 +54,7 @@ public class InventoryEssentialsClient {
         return false;
     }
 
-    public static boolean onMouseDrag(Screen screen, double mouseX, double mouseY, int button, double horizontalAmount, double verticalAmount, boolean consumed) {
+    public static boolean onMouseDrag(Screen screen, double mouseX, double mouseY, int button, double horizontalAmount, double verticalAmount) {
         if (screen instanceof AbstractContainerScreen<?> containerScreen) {
             Slot hoverSlot = ((AbstractContainerScreenAccessor) containerScreen).getHoveredSlot();
             if (hoverSlot == null || InventoryEssentialsIgnores.shouldIgnoreScreen(containerScreen) || InventoryEssentialsIgnores.shouldIgnoreSlot(containerScreen, hoverSlot)) {

@@ -17,7 +17,7 @@ public class InventoryEssentials {
         InventoryEssentialsConfig.initialize();
         ModNetworking.initialize(Balm.networking());
 
-        ServerPlayerCallback.Login.EVENT.register(player -> Balm.networking().sendTo(player, HelloMessage.INSTANCE));
+        ServerPlayerCallback.Join.EVENT.register(player -> Balm.networking().sendTo(player, HelloMessage.INSTANCE));
 
         Balm.config().onConfigAvailable(InventoryEssentialsConfig.class, config -> {
             ModFileJsonCompatLoader.load();
