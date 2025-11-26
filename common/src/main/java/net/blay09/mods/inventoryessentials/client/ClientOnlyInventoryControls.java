@@ -85,7 +85,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
 
             if (InventoryUtils.isSameInventory(slot, clickedSlot)) {
-                ItemStack slotStackCopy = slot.getItem();
+                ItemStack slotStackCopy = slot.getItem().copy();
                 slotStackCopy.setDamageValue(0);
                 if (ItemStack.isSameItemSameComponents(clickedStackCopy, slotStackCopy)) {
                     transferSlots.add(slot);
