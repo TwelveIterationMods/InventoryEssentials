@@ -1,2 +1,2 @@
-- Added basic Inventory Sorting on middle click (`enableMiddleClickSort` option, enabled by default)
-- Fixed various i18n keys
+- Fixed sorting inserting into bundles from mods that backport the vanilla feature
+- Fixed item damage desync when bulk transfering items by type
