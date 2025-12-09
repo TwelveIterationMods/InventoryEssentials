@@ -1,2 +1,1 @@
-- Fixed sorting inserting into bundles from mods that backport the vanilla feature
-- Fixed item damage desync when bulk transfering items by type
+- Fixed sorting not working inside Shulker Boxes
