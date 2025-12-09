@@ -1,1 +1,1 @@
-- Fixed item damage desync when bulk transfering items by type
+- Fixed sorting not working inside Shulker Boxes
