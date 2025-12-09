@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ShulkerBoxSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -173,7 +174,8 @@ public class ClientInventorySorting {
         }
 
         // We only sort the most standard slots you would find in your inventory or chests
-        return slot.getClass() == Slot.class;
+        return slot.getClass() == Slot.class
+                || slot.getClass() == ShulkerBoxSlot.class;
     }
 
 }
