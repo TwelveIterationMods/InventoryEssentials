@@ -2,6 +2,7 @@
   "key.category.inventoryessentials.default": "Inventory Essentials",
   "key.inventoryessentials.single_transfer": "Transfer one",
   "key.inventoryessentials.bulk_transfer": "Transfer all of type",
+  "key.inventoryessentials.bulk_transfer_single": "Transfer single",
   "key.inventoryessentials.bulk_transfer_all": "Transfer all",
   "key.inventoryessentials.bulk_drop": "Bulk Drop",
   "key.inventoryessentials.screen_bulk_drop": "Bulk Drop out of Screen",
