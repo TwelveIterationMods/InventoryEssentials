@@ -1,5 +1,6 @@
 package net.blay09.mods.inventoryessentials.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.client.screen.ScreenMouseEvent;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
@@ -22,7 +23,9 @@ public class InventoryEssentialsClient {
     public static void initialize() {
         ModKeyMappings.initialize();
 
+        Balm.getEvents().onEvent(ScreenMouseEvent.Click.Pre.class, InventoryEssentialsClient::onMouseClick);
         Balm.getEvents().onEvent(ScreenMouseEvent.Drag.Pre.class, InventoryEssentialsClient::onMouseDrag);
+        Balm.getEvents().onEvent(ScreenMouseEvent.Release.Pre.class, InventoryEssentialsClient::onMouseRelease);
     }
 
     public static InventoryControls getInventoryControls(Screen screen) {
@@ -31,6 +34,19 @@ public class InventoryEssentialsClient {
         }
 
         return InventoryEssentials.isServerSideInstalled && !InventoryEssentialsConfig.getActive().forceClientImplementation ? serverSupportedControls : clientOnlyControls;
+    }
+
+    public static void onMouseClick(ScreenMouseEvent.Click.Pre event) {
+        if (ModKeyMappings.keyDragTransfer.isActiveAndDown() && event.getButton() == InputConstants.MOUSE_BUTTON_LEFT || event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT) {
+            if (event.getScreen() instanceof AbstractContainerScreen<?> screen) {
+                Slot hoverSlot = ((AbstractContainerScreenAccessor) screen).getHoveredSlot();
+                if (hoverSlot != null && !InventoryEssentialsIgnores.shouldIgnoreScreen(screen) && !InventoryEssentialsIgnores.shouldIgnoreSlot(screen, hoverSlot)) {
+                    // Consider the clicked slot as lastDragHoverSlot to avoid doing double shift-clicks on the first slot
+                    // Double shift-clicks are a problem with modded slots that may have more than 64 items in them (e.g. upgraded Sophisticated Backpacks)
+                    lastDragHoverSlot = hoverSlot;
+                }
+            }
+        }
     }
 
     public static void onMouseDrag(ScreenMouseEvent.Drag.Pre event) {
@@ -50,6 +66,12 @@ public class InventoryEssentialsClient {
                 }
             }
         } else {
+            lastDragHoverSlot = null;
+        }
+    }
+
+    public static void onMouseRelease(ScreenMouseEvent.Release.Pre event) {
+        if (event.getButton() == InputConstants.MOUSE_BUTTON_LEFT || event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT) {
             lastDragHoverSlot = null;
         }
     }
