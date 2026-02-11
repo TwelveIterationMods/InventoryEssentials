@@ -1,5 +1,6 @@
 package net.blay09.mods.inventoryessentials.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.balm.client.BalmClientRegistrars;
 import net.blay09.mods.balm.client.platform.event.callback.ClientLifecycleCallback;
 import net.blay09.mods.balm.client.platform.event.callback.ScreenCallback;
@@ -10,6 +11,7 @@ import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor
 import net.blay09.mods.inventoryessentials.mixin.CreativeModeInventoryScreenAccessor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.inventory.Slot;
 
@@ -27,6 +29,7 @@ public class InventoryEssentialsClient {
 
         ModKeyMappings.initialize();
 
+        ScreenCallback.MousePress.Before.EVENT.register(InventoryEssentialsClient::onMouseClick);
         ScreenCallback.MouseDrag.Before.EVENT.register(InventoryEssentialsClient::onMouseDrag);
         ScreenCallback.MouseRelease.Before.EVENT.register(InventoryEssentialsClient::onMouseRelease);
     }
@@ -40,6 +43,10 @@ public class InventoryEssentialsClient {
     }
 
     public static boolean onMouseRelease(Screen screen, double mouseX, double mouseY, int button) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT || button == InputConstants.MOUSE_BUTTON_RIGHT) {
+            lastDragHoverSlot = null;
+        }
+
         if (screen instanceof AbstractContainerScreen<?> containerScreen) {
             Slot hoverSlot = ((AbstractContainerScreenAccessor) containerScreen).getHoveredSlot();
             if (hoverSlot == null || InventoryEssentialsIgnores.shouldIgnoreScreen(containerScreen) || InventoryEssentialsIgnores.shouldIgnoreSlot(containerScreen, hoverSlot)) {
@@ -49,6 +56,20 @@ public class InventoryEssentialsClient {
             if (hasDragClicked) {
                 hasDragClicked = false;
                 return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean onMouseClick(Screen screen, MouseButtonEvent event) {
+        if (ModKeyMappings.keyDragTransfer.isActiveAndDown() && event.button() == InputConstants.MOUSE_BUTTON_LEFT || event.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
+            if (screen instanceof AbstractContainerScreen<?> containerScreen) {
+                Slot hoverSlot = ((AbstractContainerScreenAccessor) containerScreen).getHoveredSlot();
+                if (hoverSlot != null && !InventoryEssentialsIgnores.shouldIgnoreScreen(containerScreen) && !InventoryEssentialsIgnores.shouldIgnoreSlot(containerScreen, hoverSlot)) {
+                    // Consider the clicked slot as lastDragHoverSlot to avoid doing double shift-clicks on the first slot
+                    // Double shift-clicks are a problem with modded slots that may have more than 64 items in them (e.g. upgraded Sophisticated Backpacks)
+                    lastDragHoverSlot = hoverSlot;
+                }
             }
         }
         return false;
