@@ -1,1 +1,1 @@
-- Fixed sorting not working inside Shulker Boxes
+- Fixed double shift click on the first slot when using drag transfer, resulting in two stacks being extracted from things like Sophisticated Backpacks with stack upgrades
