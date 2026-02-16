@@ -56,7 +56,7 @@ public class InventoryOperations {
                 }
             } else if (slot.hasItem()) {
                 nonEmptyTargetSlots.add(slot);
-            } else {
+            } else if (fillEmptySlots) {
                 emptyTargetSlots.add(slot);
             }
         }
@@ -65,80 +65,7 @@ public class InventoryOperations {
             return false;
         }
 
-        boolean movedAny = false;
-        for (final var sourceSlot : sourceSlots) {
-            if (!sourceSlot.hasItem()) {
-                continue;
-            }
-
-            slotClickHandler.click(menu, sourceSlot, 0, ClickType.PICKUP);
-            var carried = menu.getCarried();
-            if (carried.isEmpty()) {
-                continue;
-            }
-
-            final var sourceStack = carried.copy();
-            boolean hasMatchingItemInContainer = false;
-            for (final var targetSlot : nonEmptyTargetSlots) {
-                final var targetStack = targetSlot.getItem();
-                if (targetStack.isEmpty() || !ItemStack.isSameItemSameComponents(sourceStack, targetStack)) {
-                    continue;
-                } else {
-                    hasMatchingItemInContainer = true;
-                }
-
-                final int targetLimit = Math.min(targetSlot.getMaxStackSize(), targetSlot.getMaxStackSize(targetStack));
-                if (targetStack.getCount() >= targetLimit) {
-                    continue;
-                }
-
-                final int oldCarriedCount = menu.getCarried().getCount();
-                slotClickHandler.click(menu, targetSlot, 0, ClickType.PICKUP);
-                carried = menu.getCarried();
-                if (carried.getCount() < oldCarriedCount) {
-                    movedAny = true;
-                }
-                if (carried.isEmpty()) {
-                    break;
-                }
-            }
-
-            if (fillEmptySlots && !carried.isEmpty() && hasMatchingItemInContainer) {
-                for (final Iterator<Slot> iterator = emptyTargetSlots.iterator(); iterator.hasNext(); ) {
-                    final var emptyTargetSlot = iterator.next();
-                    if (emptyTargetSlot.hasItem()) {
-                        nonEmptyTargetSlots.add(emptyTargetSlot);
-                        iterator.remove();
-                        continue;
-                    }
-
-                    if (!emptyTargetSlot.mayPlace(sourceStack)) {
-                        continue;
-                    }
-
-                    final int oldCarriedCount = menu.getCarried().getCount();
-                    slotClickHandler.click(menu, emptyTargetSlot, 0, ClickType.PICKUP);
-                    carried = menu.getCarried();
-                    if (carried.getCount() < oldCarriedCount) {
-                        movedAny = true;
-                        if (emptyTargetSlot.hasItem()) {
-                            nonEmptyTargetSlots.add(emptyTargetSlot);
-                            iterator.remove();
-                        }
-                    }
-
-                    if (carried.isEmpty()) {
-                        break;
-                    }
-                }
-            }
-
-            if (!menu.getCarried().isEmpty()) {
-                slotClickHandler.click(menu, sourceSlot, 0, ClickType.PICKUP);
-            }
-        }
-
-        return movedAny;
+        return transferToSlots(menu, sourceSlots, nonEmptyTargetSlots, emptyTargetSlots);
     }
 
     public boolean transferToInventory(AbstractContainerMenu menu, Player player, boolean includeHotbar, boolean fillEmptySlots) {
@@ -161,7 +88,7 @@ public class InventoryOperations {
                         (includeHotbar || containerSlot >= Inventory.SELECTION_SIZE)) {
                     if (slot.hasItem()) {
                         nonEmptyTargetSlots.add(slot);
-                    } else {
+                    } else if (fillEmptySlots) {
                         emptyTargetSlots.add(slot);
                     }
                 }
@@ -174,6 +101,10 @@ public class InventoryOperations {
             return false;
         }
 
+        return transferToSlots(menu, sourceSlots, nonEmptyTargetSlots, emptyTargetSlots);
+    }
+
+    private boolean transferToSlots(AbstractContainerMenu menu, ArrayList<Slot> sourceSlots, ArrayList<Slot> nonEmptyTargetSlots, ArrayList<Slot> emptyTargetSlots) {
         boolean movedAny = false;
         for (final var sourceSlot : sourceSlots) {
             if (!sourceSlot.hasItem()) {
@@ -187,13 +118,13 @@ public class InventoryOperations {
             }
 
             final var sourceStack = carried.copy();
-            boolean hasMatchingItemInInventory = false;
+            boolean hasMatchingItemInTargets = false;
             for (final var targetSlot : nonEmptyTargetSlots) {
                 final var targetStack = targetSlot.getItem();
                 if (targetStack.isEmpty() || !ItemStack.isSameItemSameComponents(sourceStack, targetStack)) {
                     continue;
                 } else {
-                    hasMatchingItemInInventory = true;
+                    hasMatchingItemInTargets = true;
                 }
 
                 final int targetLimit = Math.min(targetSlot.getMaxStackSize(), targetSlot.getMaxStackSize(targetStack));
@@ -212,7 +143,7 @@ public class InventoryOperations {
                 }
             }
 
-            if (fillEmptySlots && !carried.isEmpty() && hasMatchingItemInInventory) {
+            if (!emptyTargetSlots.isEmpty() && !carried.isEmpty() && hasMatchingItemInTargets) {
                 for (final Iterator<Slot> iterator = emptyTargetSlots.iterator(); iterator.hasNext(); ) {
                     final var emptyTargetSlot = iterator.next();
                     if (emptyTargetSlot.hasItem()) {
