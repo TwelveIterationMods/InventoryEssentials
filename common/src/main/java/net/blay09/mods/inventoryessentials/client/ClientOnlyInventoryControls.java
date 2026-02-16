@@ -1,6 +1,7 @@
 package net.blay09.mods.inventoryessentials.client;
 
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
+import net.blay09.mods.inventoryessentials.InventoryOperations;
 import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -17,7 +18,12 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 
-public class    ClientOnlyInventoryControls implements InventoryControls {
+public class ClientOnlyInventoryControls implements InventoryControls {
+    private final InventoryOperations operations = createOperations();
+
+    protected InventoryOperations createOperations() {
+        return new InventoryOperations(this::slotClick, InventoryOperations.SlotPolicy.always());
+    }
 
     @Override
     public boolean singleTransfer(AbstractContainerScreen<?> screen, Slot clickedSlot) {
@@ -44,7 +50,7 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
         for (Slot slot : menu.slots) {
             ItemStack stack = slot.getItem();
             // Skip the clicked slot, skip slots that do not accept the clicked item, skip slots that are of the same inventory (since we're moving between inventories), and skip slots that are already full
-            if (!isValidTargetSlot(slot) || slot == clickedSlot || !slot.mayPlace(targetStack) || InventoryUtils.isSameInventory(clickedSlot, slot)
+            if (!operations.isValidSlot(slot) || slot == clickedSlot || !slot.mayPlace(targetStack) || InventoryUtils.isSameInventory(clickedSlot, slot)
                     || stack.getCount() >= Math.min(slot.getMaxStackSize(), slot.getMaxStackSize(stack))) {
                 continue;
             }
@@ -80,7 +86,7 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
         List<Slot> transferSlots = new ArrayList<>();
         transferSlots.add(clickedSlot);
         for (Slot slot : menu.slots) {
-            if (slot == clickedSlot || !isValidTargetSlot(slot)) {
+            if (slot == clickedSlot || !operations.isValidSlot(slot)) {
                 continue;
             }
 
@@ -126,13 +132,13 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
 
         boolean movedAny = false;
 
-        // If we're probably transferring to the player inventory, use transfer-to-inventory behaviour instead of just shift-clicking the items
+        // If we're probably transferring to the player inventory, use transfer-to-inventory behavior instead of just shift-clicking the items
         if (isProbablyMovingToPlayerInventory) {
             // To avoid O(n²), find empty and non-empty slots beforehand in one loop iteration
             Deque<Slot> emptySlots = new ArrayDeque<>();
             List<Slot> nonEmptySlots = new ArrayList<>();
             for (Slot slot : menu.slots) {
-                if (InventoryUtils.isSameInventory(slot, clickedSlot) || !(slot.container instanceof Inventory) || !isValidTargetSlot(slot)) {
+                if (InventoryUtils.isSameInventory(slot, clickedSlot) || !(slot.container instanceof Inventory) || !operations.isValidSlot(slot)) {
                     continue;
                 }
 
@@ -150,7 +156,7 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
                 }
 
                 if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
-                    // and bulk-transfer each of them using the prefer-inventory behaviour
+                    // and bulk-transfer each of them using the prefer-inventory behavior
                     if (quickTransferSingle(menu, emptySlots, nonEmptySlots, slot)) {
                         movedAny = true;
                     }
@@ -191,7 +197,7 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
         } else {
             // Just a normal inventory-to-inventory transfer, simply shift-click the items
             for (Slot slot : menu.slots) {
-                if (!slot.mayPickup(player) || !isValidTargetSlot(slot)) {
+                if (!slot.mayPickup(player) || !operations.isValidSlot(slot)) {
                     continue;
                 }
 
@@ -232,13 +238,13 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
 
         boolean movedAny = false;
 
-        // If we're probably transferring to the player inventory, use transfer-to-inventory behaviour instead of just shift-clicking the items
+        // If we're probably transferring to the player inventory, use transfer-to-inventory behavior instead of just shift-clicking the items
         if (isProbablyMovingToPlayerInventory) {
             // To avoid O(n²), find empty and non-empty slots beforehand in one loop iteration
             Deque<Slot> emptySlots = new ArrayDeque<>();
             List<Slot> nonEmptySlots = new ArrayList<>();
             for (Slot slot : menu.slots) {
-                if (InventoryUtils.isSameInventory(slot, clickedSlot) || !(slot.container instanceof Inventory) || !isValidTargetSlot(slot)) {
+                if (InventoryUtils.isSameInventory(slot, clickedSlot) || !(slot.container instanceof Inventory) || !operations.isValidSlot(slot)) {
                     continue;
                 }
 
@@ -256,7 +262,7 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
                 }
 
                 if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
-                    // and bulk-transfer each of them using the prefer-inventory behaviour
+                    // and bulk-transfer each of them using the prefer-inventory behavior
                     if (quickTransferStack(menu, emptySlots, nonEmptySlots, slot)) {
                         movedAny = true;
                     }
@@ -297,7 +303,7 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
         } else {
             // Just a normal inventory-to-inventory transfer, simply shift-click the items
             for (Slot slot : menu.slots) {
-                if (!slot.mayPickup(player) || !isValidTargetSlot(slot)) {
+                if (!slot.mayPickup(player) || !operations.isValidSlot(slot)) {
                     continue;
                 }
 
@@ -408,123 +414,22 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
 
     @Override
     public boolean restockContainer(AbstractContainerScreen<?> screen) {
-        return transferToContainer(screen, false);
-    }
-
-    @Override
-    public boolean dumpToContainer(AbstractContainerScreen<?> screen) {
-        return transferToContainer(screen, true);
-    }
-
-    private boolean transferToContainer(AbstractContainerScreen<?> screen, boolean fillEmptySlots) {
         final var player = Minecraft.getInstance().player;
         if (player == null) {
             return false;
         }
 
-        final var menu = screen.getMenu();
-        if (!menu.getCarried().isEmpty() || menu instanceof InventoryMenu) {
+        return operations.transferToContainer(screen.getMenu(), player, false);
+    }
+
+    @Override
+    public boolean dumpToContainer(AbstractContainerScreen<?> screen) {
+        final var player = Minecraft.getInstance().player;
+        if (player == null) {
             return false;
         }
 
-        final var sourceSlots = new ArrayList<Slot>();
-        final var nonEmptyTargetSlots = new ArrayList<Slot>();
-        final var emptyTargetSlots = new ArrayList<Slot>();
-        for (final var slot : menu.slots) {
-            if (!isValidTargetSlot(slot)) {
-                continue;
-            }
-
-            if (slot.container instanceof Inventory) {
-                final var containerSlot = slot.getContainerSlot();
-                if (containerSlot >= Inventory.SELECTION_SIZE && containerSlot < Inventory.INVENTORY_SIZE && slot.mayPickup(player) && slot.hasItem()) {
-                    sourceSlots.add(slot);
-                }
-            } else if (slot.hasItem()) {
-                nonEmptyTargetSlots.add(slot);
-            } else {
-                emptyTargetSlots.add(slot);
-            }
-        }
-
-        if (sourceSlots.isEmpty() || nonEmptyTargetSlots.isEmpty()) {
-            return false;
-        }
-
-        boolean movedAny = false;
-        for (final var sourceSlot : sourceSlots) {
-            if (!sourceSlot.hasItem()) {
-                continue;
-            }
-
-            slotClick(menu, sourceSlot, 0, ClickType.PICKUP);
-            var carried = menu.getCarried();
-            if (carried.isEmpty()) {
-                continue;
-            }
-
-            final var sourceStack = carried.copy();
-            boolean hasMatchingItemInContainer = false;
-            for (final var targetSlot : nonEmptyTargetSlots) {
-                final var targetStack = targetSlot.getItem();
-                if (targetStack.isEmpty() || !ItemStack.isSameItemSameComponents(sourceStack, targetStack)) {
-                    continue;
-                } else {
-                    hasMatchingItemInContainer = true;
-                }
-
-                final int targetLimit = Math.min(targetSlot.getMaxStackSize(), targetSlot.getMaxStackSize(targetStack));
-                if (targetStack.getCount() >= targetLimit) {
-                    continue;
-                }
-
-                final int oldCarriedCount = menu.getCarried().getCount();
-                slotClick(menu, targetSlot, 0, ClickType.PICKUP);
-                carried = menu.getCarried();
-                if (carried.getCount() < oldCarriedCount) {
-                    movedAny = true;
-                }
-                if (carried.isEmpty()) {
-                    break;
-                }
-            }
-
-            if (fillEmptySlots && !carried.isEmpty() && hasMatchingItemInContainer) {
-                for (final Iterator<Slot> iterator = emptyTargetSlots.iterator(); iterator.hasNext(); ) {
-                    final var emptyTargetSlot = iterator.next();
-                    if (emptyTargetSlot.hasItem()) {
-                        nonEmptyTargetSlots.add(emptyTargetSlot);
-                        iterator.remove();
-                        continue;
-                    }
-
-                    if (!emptyTargetSlot.mayPlace(sourceStack)) {
-                        continue;
-                    }
-
-                    final int oldCarriedCount = menu.getCarried().getCount();
-                    slotClick(menu, emptyTargetSlot, 0, ClickType.PICKUP);
-                    carried = menu.getCarried();
-                    if (carried.getCount() < oldCarriedCount) {
-                        movedAny = true;
-                        if (emptyTargetSlot.hasItem()) {
-                            nonEmptyTargetSlots.add(emptyTargetSlot);
-                            iterator.remove();
-                        }
-                    }
-
-                    if (carried.isEmpty()) {
-                        break;
-                    }
-                }
-            }
-
-            if (!menu.getCarried().isEmpty()) {
-                slotClick(menu, sourceSlot, 0, ClickType.PICKUP);
-            }
-        }
-
-        return movedAny;
+        return operations.transferToContainer(screen.getMenu(), player, true);
     }
 
     @Override
@@ -542,8 +447,6 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
         final var menu = screen.getMenu();
         return ClientInventorySorting.sort(menu, baseSlot, this::slotClick);
     }
-
-    
 
     protected void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType) {
         slotClick(menu, slot.index, mouseButton, clickType);
@@ -564,7 +467,7 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
         List<Slot> transferSlots = new ArrayList<>();
         transferSlots.add(hoverSlot);
         for (Slot slot : menu.slots) {
-            if (slot == hoverSlot || !isValidTargetSlot(slot)) {
+            if (slot == hoverSlot || !operations.isValidSlot(slot)) {
                 continue;
             }
 
@@ -593,7 +496,7 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
         List<Slot> transferSlots = new ArrayList<>();
         for (Slot slot : menu.slots) {
             ItemStack stack = slot.getItem();
-            if (ItemStack.isSameItemSameComponents(targetStack, stack) && isValidTargetSlot(slot)) {
+            if (ItemStack.isSameItemSameComponents(targetStack, stack) && operations.isValidSlot(slot)) {
                 transferSlots.add(slot);
             }
         }
@@ -606,7 +509,4 @@ public class    ClientOnlyInventoryControls implements InventoryControls {
         return true;
     }
 
-    protected boolean isValidTargetSlot(Slot slot) {
-        return true;
-    }
 }
