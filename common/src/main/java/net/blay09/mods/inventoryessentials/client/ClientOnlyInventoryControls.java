@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 
-public class ClientOnlyInventoryControls implements InventoryControls {
+public class    ClientOnlyInventoryControls implements InventoryControls {
 
     @Override
     public boolean singleTransfer(AbstractContainerScreen<?> screen, Slot clickedSlot) {
@@ -404,6 +404,127 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean restockContainer(AbstractContainerScreen<?> screen) {
+        return transferToContainer(screen, false);
+    }
+
+    @Override
+    public boolean dumpToContainer(AbstractContainerScreen<?> screen) {
+        return transferToContainer(screen, true);
+    }
+
+    private boolean transferToContainer(AbstractContainerScreen<?> screen, boolean fillEmptySlots) {
+        final var player = Minecraft.getInstance().player;
+        if (player == null) {
+            return false;
+        }
+
+        final var menu = screen.getMenu();
+        if (!menu.getCarried().isEmpty() || menu instanceof InventoryMenu) {
+            return false;
+        }
+
+        final var sourceSlots = new ArrayList<Slot>();
+        final var nonEmptyTargetSlots = new ArrayList<Slot>();
+        final var emptyTargetSlots = new ArrayList<Slot>();
+        for (final var slot : menu.slots) {
+            if (!isValidTargetSlot(slot)) {
+                continue;
+            }
+
+            if (slot.container instanceof Inventory) {
+                final var containerSlot = slot.getContainerSlot();
+                if (containerSlot >= Inventory.SELECTION_SIZE && containerSlot < Inventory.INVENTORY_SIZE && slot.mayPickup(player) && slot.hasItem()) {
+                    sourceSlots.add(slot);
+                }
+            } else if (slot.hasItem()) {
+                nonEmptyTargetSlots.add(slot);
+            } else {
+                emptyTargetSlots.add(slot);
+            }
+        }
+
+        if (sourceSlots.isEmpty() || nonEmptyTargetSlots.isEmpty()) {
+            return false;
+        }
+
+        boolean movedAny = false;
+        for (final var sourceSlot : sourceSlots) {
+            if (!sourceSlot.hasItem()) {
+                continue;
+            }
+
+            slotClick(menu, sourceSlot, 0, ClickType.PICKUP);
+            var carried = menu.getCarried();
+            if (carried.isEmpty()) {
+                continue;
+            }
+
+            final var sourceStack = carried.copy();
+            boolean hasMatchingItemInContainer = false;
+            for (final var targetSlot : nonEmptyTargetSlots) {
+                final var targetStack = targetSlot.getItem();
+                if (targetStack.isEmpty() || !ItemStack.isSameItemSameComponents(sourceStack, targetStack)) {
+                    continue;
+                } else {
+                    hasMatchingItemInContainer = true;
+                }
+
+                final int targetLimit = Math.min(targetSlot.getMaxStackSize(), targetSlot.getMaxStackSize(targetStack));
+                if (targetStack.getCount() >= targetLimit) {
+                    continue;
+                }
+
+                final int oldCarriedCount = menu.getCarried().getCount();
+                slotClick(menu, targetSlot, 0, ClickType.PICKUP);
+                carried = menu.getCarried();
+                if (carried.getCount() < oldCarriedCount) {
+                    movedAny = true;
+                }
+                if (carried.isEmpty()) {
+                    break;
+                }
+            }
+
+            if (fillEmptySlots && !carried.isEmpty() && hasMatchingItemInContainer) {
+                for (final Iterator<Slot> iterator = emptyTargetSlots.iterator(); iterator.hasNext(); ) {
+                    final var emptyTargetSlot = iterator.next();
+                    if (emptyTargetSlot.hasItem()) {
+                        nonEmptyTargetSlots.add(emptyTargetSlot);
+                        iterator.remove();
+                        continue;
+                    }
+
+                    if (!emptyTargetSlot.mayPlace(sourceStack)) {
+                        continue;
+                    }
+
+                    final int oldCarriedCount = menu.getCarried().getCount();
+                    slotClick(menu, emptyTargetSlot, 0, ClickType.PICKUP);
+                    carried = menu.getCarried();
+                    if (carried.getCount() < oldCarriedCount) {
+                        movedAny = true;
+                        if (emptyTargetSlot.hasItem()) {
+                            nonEmptyTargetSlots.add(emptyTargetSlot);
+                            iterator.remove();
+                        }
+                    }
+
+                    if (carried.isEmpty()) {
+                        break;
+                    }
+                }
+            }
+
+            if (!menu.getCarried().isEmpty()) {
+                slotClick(menu, sourceSlot, 0, ClickType.PICKUP);
+            }
+        }
+
+        return movedAny;
     }
 
     @Override

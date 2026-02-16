@@ -8,6 +8,8 @@
   "key.inventoryessentials.screen_bulk_drop": "Bulk Drop out of Screen",
   "key.inventoryessentials.drag_transfer": "Transfer on Hover (Hold)",
   "key.inventoryessentials.sort_inventory": "Sort Inventory",
+  "key.inventoryessentials.restock_container": "Restock Container",
+  "key.inventoryessentials.dump_to_container": "Dump to Container",
 
   "inventoryessentials.configuration.title": "Inventory Essentials",
   "inventoryessentials.configuration.forceClientImplementation": "Force Client Implementation (dev only)",

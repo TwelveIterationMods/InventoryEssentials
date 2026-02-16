@@ -4,6 +4,7 @@ import net.blay09.mods.balm.Balm;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.network.BulkTransferAllMessage;
 import net.blay09.mods.inventoryessentials.network.BulkTransferSingleMessage;
+import net.blay09.mods.inventoryessentials.network.DumpToContainerMessage;
 import net.blay09.mods.inventoryessentials.network.SingleTransferMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -63,5 +64,25 @@ public class ServerSupportedInventoryControls extends ClientOnlyInventoryControl
         }
 
         return false;
+    }
+
+    @Override
+    public boolean restockContainer(AbstractContainerScreen<?> screen) {
+        if (Minecraft.getInstance().player == null) {
+            return false;
+        }
+
+        Balm.networking().sendToServer(new DumpToContainerMessage(false));
+        return true;
+    }
+
+    @Override
+    public boolean dumpToContainer(AbstractContainerScreen<?> screen) {
+        if (Minecraft.getInstance().player == null) {
+            return false;
+        }
+
+        Balm.networking().sendToServer(new DumpToContainerMessage(true));
+        return true;
     }
 }
