@@ -14,6 +14,8 @@
   "key.inventoryessentials.screen_bulk_drop_modifier": "Bulk Drop out of Screen (Hold)",
   "key.inventoryessentials.drag_transfer": "Transfer on Hover (Hold)",
   "key.inventoryessentials.sort_inventory": "Sort Inventory",
+  "key.inventoryessentials.restock_container": "Restock Container",
+  "key.inventoryessentials.dump_to_container": "Dump to Container",
 
   "inventoryessentials.configuration.forceClientImplementation": "Force Client Implementation (dev only)",
   "inventoryessentials.configuration.forceClientImplementation.tooltip": "Use the client implementation even on servers that have the mod installed - only useful for development purposes.",

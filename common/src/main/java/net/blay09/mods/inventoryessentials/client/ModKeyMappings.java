@@ -23,6 +23,8 @@ public class ModKeyMappings {
     public static ManagedKeyMapping keyScreenBulkDrop;
     public static ManagedKeyMapping keyDragTransfer;
     public static ManagedKeyMapping keySortInventory;
+    public static ManagedKeyMapping keyRestockContainer;
+    public static ManagedKeyMapping keyDumpToContainer;
 
     public static void initialize() {
         keySingleTransfer = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "single_transfer"))
@@ -93,6 +95,36 @@ public class ModKeyMappings {
                 .handleScreenInput(event -> handleSlotInput(event, () -> InventoryEssentialsConfig.getActive().enableMiddleClickSort,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).sort(screen, slot)))
                 .build();
+
+        keyRestockContainer = Kuma.createKeyMapping(Identifier.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "restock_container"))
+                .withContext(KeyConflictContext.SCREEN)
+                .handleScreenInput(event -> {
+                    if (InventoryEssentialsIgnores.shouldIgnoreScreen(event.screen())) {
+                        return false;
+                    }
+
+                    if (!(event.screen() instanceof AbstractContainerScreen<?> containerScreen)) {
+                        return false;
+                    }
+
+                    return InventoryEssentialsClient.getInventoryControls(containerScreen).restockContainer(containerScreen);
+                })
+                .build();
+
+        keyDumpToContainer = Kuma.createKeyMapping(Identifier.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "dump_to_container"))
+                .withContext(KeyConflictContext.SCREEN)
+                .handleScreenInput(event -> {
+                    if (InventoryEssentialsIgnores.shouldIgnoreScreen(event.screen())) {
+                        return false;
+                    }
+
+                    if (!(event.screen() instanceof AbstractContainerScreen<?> containerScreen)) {
+                        return false;
+                    }
+
+                    return InventoryEssentialsClient.getInventoryControls(containerScreen).dumpToContainer(containerScreen);
+                })
+                .build();
     }
 
     private static boolean handleSlotInput(ScreenInputEvent event, Supplier<Boolean> predicate, BiFunction<AbstractContainerScreen<?>, Slot, Boolean> handler) {
@@ -116,4 +148,3 @@ public class ModKeyMappings {
         return handler.apply(containerScreen, hoverSlot);
     }
 }
-

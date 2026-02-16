@@ -13,6 +13,10 @@ public interface InventoryControls {
 
     boolean bulkTransferAll(AbstractContainerScreen<?> screen, Slot clickedSlot);
 
+    boolean restockContainer(AbstractContainerScreen<?> screen);
+
+    boolean dumpToContainer(AbstractContainerScreen<?> screen);
+
     void dragTransfer(AbstractContainerScreen<?> screen, Slot clickedSlot);
 
     boolean dropByType(AbstractContainerScreen<?> screen, Slot hoverSlot);
