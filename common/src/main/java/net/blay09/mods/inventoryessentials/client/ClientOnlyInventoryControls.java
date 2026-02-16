@@ -411,6 +411,16 @@ public class ClientOnlyInventoryControls implements InventoryControls {
     }
 
     @Override
+    public boolean restockInventory(AbstractContainerScreen<?> screen) {
+        final var player = Minecraft.getInstance().player;
+        if (player == null) {
+            return false;
+        }
+
+        return operations.transferToInventory(screen.getMenu(), player, true, false);
+    }
+
+    @Override
     public boolean dumpToContainer(AbstractContainerScreen<?> screen) {
         return transferToContainer(screen, true);
     }

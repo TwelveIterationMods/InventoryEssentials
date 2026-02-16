@@ -15,6 +15,7 @@
   "key.inventoryessentials.drag_transfer": "Transfer on Hover (Hold)",
   "key.inventoryessentials.sort_inventory": "Sort Inventory",
   "key.inventoryessentials.restock_container": "Restock Container",
+  "key.inventoryessentials.restock_inventory": "Restock Inventory",
   "key.inventoryessentials.dump_to_container": "Dump to Container",
 
   "inventoryessentials.configuration.forceClientImplementation": "Force Client Implementation (dev only)",

@@ -24,6 +24,7 @@ public class ModKeyMappings {
     public static ManagedKeyMapping keyDragTransfer;
     public static ManagedKeyMapping keySortInventory;
     public static ManagedKeyMapping keyRestockContainer;
+    public static ManagedKeyMapping keyRestockInventory;
     public static ManagedKeyMapping keyDumpToContainer;
 
     public static void initialize() {
@@ -108,6 +109,21 @@ public class ModKeyMappings {
                     }
 
                     return InventoryEssentialsClient.getInventoryControls(containerScreen).restockContainer(containerScreen);
+                })
+                .build();
+
+        keyRestockInventory = Kuma.createKeyMapping(Identifier.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "restock_inventory"))
+                .withContext(KeyConflictContext.SCREEN)
+                .handleScreenInput(event -> {
+                    if (InventoryEssentialsIgnores.shouldIgnoreScreen(event.screen())) {
+                        return false;
+                    }
+
+                    if (!(event.screen() instanceof AbstractContainerScreen<?> containerScreen)) {
+                        return false;
+                    }
+
+                    return InventoryEssentialsClient.getInventoryControls(containerScreen).restockInventory(containerScreen);
                 })
                 .build();
 

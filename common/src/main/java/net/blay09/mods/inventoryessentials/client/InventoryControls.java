@@ -15,6 +15,8 @@ public interface InventoryControls {
 
     boolean restockContainer(AbstractContainerScreen<?> screen);
 
+    boolean restockInventory(AbstractContainerScreen<?> screen);
+
     boolean dumpToContainer(AbstractContainerScreen<?> screen);
 
     void dragTransfer(AbstractContainerScreen<?> screen, Slot clickedSlot);
