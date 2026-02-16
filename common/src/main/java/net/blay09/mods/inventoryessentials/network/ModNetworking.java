@@ -15,5 +15,6 @@ public class ModNetworking {
         networking.registerServerboundPacket(BulkTransferAllMessage.TYPE, BulkTransferAllMessage.class, BulkTransferAllMessage.STREAM_CODEC, BulkTransferAllMessage::handle);
         networking.registerServerboundPacket(BulkTransferSingleMessage.TYPE, BulkTransferSingleMessage.class, BulkTransferSingleMessage.STREAM_CODEC, BulkTransferSingleMessage::handle);
         networking.registerServerboundPacket(DumpToContainerMessage.TYPE, DumpToContainerMessage.class, DumpToContainerMessage.STREAM_CODEC, DumpToContainerMessage::handle);
+        networking.registerServerboundPacket(RestockInventoryMessage.TYPE, RestockInventoryMessage.class, RestockInventoryMessage.STREAM_CODEC, RestockInventoryMessage::handle);
     }
 }
