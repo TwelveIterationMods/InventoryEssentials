@@ -1,1 +1,2 @@
-- Fixed double shift click on the first slot when using drag transfer, resulting in two stacks being extracted from things like Sophisticated Backpacks with stack upgrades
+- Added Restock Inventory key (default: none)
+- Added Dump to Container key (default: none)
