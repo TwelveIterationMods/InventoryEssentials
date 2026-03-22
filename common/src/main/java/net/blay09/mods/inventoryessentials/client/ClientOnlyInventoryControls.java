@@ -11,7 +11,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +40,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         ItemStack targetStack = clickedSlot.getItem().copy();
         // If clicked stack only has a count of one to begin with, just do a normal shift-click on it
         if (targetStack.getCount() == 1) {
-            slotClick(menu, clickedSlot, 0, ClickType.QUICK_MOVE);
+            slotClick(menu, clickedSlot, 0, ContainerInput.QUICK_MOVE);
             return true;
         }
 
@@ -57,9 +57,9 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
             // Prefer inputting into an existing stack if the items match
             if (ItemStack.isSameItemSameComponents(targetStack, stack)) {
-                slotClick(menu, clickedSlot, 1, ClickType.PICKUP);
-                slotClick(menu, slot, 1, ClickType.PICKUP);
-                slotClick(menu, clickedSlot, 0, ClickType.PICKUP);
+                slotClick(menu, clickedSlot, 1, ContainerInput.PICKUP);
+                slotClick(menu, slot, 1, ContainerInput.PICKUP);
+                slotClick(menu, clickedSlot, 0, ContainerInput.PICKUP);
                 return true;
             } else if (!slot.hasItem() && fallbackSlot == null) {
                 // Remember the first empty slot and move the item there later in case we didn't find an existing stack
@@ -69,9 +69,9 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
         // There was no existing stack, so move the item into the first empty slot we found
         if (fallbackSlot != null) {
-            slotClick(menu, clickedSlot, 1, ClickType.PICKUP);
-            slotClick(menu, fallbackSlot, 1, ClickType.PICKUP);
-            slotClick(menu, clickedSlot, 0, ClickType.PICKUP);
+            slotClick(menu, clickedSlot, 1, ContainerInput.PICKUP);
+            slotClick(menu, fallbackSlot, 1, ContainerInput.PICKUP);
+            slotClick(menu, clickedSlot, 0, ContainerInput.PICKUP);
             return true;
         }
 
@@ -100,7 +100,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         }
 
         for (Slot transferSlot : transferSlots) {
-            slotClick(menu, transferSlot, 0, ClickType.QUICK_MOVE);
+            slotClick(menu, transferSlot, 0, ContainerInput.QUICK_MOVE);
         }
 
         return true;
@@ -175,7 +175,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             // When clicking an equipped armor, un-equip all
             if (clickedSlot.index >= InventoryMenu.ARMOR_SLOT_START && clickedSlot.index < InventoryMenu.ARMOR_SLOT_END) {
                 for (int i = InventoryMenu.ARMOR_SLOT_START; i < InventoryMenu.ARMOR_SLOT_END; i++) {
-                    slotClick(menu, i, 0, ClickType.QUICK_MOVE);
+                    slotClick(menu, i, 0, ContainerInput.QUICK_MOVE);
                 }
                 return true;
             }
@@ -187,9 +187,9 @@ public class ClientOnlyInventoryControls implements InventoryControls {
                 final var equipmentSlot = equipmentSlots.get(i - InventoryMenu.ARMOR_SLOT_START);
                 final var swapSlot = armorSlots.get(equipmentSlot);
                 if (swapSlot != null) {
-                    slotClick(menu, i, 0, ClickType.PICKUP);
-                    slotClick(menu, swapSlot, 0, ClickType.PICKUP);
-                    slotClick(menu, i, 0, ClickType.PICKUP);
+                    slotClick(menu, i, 0, ContainerInput.PICKUP);
+                    slotClick(menu, swapSlot, 0, ContainerInput.PICKUP);
+                    slotClick(menu, i, 0, ContainerInput.PICKUP);
                 }
             }
 
@@ -281,7 +281,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             // When clicking an equipped armor, un-equip all
             if (clickedSlot.index >= InventoryMenu.ARMOR_SLOT_START && clickedSlot.index < InventoryMenu.ARMOR_SLOT_END) {
                 for (int i = InventoryMenu.ARMOR_SLOT_START; i < InventoryMenu.ARMOR_SLOT_END; i++) {
-                    slotClick(menu, i, 0, ClickType.QUICK_MOVE);
+                    slotClick(menu, i, 0, ContainerInput.QUICK_MOVE);
                 }
                 return true;
             }
@@ -293,9 +293,9 @@ public class ClientOnlyInventoryControls implements InventoryControls {
                 final var equipmentSlot = equipmentSlots.get(i - InventoryMenu.ARMOR_SLOT_START);
                 final var swapSlot = armorSlots.get(equipmentSlot);
                 if (swapSlot != null) {
-                    slotClick(menu, i, 0, ClickType.PICKUP);
-                    slotClick(menu, swapSlot, 0, ClickType.PICKUP);
-                    slotClick(menu, i, 0, ClickType.PICKUP);
+                    slotClick(menu, i, 0, ContainerInput.PICKUP);
+                    slotClick(menu, swapSlot, 0, ContainerInput.PICKUP);
+                    slotClick(menu, i, 0, ContainerInput.PICKUP);
                 }
             }
 
@@ -308,7 +308,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
                 }
 
                 if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
-                    slotClick(menu, slot, 0, ClickType.QUICK_MOVE);
+                    slotClick(menu, slot, 0, ContainerInput.QUICK_MOVE);
                     movedAny = true;
                 }
             }
@@ -324,7 +324,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             return false;
         }
 
-        slotClick(menu, slot, 0, ClickType.PICKUP);
+        slotClick(menu, slot, 0, ContainerInput.PICKUP);
 
         for (Slot nonEmptySlot : nonEmptySlots) {
             ItemStack stack = nonEmptySlot.getItem();
@@ -334,7 +334,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
                     continue;
                 }
 
-                slotClick(menu, nonEmptySlot, 0, ClickType.PICKUP);
+                slotClick(menu, nonEmptySlot, 0, ContainerInput.PICKUP);
                 ItemStack mouseItem = menu.getCarried();
                 if (mouseItem.isEmpty()) {
                     return true;
@@ -344,7 +344,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
         for (Iterator<Slot> iterator = emptySlots.iterator(); iterator.hasNext(); ) {
             Slot emptySlot = iterator.next();
-            slotClick(menu, emptySlot, 0, ClickType.PICKUP);
+            slotClick(menu, emptySlot, 0, ContainerInput.PICKUP);
             if (emptySlot.hasItem()) {
                 nonEmptySlots.add(emptySlot);
                 iterator.remove();
@@ -358,7 +358,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
         ItemStack mouseItem = menu.getCarried();
         if (!mouseItem.isEmpty()) {
-            slotClick(menu, slot, 0, ClickType.PICKUP);
+            slotClick(menu, slot, 0, ContainerInput.PICKUP);
         }
 
         return false;
@@ -370,7 +370,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             return false;
         }
 
-        slotClick(menu, slot, 0, ClickType.PICKUP);
+        slotClick(menu, slot, 0, ContainerInput.PICKUP);
 
         for (Slot nonEmptySlot : nonEmptySlots) {
             ItemStack stack = nonEmptySlot.getItem();
@@ -380,10 +380,10 @@ public class ClientOnlyInventoryControls implements InventoryControls {
                     continue;
                 }
 
-                slotClick(menu, nonEmptySlot, 1, ClickType.PICKUP);
+                slotClick(menu, nonEmptySlot, 1, ContainerInput.PICKUP);
                 ItemStack mouseItem = menu.getCarried();
                 if (mouseItem.getCount() < targetStack.getCount()) {
-                    slotClick(menu, slot, 0, ClickType.PICKUP);
+                    slotClick(menu, slot, 0, ContainerInput.PICKUP);
                     return true;
                 }
             }
@@ -391,7 +391,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
         for (Iterator<Slot> iterator = emptySlots.iterator(); iterator.hasNext(); ) {
             Slot emptySlot = iterator.next();
-            slotClick(menu, emptySlot, 1, ClickType.PICKUP);
+            slotClick(menu, emptySlot, 1, ContainerInput.PICKUP);
             if (emptySlot.hasItem()) {
                 nonEmptySlots.add(emptySlot);
                 iterator.remove();
@@ -399,14 +399,14 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
             ItemStack mouseItem = menu.getCarried();
             if (mouseItem.getCount() < targetStack.getCount()) {
-                slotClick(menu, slot, 0, ClickType.PICKUP);
+                slotClick(menu, slot, 0, ContainerInput.PICKUP);
                 return true;
             }
         }
 
         ItemStack mouseItem = menu.getCarried();
         if (!mouseItem.isEmpty()) {
-            slotClick(menu, slot, 0, ClickType.PICKUP);
+            slotClick(menu, slot, 0, ContainerInput.PICKUP);
         }
 
         return false;
@@ -444,12 +444,12 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
     @Override
     public void dragTransfer(AbstractContainerScreen<?> screen, Slot clickedSlot) {
-        slotClick(screen.getMenu(), clickedSlot, 0, ClickType.QUICK_MOVE);
+        slotClick(screen.getMenu(), clickedSlot, 0, ContainerInput.QUICK_MOVE);
     }
 
     @Override
     public void dragClick(AbstractContainerScreen<?> screen, Slot hoveredSlot, int mouseButton) {
-        slotClick(screen.getMenu(), hoveredSlot, mouseButton, ClickType.PICKUP);
+        slotClick(screen.getMenu(), hoveredSlot, mouseButton, ContainerInput.PICKUP);
     }
 
     @Override
@@ -458,15 +458,15 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         return ClientInventorySorting.sort(menu, baseSlot, this::slotClick);
     }
 
-    protected void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType) {
-        slotClick(menu, slot.index, mouseButton, clickType);
+    protected void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ContainerInput ContainerInput) {
+        slotClick(menu, slot.index, mouseButton, ContainerInput);
     }
 
-    protected void slotClick(AbstractContainerMenu menu, int slotIndex, int mouseButton, ClickType clickType) {
+    protected void slotClick(AbstractContainerMenu menu, int slotIndex, int mouseButton, ContainerInput ContainerInput) {
         Player player = Minecraft.getInstance().player;
         MultiPlayerGameMode gameMode = Minecraft.getInstance().gameMode;
         if (player != null && gameMode != null && (slotIndex >= 0 && slotIndex < menu.slots.size() || slotIndex == -999)) {
-            gameMode.handleInventoryMouseClick(menu.containerId, slotIndex, mouseButton, clickType, player);
+            gameMode.handleContainerInput(menu.containerId, slotIndex, mouseButton, ContainerInput, player);
         }
     }
 
@@ -490,7 +490,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         }
 
         for (Slot transferSlot : transferSlots) {
-            slotClick(menu, transferSlot, 1, ClickType.THROW);
+            slotClick(menu, transferSlot, 1, ContainerInput.THROW);
         }
 
         return true;
@@ -511,9 +511,9 @@ public class ClientOnlyInventoryControls implements InventoryControls {
             }
         }
 
-        slotClick(menu, -999, 0, ClickType.PICKUP);
+        slotClick(menu, -999, 0, ContainerInput.PICKUP);
         for (Slot transferSlot : transferSlots) {
-            slotClick(menu, transferSlot, 1, ClickType.THROW);
+            slotClick(menu, transferSlot, 1, ContainerInput.THROW);
         }
 
         return true;

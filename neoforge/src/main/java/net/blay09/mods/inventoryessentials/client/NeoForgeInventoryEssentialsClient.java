@@ -5,13 +5,14 @@ import net.blay09.mods.balm.neoforge.platform.runtime.NeoForgeLoadContext;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 
 @Mod(value = InventoryEssentials.MOD_ID, dist = Dist.CLIENT)
 public class NeoForgeInventoryEssentialsClient {
 
-    public NeoForgeInventoryEssentialsClient(IEventBus modEventBus) {
-        final var context = new NeoForgeLoadContext(modEventBus);
+    public NeoForgeInventoryEssentialsClient(ModContainer modContainer, IEventBus modEventBus) {
+        final var context = new NeoForgeLoadContext(modContainer, modEventBus);
         BalmClient.initializeMod(InventoryEssentials.MOD_ID, context, InventoryEssentialsClient::initialize);
     }
 

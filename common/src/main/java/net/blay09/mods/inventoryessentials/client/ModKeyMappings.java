@@ -86,7 +86,6 @@ public class ModKeyMappings {
         keyDragTransfer = Kuma.createKeyMapping(Identifier.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "drag_transfer"))
                 .withDefault(InputBinding.key(InputConstants.KEY_LSHIFT))
                 .withContext(KeyConflictContext.SCREEN)
-                .forceVirtual()
                 .build();
 
         keySortInventory = Kuma.createKeyMapping(Identifier.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "sort_inventory"))

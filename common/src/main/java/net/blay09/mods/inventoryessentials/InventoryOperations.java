@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public class InventoryOperations {
 
     @FunctionalInterface
     public interface SlotClickHandler {
-        void click(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType);
+        void click(AbstractContainerMenu menu, Slot slot, int mouseButton, ContainerInput ContainerInput);
     }
 
     private final SlotClickHandler slotClickHandler;
@@ -111,7 +111,7 @@ public class InventoryOperations {
                 continue;
             }
 
-            slotClickHandler.click(menu, sourceSlot, 0, ClickType.PICKUP);
+            slotClickHandler.click(menu, sourceSlot, 0, ContainerInput.PICKUP);
             var carried = menu.getCarried();
             if (carried.isEmpty()) {
                 continue;
@@ -133,7 +133,7 @@ public class InventoryOperations {
                 }
 
                 final int oldCarriedCount = menu.getCarried().getCount();
-                slotClickHandler.click(menu, targetSlot, 0, ClickType.PICKUP);
+                slotClickHandler.click(menu, targetSlot, 0, ContainerInput.PICKUP);
                 carried = menu.getCarried();
                 if (carried.getCount() < oldCarriedCount) {
                     movedAny = true;
@@ -157,7 +157,7 @@ public class InventoryOperations {
                     }
 
                     final int oldCarriedCount = menu.getCarried().getCount();
-                    slotClickHandler.click(menu, emptyTargetSlot, 0, ClickType.PICKUP);
+                    slotClickHandler.click(menu, emptyTargetSlot, 0, ContainerInput.PICKUP);
                     carried = menu.getCarried();
                     if (carried.getCount() < oldCarriedCount) {
                         movedAny = true;
@@ -174,7 +174,7 @@ public class InventoryOperations {
             }
 
             if (!menu.getCarried().isEmpty()) {
-                slotClickHandler.click(menu, sourceSlot, 0, ClickType.PICKUP);
+                slotClickHandler.click(menu, sourceSlot, 0, ContainerInput.PICKUP);
             }
         }
 
@@ -186,7 +186,7 @@ public class InventoryOperations {
     }
 
     public static InventoryOperations forServerPlayer(ServerPlayer player) {
-        return new InventoryOperations((containerMenu, slot, mouseButton, clickType) -> containerMenu.clicked(slot.index, mouseButton, clickType, player), SlotPolicy.always());
+        return new InventoryOperations((containerMenu, slot, mouseButton, ContainerInput) -> containerMenu.clicked(slot.index, mouseButton, ContainerInput, player), SlotPolicy.always());
     }
 
 }

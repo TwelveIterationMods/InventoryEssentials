@@ -16,7 +16,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -94,7 +94,7 @@ public record BulkTransferSingleMessage(int slotNumber) implements CustomPacketP
                 // When clicking an equipped armor, un-equip all
                 if (clickedSlot.index >= InventoryMenu.ARMOR_SLOT_START && clickedSlot.index < InventoryMenu.ARMOR_SLOT_END) {
                     for (int i = InventoryMenu.ARMOR_SLOT_START; i < InventoryMenu.ARMOR_SLOT_END; i++) {
-                        menu.clicked(i, 0, ClickType.QUICK_MOVE, player);
+                        menu.clicked(i, 0, ContainerInput.QUICK_MOVE, player);
                     }
                     return;
                 }
@@ -106,9 +106,9 @@ public record BulkTransferSingleMessage(int slotNumber) implements CustomPacketP
                     final var equipmentSlot = equipmentSlots.get(i - InventoryMenu.ARMOR_SLOT_START);
                     final var swapSlot = armorSlots.get(equipmentSlot);
                     if (swapSlot != null) {
-                        menu.clicked(i, 0, ClickType.PICKUP, player);
-                        menu.clicked(swapSlot.index, 0, ClickType.PICKUP, player);
-                        menu.clicked(i, 0, ClickType.PICKUP, player);
+                        menu.clicked(i, 0, ContainerInput.PICKUP, player);
+                        menu.clicked(swapSlot.index, 0, ContainerInput.PICKUP, player);
+                        menu.clicked(i, 0, ContainerInput.PICKUP, player);
                     }
                 }
             } else {
@@ -132,7 +132,7 @@ public record BulkTransferSingleMessage(int slotNumber) implements CustomPacketP
             return false;
         }
 
-        menu.clicked(slot.index, 0, ClickType.PICKUP, player);
+        menu.clicked(slot.index, 0, ContainerInput.PICKUP, player);
 
         for (final var nonEmptySlot : nonEmptySlots) {
             final var stack = nonEmptySlot.getItem();
@@ -142,10 +142,10 @@ public record BulkTransferSingleMessage(int slotNumber) implements CustomPacketP
                     continue;
                 }
 
-                menu.clicked(nonEmptySlot.index, 1, ClickType.PICKUP, player);
+                menu.clicked(nonEmptySlot.index, 1, ContainerInput.PICKUP, player);
                 ItemStack mouseItem = menu.getCarried();
                 if (mouseItem.getCount() < targetStack.getCount()) {
-                    menu.clicked(slot.index, 0, ClickType.PICKUP, player);
+                    menu.clicked(slot.index, 0, ContainerInput.PICKUP, player);
                     return true;
                 }
             }
@@ -153,7 +153,7 @@ public record BulkTransferSingleMessage(int slotNumber) implements CustomPacketP
 
         for (Iterator<Slot> iterator = emptySlots.iterator(); iterator.hasNext(); ) {
             Slot emptySlot = iterator.next();
-            menu.clicked(emptySlot.index, 1, ClickType.PICKUP, player);
+            menu.clicked(emptySlot.index, 1, ContainerInput.PICKUP, player);
             if (emptySlot.hasItem()) {
                 nonEmptySlots.add(emptySlot);
                 iterator.remove();
@@ -161,14 +161,14 @@ public record BulkTransferSingleMessage(int slotNumber) implements CustomPacketP
 
             ItemStack mouseItem = menu.getCarried();
             if (mouseItem.getCount() < targetStack.getCount()) {
-                menu.clicked(slot.index, 0, ClickType.PICKUP, player);
+                menu.clicked(slot.index, 0, ContainerInput.PICKUP, player);
                 return true;
             }
         }
 
         ItemStack mouseItem = menu.getCarried();
         if (!mouseItem.isEmpty()) {
-            menu.clicked(slot.index, 0, ClickType.PICKUP, player);
+            menu.clicked(slot.index, 0, ContainerInput.PICKUP, player);
         }
 
         return false;

@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.ShulkerBoxSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +26,7 @@ public class ClientInventorySorting {
 
     @FunctionalInterface
     public interface SlotClicker {
-        void click(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType);
+        void click(AbstractContainerMenu menu, Slot slot, int mouseButton, ContainerInput ContainerInput);
     }
 
     public static boolean sort(AbstractContainerMenu menu, Slot baseSlot, SlotClicker clicker) {
@@ -98,8 +98,8 @@ public class ClientInventorySorting {
             if (!firstSlot.hasItem() || !secondSlot.hasItem()) {
                 final var fromSlot = firstSlot.hasItem() ? firstSlot : secondSlot;
                 final var toSlot = firstSlot.hasItem() ? secondSlot : firstSlot;
-                clicker.click(menu, fromSlot, 0, ClickType.PICKUP);
-                clicker.click(menu, toSlot, 0, ClickType.PICKUP);
+                clicker.click(menu, fromSlot, 0, ContainerInput.PICKUP);
+                clicker.click(menu, toSlot, 0, ContainerInput.PICKUP);
                 return;
             }
 
@@ -115,17 +115,17 @@ public class ClientInventorySorting {
 
                 // If we found an empty slot to use as a buffer, use it to swap the two slots; otherwise just leave the bundle untouched
                 if (emptyBufferSlot != null) {
-                    clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
-                    clicker.click(menu, emptyBufferSlot, 0, ClickType.PICKUP);
-                    clicker.click(menu, secondSlot, 0, ClickType.PICKUP);
-                    clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
-                    clicker.click(menu, emptyBufferSlot, 0, ClickType.PICKUP);
-                    clicker.click(menu, secondSlot, 0, ClickType.PICKUP);
+                    clicker.click(menu, firstSlot, 0, ContainerInput.PICKUP);
+                    clicker.click(menu, emptyBufferSlot, 0, ContainerInput.PICKUP);
+                    clicker.click(menu, secondSlot, 0, ContainerInput.PICKUP);
+                    clicker.click(menu, firstSlot, 0, ContainerInput.PICKUP);
+                    clicker.click(menu, emptyBufferSlot, 0, ContainerInput.PICKUP);
+                    clicker.click(menu, secondSlot, 0, ContainerInput.PICKUP);
                 }
             } else {
-                clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
-                clicker.click(menu, secondSlot, 0, ClickType.PICKUP);
-                clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
+                clicker.click(menu, firstSlot, 0, ContainerInput.PICKUP);
+                clicker.click(menu, secondSlot, 0, ContainerInput.PICKUP);
+                clicker.click(menu, firstSlot, 0, ContainerInput.PICKUP);
             }
         }
     }
@@ -148,10 +148,10 @@ public class ClientInventorySorting {
                 }
 
                 if (!otherStack.isEmpty() && ItemStack.isSameItemSameComponents(thisStack, otherStack)) {
-                    clicker.click(menu, otherSlot, 0, ClickType.PICKUP);
-                    clicker.click(menu, thisSlot, 0, ClickType.PICKUP);
+                    clicker.click(menu, otherSlot, 0, ContainerInput.PICKUP);
+                    clicker.click(menu, thisSlot, 0, ContainerInput.PICKUP);
                     if (!menu.getCarried().isEmpty()) {
-                        clicker.click(menu, otherSlot, 0, ClickType.PICKUP);
+                        clicker.click(menu, otherSlot, 0, ContainerInput.PICKUP);
                     }
 
                     final var newThisStack = thisSlot.getItem();

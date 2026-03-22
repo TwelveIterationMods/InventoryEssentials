@@ -4,13 +4,14 @@ import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.neoforge.platform.runtime.NeoForgeLoadContext;
 import net.minecraft.world.inventory.Slot;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 @Mod(InventoryEssentials.MOD_ID)
 public class NeoForgeInventoryEssentials {
 
-    public NeoForgeInventoryEssentials(IEventBus modEventBus) {
+    public NeoForgeInventoryEssentials(ModContainer modContainer, IEventBus modEventBus) {
         PlatformBindings.INSTANCE = new PlatformBindings() {
             @Override
             public boolean isSameInventory(Slot targetSlot, Slot slot) {
@@ -22,7 +23,7 @@ public class NeoForgeInventoryEssentials {
             }
         };
 
-        final var context = new NeoForgeLoadContext(modEventBus);
+        final var context = new NeoForgeLoadContext(modContainer, modEventBus);
         Balm.initializeMod(InventoryEssentials.MOD_ID, context, InventoryEssentials::initialize);
     }
 

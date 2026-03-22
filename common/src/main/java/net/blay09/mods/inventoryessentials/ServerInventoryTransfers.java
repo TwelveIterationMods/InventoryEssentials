@@ -2,7 +2,7 @@ package net.blay09.mods.inventoryessentials;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 
 public class ServerInventoryTransfers {
@@ -13,7 +13,7 @@ public class ServerInventoryTransfers {
 
         final var sourceStack = slot.getItem();
         if (sourceStack.getCount() == 1) {
-            menu.clicked(slot.index, 0, ClickType.QUICK_MOVE, player);
+            menu.clicked(slot.index, 0, ContainerInput.QUICK_MOVE, player);
         } else if (!sourceStack.isEmpty()) {
             final var restStack = sourceStack.copy();
             sourceStack.setCount(1);
@@ -22,7 +22,7 @@ public class ServerInventoryTransfers {
             slot.set(sourceStack);
 
             restStack.shrink(1);
-            menu.clicked(slot.index, 0, ClickType.QUICK_MOVE, player);
+            menu.clicked(slot.index, 0, ContainerInput.QUICK_MOVE, player);
             if (!slot.hasItem()) {
                 slot.set(restStack);
             } else {

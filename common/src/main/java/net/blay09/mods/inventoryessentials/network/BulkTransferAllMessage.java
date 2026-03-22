@@ -14,7 +14,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -83,7 +83,7 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
                 // When clicking an equipped armor, un-equip all
                 if (clickedSlot.index >= InventoryMenu.ARMOR_SLOT_START && clickedSlot.index < InventoryMenu.ARMOR_SLOT_END) {
                     for (int i = InventoryMenu.ARMOR_SLOT_START; i < InventoryMenu.ARMOR_SLOT_END; i++) {
-                        menu.clicked(i, 0, ClickType.QUICK_MOVE, player);
+                        menu.clicked(i, 0, ContainerInput.QUICK_MOVE, player);
                     }
                     return;
                 }
@@ -95,9 +95,9 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
                     final var equipmentSlot = equipmentSlots.get(i - InventoryMenu.ARMOR_SLOT_START);
                     final var swapSlot = armorSlots.get(equipmentSlot);
                     if (swapSlot != null) {
-                        menu.clicked(i, 0, ClickType.PICKUP, player);
-                        menu.clicked(swapSlot.index, 0, ClickType.PICKUP, player);
-                        menu.clicked(i, 0, ClickType.PICKUP, player);
+                        menu.clicked(i, 0, ContainerInput.PICKUP, player);
+                        menu.clicked(swapSlot.index, 0, ContainerInput.PICKUP, player);
+                        menu.clicked(i, 0, ContainerInput.PICKUP, player);
                     }
                 }
             } else {
@@ -108,7 +108,7 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
                     }
 
                     if (InventoryUtils.isSameInventory(slot, clickedSlot, true)) {
-                        menu.clicked(slot.index, 0, ClickType.QUICK_MOVE, player);
+                        menu.clicked(slot.index, 0, ContainerInput.QUICK_MOVE, player);
                     }
                 }
             }
@@ -121,7 +121,7 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
             return false;
         }
 
-        menu.clicked(slot.index, 0, ClickType.PICKUP, player);
+        menu.clicked(slot.index, 0, ContainerInput.PICKUP, player);
 
         for (Slot nonEmptySlot : nonEmptySlots) {
             ItemStack stack = nonEmptySlot.getItem();
@@ -131,7 +131,7 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
                     continue;
                 }
 
-                menu.clicked(nonEmptySlot.index, 0, ClickType.PICKUP, player);
+                menu.clicked(nonEmptySlot.index, 0, ContainerInput.PICKUP, player);
                 ItemStack mouseItem = menu.getCarried();
                 if (mouseItem.isEmpty()) {
                     return true;
@@ -141,7 +141,7 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
 
         for (Iterator<Slot> iterator = emptySlots.iterator(); iterator.hasNext(); ) {
             Slot emptySlot = iterator.next();
-            menu.clicked(emptySlot.index, 0, ClickType.PICKUP, player);
+            menu.clicked(emptySlot.index, 0, ContainerInput.PICKUP, player);
             if (emptySlot.hasItem()) {
                 nonEmptySlots.add(emptySlot);
                 iterator.remove();
@@ -155,7 +155,7 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
 
         ItemStack mouseItem = menu.getCarried();
         if (!mouseItem.isEmpty()) {
-            menu.clicked(slot.index, 0, ClickType.PICKUP, player);
+            menu.clicked(slot.index, 0, ContainerInput.PICKUP, player);
         }
 
         return false;
