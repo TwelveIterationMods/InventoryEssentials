@@ -1,2 +1,1 @@
-- Added Restock Inventory key (default: none)
-- Added Dump to Container key (default: none)
+- Updated to Minecraft 26.1
