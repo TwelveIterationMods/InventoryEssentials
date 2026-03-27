@@ -14,6 +14,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.inventory.Slot;
+import org.jspecify.annotations.Nullable;
 
 public class InventoryEssentialsClient {
 
@@ -21,7 +22,7 @@ public class InventoryEssentialsClient {
     private static final InventoryControls creativeControls = new CreativeInventoryControls();
     private static final InventoryControls serverSupportedControls = new ServerSupportedInventoryControls();
 
-    private static Slot lastDragHoverSlot;
+    private static @Nullable Slot lastDragHoverSlot;
     private static boolean hasDragClicked;
 
     public static void initialize(BalmClientRegistrars registrars) {

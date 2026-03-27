@@ -4,6 +4,8 @@ import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.config.reflection.Comment;
 import net.blay09.mods.balm.platform.config.reflection.Config;
 
+import java.util.Objects;
+
 @Config(InventoryEssentials.MOD_ID)
 public class InventoryEssentialsConfig {
 
@@ -41,7 +43,7 @@ public class InventoryEssentialsConfig {
     public boolean enableMiddleClickSort = true;
 
     public static InventoryEssentialsConfig getActive() {
-        return Balm.config().getActiveConfig(InventoryEssentialsConfig.class);
+        return Objects.requireNonNull(Balm.config().getActiveConfig(InventoryEssentialsConfig.class));
     }
 
     public static void initialize() {

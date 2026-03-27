@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public record SingleTransferMessage(int slotNumber) implements CustomPacketPayload {
 
-    public static CustomPacketPayload.Type<SingleTransferMessage> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(
+    public static final CustomPacketPayload.Type<SingleTransferMessage> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(
             InventoryEssentials.MOD_ID,
             "single_transfer"));
 

@@ -1,7 +1,9 @@
-package net.blay09.mods.inventoryessentials;
+package net.blay09.mods.inventoryessentials.neoforge;
 
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.neoforge.platform.runtime.NeoForgeLoadContext;
+import net.blay09.mods.inventoryessentials.InventoryEssentials;
+import net.blay09.mods.inventoryessentials.PlatformBindings;
 import net.minecraft.world.inventory.Slot;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
