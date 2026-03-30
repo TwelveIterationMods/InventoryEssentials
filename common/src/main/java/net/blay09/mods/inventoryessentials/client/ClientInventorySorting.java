@@ -1,5 +1,6 @@
 package net.blay09.mods.inventoryessentials.client;
 
+import net.blay09.mods.inventoryessentials.InventorySorting;
 import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tags.ItemTags;
@@ -29,7 +30,7 @@ public class ClientInventorySorting {
         void click(AbstractContainerMenu menu, Slot slot, int mouseButton, ContainerInput ContainerInput);
     }
 
-    public static boolean sort(AbstractContainerMenu menu, Slot baseSlot, SlotClicker clicker) {
+    public static boolean sort(AbstractContainerMenu menu, Slot baseSlot, InventorySorting sortingMode, SlotClicker clicker) {
         final var player = Minecraft.getInstance().player;
         if (player == null) {
             return false;
@@ -49,12 +50,16 @@ public class ClientInventorySorting {
         // Merge matching stacks first before sorting
         consolidateStacks(menu, slotsToSort, clicker);
 
+        if (sortingMode == InventorySorting.CONSOLIDATE_ONLY) {
+            return true;
+        }
+
         // Compute the sorted order
         final var goalSorting = slotsToSort.stream()
                 .map(Slot::getItem)
                 .map(ItemStack::copy)
                 .filter(stack -> !stack.isEmpty())
-                .sorted(defaultComparator)
+                .sorted(getComparator(sortingMode))
                 .toList();
 
         // Swap items to match the new sorting
@@ -85,6 +90,15 @@ public class ClientInventorySorting {
         }
 
         return true;
+    }
+
+    private static Comparator<ItemStack> getComparator(InventorySorting sortingMode) {
+        return switch (sortingMode) {
+            case CONSOLIDATE_ONLY -> throw new IllegalStateException("Sort comparator requested for consolidate mode");
+            case ALPHABETICAL -> defaultComparator;
+            // CREATIVE uses the alphabetical fallback until a dedicated creative sort is implemented.
+            case CREATIVE -> defaultComparator;
+        };
     }
 
     private static void swapSlots(AbstractContainerMenu menu, List<Slot> slots, int firstIndex, int secondIndex, SlotClicker clicker) {

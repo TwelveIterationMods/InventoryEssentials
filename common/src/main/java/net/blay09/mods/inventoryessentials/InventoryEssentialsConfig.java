@@ -39,8 +39,8 @@ public class InventoryEssentialsConfig {
     @Comment("Should holding click or right-click with a bundle empty or insert hovered slots?")
     public boolean enableBundleDrag = true;
 
-    @Comment("Should middle-clicking a slot sort the inventory?")
-    public boolean enableMiddleClickSort = true;
+    @Comment("Choose how middle-click inventory sorting should behave.")
+    public InventorySorting inventorySorting = InventorySorting.ALPHABETICAL;
 
     public static InventoryEssentialsConfig getActive() {
         return Objects.requireNonNull(Balm.config().getActiveConfig(InventoryEssentialsConfig.class));
@@ -50,5 +50,4 @@ public class InventoryEssentialsConfig {
         Balm.config().registerConfig(InventoryEssentialsConfig.class);
     }
 }
-
 
