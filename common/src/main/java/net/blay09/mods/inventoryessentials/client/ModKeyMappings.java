@@ -93,7 +93,7 @@ public class ModKeyMappings {
 
         keySortInventory = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "sort_inventory"))
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_MIDDLE))
-                .handleScreenInput(event -> handleSlotInput(event, () -> InventoryEssentialsConfig.getActive().enableMiddleClickSort,
+                .handleScreenInput(event -> handleSlotInput(event, () -> true,
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).sort(screen, slot)))
                 .build();
 
