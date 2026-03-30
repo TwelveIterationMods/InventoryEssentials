@@ -6,6 +6,7 @@ import java.util.Locale;
 
 public enum InventorySorting implements StringRepresentable {
     CONSOLIDATE_ONLY,
+    RETAIN_ORDER,
     ALPHABETICAL,
     CREATIVE;
 
