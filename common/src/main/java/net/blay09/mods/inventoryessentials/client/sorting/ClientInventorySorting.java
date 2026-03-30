@@ -1,4 +1,4 @@
-package net.blay09.mods.inventoryessentials.client;
+package net.blay09.mods.inventoryessentials.client.sorting;
 
 import net.blay09.mods.inventoryessentials.InventorySorting;
 import net.blay09.mods.inventoryessentials.InventoryUtils;
@@ -55,12 +55,7 @@ public class ClientInventorySorting {
         }
 
         // Compute the sorted order
-        final var goalSorting = slotsToSort.stream()
-                .map(Slot::getItem)
-                .map(ItemStack::copy)
-                .filter(stack -> !stack.isEmpty())
-                .sorted(getComparator(sortingMode))
-                .toList();
+        final var goalSorting = computeSortedList(slotsToSort, sortingMode);
 
         // Swap items to match the new sorting
         for (int i = 0; i < goalSorting.size(); i++) {
@@ -94,11 +89,26 @@ public class ClientInventorySorting {
 
     private static Comparator<ItemStack> getComparator(InventorySorting sortingMode) {
         return switch (sortingMode) {
-            case CONSOLIDATE_ONLY -> throw new IllegalStateException("Sort comparator requested for consolidate mode");
+            case CONSOLIDATE_ONLY -> throw new IllegalStateException("No comparator available for CONSOLIDATE_ONLY");
+            case RETAIN_ORDER -> throw new IllegalStateException("No comparator available for RETAIN_ORDER");
             case ALPHABETICAL -> defaultComparator;
-            // CREATIVE uses the alphabetical fallback until a dedicated creative sort is implemented.
-            case CREATIVE -> defaultComparator;
+            case CREATIVE -> CreativeSorting.getCreativeComparator().thenComparing(defaultComparator);
         };
+    }
+
+    private static List<ItemStack> computeSortedList(List<Slot> slotsToSort, InventorySorting sortingMode) {
+        final var stacks = slotsToSort.stream()
+                .map(Slot::getItem)
+                .map(ItemStack::copy)
+                .filter(stack -> !stack.isEmpty())
+                .toList();
+        if (sortingMode == InventorySorting.RETAIN_ORDER) {
+            return RetainOrderSorting.computeSortedList(stacks);
+        }
+
+        return stacks.stream()
+                .sorted(getComparator(sortingMode))
+                .toList();
     }
 
     private static void swapSlots(AbstractContainerMenu menu, List<Slot> slots, int firstIndex, int secondIndex, SlotClicker clicker) {

@@ -3,6 +3,7 @@ package net.blay09.mods.inventoryessentials.client;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.InventoryOperations;
 import net.blay09.mods.inventoryessentials.InventoryUtils;
+import net.blay09.mods.inventoryessentials.client.sorting.ClientInventorySorting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
