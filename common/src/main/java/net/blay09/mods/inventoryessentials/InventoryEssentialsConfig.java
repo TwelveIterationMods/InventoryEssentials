@@ -40,7 +40,7 @@ public class InventoryEssentialsConfig {
     public boolean enableBundleDrag = true;
 
     @Comment("Choose how middle-click inventory sorting should behave.")
-    public InventorySorting inventorySorting = InventorySorting.ALPHABETICAL;
+    public InventorySorting inventorySorting = InventorySorting.CREATIVE;
 
     public static InventoryEssentialsConfig getActive() {
         return Objects.requireNonNull(Balm.config().getActiveConfig(InventoryEssentialsConfig.class));
