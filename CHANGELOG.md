@@ -1,1 +1,3 @@
-- Updated to Minecraft 26.1
+- Added `RETAIN_ORDER`, `CONSOLIDATE_ONLY`  and `CREATIVE` (default) sorting
+- Replace `enableMiddleClickSort` option with `inventorySorting` option to control sorting order
+  - If you want to disable sorting, unbind the key
