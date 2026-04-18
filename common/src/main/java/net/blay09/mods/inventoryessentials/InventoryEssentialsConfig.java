@@ -39,6 +39,9 @@ public class InventoryEssentialsConfig {
     @Comment("Should holding click or right-click with a bundle empty or insert hovered slots?")
     public boolean enableBundleDrag = true;
 
+    @Comment("Should picked up items automatically be placed into matching bundles?")
+    public boolean enableBundleAutoFill = true;
+
     @Comment("Choose how middle-click inventory sorting should behave.")
     public InventorySorting inventorySorting = InventorySorting.CREATIVE;
 

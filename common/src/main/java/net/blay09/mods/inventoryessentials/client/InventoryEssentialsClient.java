@@ -9,9 +9,12 @@ import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsIgnores;
 import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.inventoryessentials.mixin.CreativeModeInventoryScreenAccessor;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.network.protocol.game.ClientboundTakeItemEntityPacket;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.inventory.Slot;
 import org.jspecify.annotations.Nullable;
@@ -21,18 +24,30 @@ public class InventoryEssentialsClient {
     private static final InventoryControls clientOnlyControls = new ClientOnlyInventoryControls();
     private static final InventoryControls creativeControls = new CreativeInventoryControls();
     private static final InventoryControls serverSupportedControls = new ServerSupportedInventoryControls();
+    private static final BundleAutoFillHandler bundleAutoFillHandler = new BundleAutoFillHandler();
 
     private static @Nullable Slot lastDragHoverSlot;
     private static boolean hasDragClicked;
 
     public static void initialize(BalmClientRegistrars registrars) {
-        ClientLifecycleCallback.DisconnectedFromServer.EVENT.register(client -> InventoryEssentials.isServerSideInstalled = false);
+        ClientLifecycleCallback.DisconnectedFromServer.EVENT.register(client -> {
+            InventoryEssentials.isServerSideInstalled = false;
+            bundleAutoFillHandler.reset();
+        });
 
         ModKeyMappings.initialize();
 
         ScreenCallback.MousePress.Before.EVENT.register(InventoryEssentialsClient::onMouseClick);
         ScreenCallback.MouseDrag.Before.EVENT.register(InventoryEssentialsClient::onMouseDrag);
         ScreenCallback.MouseRelease.Before.EVENT.register(InventoryEssentialsClient::onMouseRelease);
+    }
+
+    public static void onTakeItemEntityPacket(ClientboundTakeItemEntityPacket packet) {
+        bundleAutoFillHandler.onTakeItemEntityPacket(Minecraft.getInstance(), packet);
+    }
+
+    public static void onContainerSetSlotPacket(ClientboundContainerSetSlotPacket packet) {
+        bundleAutoFillHandler.onContainerSetSlotPacket(Minecraft.getInstance(), packet);
     }
 
     public static InventoryControls getInventoryControls(Screen screen) {

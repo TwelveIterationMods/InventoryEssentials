@@ -9,6 +9,7 @@
   "client": [
     "AbstractContainerScreenAccessor",
     "AbstractContainerMenuAccessor",
+    "ClientPacketListenerMixin",
     "CreativeModeInventoryScreenAccessor",
     "SlotWrapperAccessor"
   ],
