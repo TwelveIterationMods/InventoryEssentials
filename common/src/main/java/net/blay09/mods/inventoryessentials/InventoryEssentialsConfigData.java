@@ -34,6 +34,9 @@ public class InventoryEssentialsConfigData implements BalmConfigData {
     @Comment("Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?")
     public boolean enableShiftDrag = true;
 
+    @Comment("Should broken tools automatically be replaced from the inventory?")
+    public boolean enableToolRefill = true;
+
     @Comment("Choose how middle-click inventory sorting should behave.")
     public InventorySorting inventorySorting = InventorySorting.CREATIVE;
 

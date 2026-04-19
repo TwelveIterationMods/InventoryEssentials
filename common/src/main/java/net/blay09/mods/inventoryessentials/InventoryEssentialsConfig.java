@@ -13,4 +13,3 @@ public class InventoryEssentialsConfig {
         Balm.getConfig().registerConfig(InventoryEssentialsConfigData.class, null);
     }
 }
-

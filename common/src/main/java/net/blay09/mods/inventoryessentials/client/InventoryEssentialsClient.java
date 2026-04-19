@@ -2,6 +2,7 @@ package net.blay09.mods.inventoryessentials.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.api.event.client.DisconnectedFromServerEvent;
 import net.blay09.mods.balm.api.event.client.screen.ScreenMouseEvent;
 import net.blay09.mods.inventoryessentials.InventoryEssentials;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsIgnores;
@@ -17,15 +18,29 @@ public class InventoryEssentialsClient {
     private static final InventoryControls clientOnlyControls = new ClientOnlyInventoryControls();
     private static final InventoryControls creativeControls = new CreativeInventoryControls();
     private static final InventoryControls serverSupportedControls = new ServerSupportedInventoryControls();
+    private static final ToolRefillHandler toolRefillHandler = new ToolRefillHandler();
 
     private static Slot lastDragHoverSlot;
 
     public static void initialize() {
+        Balm.getEvents().onEvent(DisconnectedFromServerEvent.class, event -> {
+            InventoryEssentials.isServerSideInstalled = false;
+            toolRefillHandler.reset();
+        });
+
         ModKeyMappings.initialize();
 
         Balm.getEvents().onEvent(ScreenMouseEvent.Click.Pre.class, InventoryEssentialsClient::onMouseClick);
         Balm.getEvents().onEvent(ScreenMouseEvent.Drag.Pre.class, InventoryEssentialsClient::onMouseDrag);
         Balm.getEvents().onEvent(ScreenMouseEvent.Release.Pre.class, InventoryEssentialsClient::onMouseRelease);
+    }
+
+    public static void beforeContainerSetSlotPacket(ClientboundContainerSetSlotPacket packet) {
+        toolRefillHandler.beforeContainerSetSlot(Minecraft.getInstance(), packet);
+    }
+
+    public static void afterContainerSetSlotPacket(ClientboundContainerSetSlotPacket packet) {
+        toolRefillHandler.afterContainerSetSlot(Minecraft.getInstance(), packet);
     }
 
     public static InventoryControls getInventoryControls(Screen screen) {
