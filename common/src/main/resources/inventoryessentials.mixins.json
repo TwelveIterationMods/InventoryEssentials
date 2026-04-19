@@ -11,6 +11,7 @@
     "AbstractContainerMenuAccessor",
     "ClientPacketListenerMixin",
     "CreativeModeInventoryScreenAccessor",
+    "MultiPlayerGameModeMixin",
     "SlotWrapperAccessor"
   ],
   "injectors": {

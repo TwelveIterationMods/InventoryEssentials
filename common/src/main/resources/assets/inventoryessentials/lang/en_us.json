@@ -37,6 +37,8 @@
   "inventoryessentials.configuration.enableBundleAutoFill.tooltip": "Should picked up items automatically be placed into matching bundles?",
   "inventoryessentials.configuration.enableToolRefill": "Enable Tool Refill",
   "inventoryessentials.configuration.enableToolRefill.tooltip": "Should broken tools automatically be replaced from the inventory?",
+  "inventoryessentials.configuration.enableStackRefill": "Enable Stack Refill",
+  "inventoryessentials.configuration.enableStackRefill.tooltip": "Should depleted block stacks automatically be replaced from the inventory?",
   "inventoryessentials.configuration.inventorySorting": "Inventory Sorting",
   "inventoryessentials.configuration.inventorySorting.tooltip": "Choose how middle-click inventory sorting should behave.",
   "inventoryessentials.configuration.inventorySorting.consolidate_only": "Consolidate Only",

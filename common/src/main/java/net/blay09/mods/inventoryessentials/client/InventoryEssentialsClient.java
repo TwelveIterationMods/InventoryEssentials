@@ -13,9 +13,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundTakeItemEntityPacket;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.inventory.Slot;
 import org.jspecify.annotations.Nullable;
 
@@ -26,6 +29,7 @@ public class InventoryEssentialsClient {
     private static final InventoryControls serverSupportedControls = new ServerSupportedInventoryControls();
     private static final BundleAutoFillHandler bundleAutoFillHandler = new BundleAutoFillHandler();
     private static final ToolRefillHandler toolRefillHandler = new ToolRefillHandler();
+    private static final StackRefillHandler stackRefillHandler = new StackRefillHandler();
 
     private static @Nullable Slot lastDragHoverSlot;
     private static boolean hasDragClicked;
@@ -35,6 +39,7 @@ public class InventoryEssentialsClient {
             InventoryEssentials.isServerSideInstalled = false;
             bundleAutoFillHandler.reset();
             toolRefillHandler.reset();
+            stackRefillHandler.reset();
         });
 
         ModKeyMappings.initialize();
@@ -48,13 +53,23 @@ public class InventoryEssentialsClient {
         bundleAutoFillHandler.onTakeItemEntityPacket(Minecraft.getInstance(), packet);
     }
 
+    public static void beforeUseItemOn(LocalPlayer player, InteractionHand hand) {
+        stackRefillHandler.beforeUseItemOn(Minecraft.getInstance(), player, hand);
+    }
+
+    public static void afterUseItemOn(LocalPlayer player, InteractionHand hand, InteractionResult result) {
+        stackRefillHandler.afterUseItemOn(Minecraft.getInstance(), player, hand, result);
+    }
+
     public static void beforeContainerSetSlotPacket(ClientboundContainerSetSlotPacket packet) {
-        toolRefillHandler.beforeContainerSetSlot(Minecraft.getInstance(), packet);
+        final var client = Minecraft.getInstance();
+        toolRefillHandler.beforeContainerSetSlot(client, packet);
     }
 
     public static void afterContainerSetSlotPacket(ClientboundContainerSetSlotPacket packet) {
-        toolRefillHandler.afterContainerSetSlot(Minecraft.getInstance(), packet);
-        bundleAutoFillHandler.onContainerSetSlotPacket(Minecraft.getInstance(), packet);
+        final var client = Minecraft.getInstance();
+        toolRefillHandler.afterContainerSetSlot(client, packet);
+        bundleAutoFillHandler.onContainerSetSlotPacket(client, packet);
     }
 
     public static InventoryControls getInventoryControls(Screen screen) {
