@@ -42,6 +42,9 @@ public class InventoryEssentialsConfig {
     @Comment("Should picked up items automatically be placed into matching bundles?")
     public boolean enableBundleAutoFill = true;
 
+    @Comment("Should broken tools automatically be replaced from the inventory?")
+    public boolean enableToolRefill = true;
+
     @Comment("Choose how middle-click inventory sorting should behave.")
     public InventorySorting inventorySorting = InventorySorting.CREATIVE;
 
@@ -53,4 +56,3 @@ public class InventoryEssentialsConfig {
         Balm.config().registerConfig(InventoryEssentialsConfig.class);
     }
 }
-

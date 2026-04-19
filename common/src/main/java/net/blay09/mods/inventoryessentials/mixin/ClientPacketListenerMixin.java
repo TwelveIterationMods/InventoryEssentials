@@ -17,8 +17,13 @@ public class ClientPacketListenerMixin {
         InventoryEssentialsClient.onTakeItemEntityPacket(packet);
     }
 
+    @Inject(method = "handleContainerSetSlot", at = @At("HEAD"))
+    private void beforeContainerSetSlot(ClientboundContainerSetSlotPacket packet, CallbackInfo callbackInfo) {
+        InventoryEssentialsClient.beforeContainerSetSlotPacket(packet);
+    }
+
     @Inject(method = "handleContainerSetSlot", at = @At("TAIL"))
     private void handleContainerSetSlot(ClientboundContainerSetSlotPacket packet, CallbackInfo callbackInfo) {
-        InventoryEssentialsClient.onContainerSetSlotPacket(packet);
+        InventoryEssentialsClient.afterContainerSetSlotPacket(packet);
     }
 }

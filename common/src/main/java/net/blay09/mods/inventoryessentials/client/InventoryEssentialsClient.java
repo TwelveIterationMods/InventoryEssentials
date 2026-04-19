@@ -25,6 +25,7 @@ public class InventoryEssentialsClient {
     private static final InventoryControls creativeControls = new CreativeInventoryControls();
     private static final InventoryControls serverSupportedControls = new ServerSupportedInventoryControls();
     private static final BundleAutoFillHandler bundleAutoFillHandler = new BundleAutoFillHandler();
+    private static final ToolRefillHandler toolRefillHandler = new ToolRefillHandler();
 
     private static @Nullable Slot lastDragHoverSlot;
     private static boolean hasDragClicked;
@@ -33,6 +34,7 @@ public class InventoryEssentialsClient {
         ClientLifecycleCallback.DisconnectedFromServer.EVENT.register(client -> {
             InventoryEssentials.isServerSideInstalled = false;
             bundleAutoFillHandler.reset();
+            toolRefillHandler.reset();
         });
 
         ModKeyMappings.initialize();
@@ -46,7 +48,12 @@ public class InventoryEssentialsClient {
         bundleAutoFillHandler.onTakeItemEntityPacket(Minecraft.getInstance(), packet);
     }
 
-    public static void onContainerSetSlotPacket(ClientboundContainerSetSlotPacket packet) {
+    public static void beforeContainerSetSlotPacket(ClientboundContainerSetSlotPacket packet) {
+        toolRefillHandler.beforeContainerSetSlot(Minecraft.getInstance(), packet);
+    }
+
+    public static void afterContainerSetSlotPacket(ClientboundContainerSetSlotPacket packet) {
+        toolRefillHandler.afterContainerSetSlot(Minecraft.getInstance(), packet);
         bundleAutoFillHandler.onContainerSetSlotPacket(Minecraft.getInstance(), packet);
     }
 
