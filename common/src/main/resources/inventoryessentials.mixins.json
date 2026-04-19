@@ -10,6 +10,7 @@
     "AbstractContainerScreenAccessor",
     "AbstractContainerMenuAccessor",
     "CreativeModeInventoryScreenAccessor",
+    "MultiPlayerGameModeMixin",
     "SlotWrapperAccessor"
   ],
   "injectors": {

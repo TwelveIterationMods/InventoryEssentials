@@ -38,6 +38,8 @@
   "inventoryessentials.configuration.enableShiftDrag.tooltip": "Should holding shift and moving your mouse over items quick-transfer them without requiring each to be clicked?",
   "inventoryessentials.configuration.enableToolRefill": "Enable Tool Refill",
   "inventoryessentials.configuration.enableToolRefill.tooltip": "Should broken tools automatically be replaced from the inventory?",
+  "inventoryessentials.configuration.enableStackRefill": "Enable Stack Refill",
+  "inventoryessentials.configuration.enableStackRefill.tooltip": "Should depleted block stacks automatically be replaced from the inventory?",
   "inventoryessentials.configuration.inventorySorting": "Inventory Sorting",
   "inventoryessentials.configuration.inventorySorting.tooltip": "Choose how middle-click inventory sorting should behave.",
   "inventoryessentials.configuration.inventorySorting.consolidate_only": "Consolidate Only",

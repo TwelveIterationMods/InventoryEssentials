@@ -9,8 +9,12 @@ import net.blay09.mods.inventoryessentials.InventoryEssentialsIgnores;
 import net.blay09.mods.inventoryessentials.InventoryEssentialsConfig;
 import net.blay09.mods.inventoryessentials.mixin.AbstractContainerScreenAccessor;
 import net.blay09.mods.inventoryessentials.mixin.CreativeModeInventoryScreenAccessor;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.Slot;
 
 public class InventoryEssentialsClient {
@@ -19,6 +23,7 @@ public class InventoryEssentialsClient {
     private static final InventoryControls creativeControls = new CreativeInventoryControls();
     private static final InventoryControls serverSupportedControls = new ServerSupportedInventoryControls();
     private static final ToolRefillHandler toolRefillHandler = new ToolRefillHandler();
+    private static final StackRefillHandler stackRefillHandler = new StackRefillHandler();
 
     private static Slot lastDragHoverSlot;
 
@@ -26,6 +31,7 @@ public class InventoryEssentialsClient {
         Balm.getEvents().onEvent(DisconnectedFromServerEvent.class, event -> {
             InventoryEssentials.isServerSideInstalled = false;
             toolRefillHandler.reset();
+            stackRefillHandler.reset();
         });
 
         ModKeyMappings.initialize();
@@ -33,6 +39,14 @@ public class InventoryEssentialsClient {
         Balm.getEvents().onEvent(ScreenMouseEvent.Click.Pre.class, InventoryEssentialsClient::onMouseClick);
         Balm.getEvents().onEvent(ScreenMouseEvent.Drag.Pre.class, InventoryEssentialsClient::onMouseDrag);
         Balm.getEvents().onEvent(ScreenMouseEvent.Release.Pre.class, InventoryEssentialsClient::onMouseRelease);
+    }
+
+    public static void beforeUseItemOn(LocalPlayer player, InteractionHand hand) {
+        stackRefillHandler.beforeUseItemOn(Minecraft.getInstance(), player, hand);
+    }
+
+    public static void afterUseItemOn(LocalPlayer player, InteractionHand hand, InteractionResult result) {
+        stackRefillHandler.afterUseItemOn(Minecraft.getInstance(), player, hand, result);
     }
 
     public static void beforeContainerSetSlotPacket(ClientboundContainerSetSlotPacket packet) {

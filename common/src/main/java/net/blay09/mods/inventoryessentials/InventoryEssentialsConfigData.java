@@ -37,6 +37,9 @@ public class InventoryEssentialsConfigData implements BalmConfigData {
     @Comment("Should broken tools automatically be replaced from the inventory?")
     public boolean enableToolRefill = true;
 
+    @Comment("Should depleted block stacks automatically be replaced from the inventory?")
+    public boolean enableStackRefill = true;
+
     @Comment("Choose how middle-click inventory sorting should behave.")
     public InventorySorting inventorySorting = InventorySorting.CREATIVE;
 
