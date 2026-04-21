@@ -25,12 +25,12 @@ public class BulkTransferAllMessage {
     }
 
     public static BulkTransferAllMessage decode(FriendlyByteBuf buf) {
-        int slotNumber = buf.readByte();
+        int slotNumber = buf.readVarInt();
         return new BulkTransferAllMessage(slotNumber);
     }
 
     public static void encode(BulkTransferAllMessage message, FriendlyByteBuf buf) {
-        buf.writeByte(message.slotNumber);
+        buf.writeVarInt(message.slotNumber);
     }
 
     public static void handle(ServerPlayer player, BulkTransferAllMessage message) {

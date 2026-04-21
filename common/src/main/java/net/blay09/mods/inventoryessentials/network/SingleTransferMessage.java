@@ -13,12 +13,12 @@ public class SingleTransferMessage {
     }
 
     public static SingleTransferMessage decode(FriendlyByteBuf buf) {
-        int slotNumber = buf.readByte();
+        int slotNumber = buf.readVarInt();
         return new SingleTransferMessage(slotNumber);
     }
 
     public static void encode(SingleTransferMessage message, FriendlyByteBuf buf) {
-        buf.writeByte(message.slotNumber);
+        buf.writeVarInt(message.slotNumber);
     }
 
     public static void handle(ServerPlayer player, SingleTransferMessage message) {
