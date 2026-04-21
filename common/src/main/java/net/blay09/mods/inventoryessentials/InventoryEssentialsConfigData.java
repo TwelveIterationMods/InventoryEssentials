@@ -35,7 +35,7 @@ public class InventoryEssentialsConfigData implements BalmConfigData {
     public boolean enableShiftDrag = true;
 
     @Comment("Choose how middle-click inventory sorting should behave.")
-    public InventorySorting inventorySorting = InventorySorting.ALPHABETICAL;
+    public InventorySorting inventorySorting = InventorySorting.CREATIVE;
 
 }
 
