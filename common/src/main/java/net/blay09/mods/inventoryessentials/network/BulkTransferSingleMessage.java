@@ -32,12 +32,12 @@ public class BulkTransferSingleMessage implements CustomPacketPayload {
     }
 
     public static BulkTransferSingleMessage decode(FriendlyByteBuf buf) {
-        int slotNumber = buf.readByte();
+        int slotNumber = buf.readVarInt();
         return new BulkTransferSingleMessage(slotNumber);
     }
 
     public static void encode(FriendlyByteBuf buf, BulkTransferSingleMessage message) {
-        buf.writeByte(message.slotNumber);
+        buf.writeVarInt(message.slotNumber);
     }
 
     public static void handle(ServerPlayer player, BulkTransferSingleMessage message) {
