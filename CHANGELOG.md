@@ -1,2 +1,1 @@
-- Added basic Inventory Sorting on middle click (`enableMiddleClickSort` option, enabled by default)
-- Fixed various i18n keys
+- Fixed Inventory Essentials controls not working in large containers on slots > 127
