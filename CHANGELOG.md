@@ -1,1 +1,1 @@
-- Fixed double shift click on the first slot when using drag transfer, resulting in two stacks being extracted from things like Sophisticated Backpacks with stack upgrades
+- Fixed Inventory Essentials controls not working in large containers on slots > 127
