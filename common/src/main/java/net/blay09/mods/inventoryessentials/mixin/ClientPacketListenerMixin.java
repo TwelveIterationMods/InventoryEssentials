@@ -12,11 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
 
-    @Inject(method = "handleTakeItemEntity", at = @At("HEAD"))
-    private void handleTakeItemEntity(ClientboundTakeItemEntityPacket packet, CallbackInfo callbackInfo) {
-        InventoryEssentialsClient.onTakeItemEntityPacket(packet);
-    }
-
     @Inject(method = "handleContainerSetSlot", at = @At("HEAD"))
     private void beforeContainerSetSlot(ClientboundContainerSetSlotPacket packet, CallbackInfo callbackInfo) {
         InventoryEssentialsClient.beforeContainerSetSlotPacket(packet);

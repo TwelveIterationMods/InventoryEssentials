@@ -73,7 +73,7 @@ public class ServerSupportedInventoryControls extends ClientOnlyInventoryControl
             return false;
         }
 
-        Balm.networking().sendToServer(new DumpToContainerMessage(false));
+        Balm.getNetworking().sendToServer(new DumpToContainerMessage(false));
         return true;
     }
 
@@ -83,7 +83,7 @@ public class ServerSupportedInventoryControls extends ClientOnlyInventoryControl
             return false;
         }
 
-        Balm.networking().sendToServer(RestockInventoryMessage.INSTANCE);
+        Balm.getNetworking().sendToServer(RestockInventoryMessage.INSTANCE);
         return true;
     }
 
@@ -93,7 +93,7 @@ public class ServerSupportedInventoryControls extends ClientOnlyInventoryControl
             return false;
         }
 
-        Balm.networking().sendToServer(new DumpToContainerMessage(true));
+        Balm.getNetworking().sendToServer(new DumpToContainerMessage(true));
         return true;
     }
 }

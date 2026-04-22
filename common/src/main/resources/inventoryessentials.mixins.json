@@ -7,8 +7,9 @@
   "mixins": [
   ],
   "client": [
-    "AbstractContainerScreenAccessor",
     "AbstractContainerMenuAccessor",
+    "AbstractContainerScreenAccessor",
+    "ClientPacketListenerMixin",
     "CreativeModeInventoryScreenAccessor",
     "MultiPlayerGameModeMixin",
     "SlotWrapperAccessor"

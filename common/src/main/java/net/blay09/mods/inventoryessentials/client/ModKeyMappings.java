@@ -97,7 +97,7 @@ public class ModKeyMappings {
                         (screen, slot) -> InventoryEssentialsClient.getInventoryControls(screen).sort(screen, slot)))
                 .build();
 
-        keyRestockContainer = Kuma.createKeyMapping(Identifier.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "restock_container"))
+        keyRestockContainer = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "restock_container"))
                 .withContext(KeyConflictContext.SCREEN)
                 .handleScreenInput(event -> {
                     if (InventoryEssentialsIgnores.shouldIgnoreScreen(event.screen())) {
@@ -112,7 +112,7 @@ public class ModKeyMappings {
                 })
                 .build();
 
-        keyRestockInventory = Kuma.createKeyMapping(Identifier.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "restock_inventory"))
+        keyRestockInventory = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "restock_inventory"))
                 .withContext(KeyConflictContext.SCREEN)
                 .handleScreenInput(event -> {
                     if (InventoryEssentialsIgnores.shouldIgnoreScreen(event.screen())) {
@@ -127,7 +127,7 @@ public class ModKeyMappings {
                 })
                 .build();
 
-        keyDumpToContainer = Kuma.createKeyMapping(Identifier.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "dump_to_container"))
+        keyDumpToContainer = Kuma.createKeyMapping(ResourceLocation.fromNamespaceAndPath(InventoryEssentials.MOD_ID, "dump_to_container"))
                 .withContext(KeyConflictContext.SCREEN)
                 .handleScreenInput(event -> {
                     if (InventoryEssentialsIgnores.shouldIgnoreScreen(event.screen())) {

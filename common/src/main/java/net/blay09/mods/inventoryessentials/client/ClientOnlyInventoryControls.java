@@ -20,6 +20,11 @@ import net.minecraft.world.item.ItemStack;
 import java.util.*;
 
 public class ClientOnlyInventoryControls implements InventoryControls {
+    private final InventoryOperations operations = createOperations();
+
+    protected InventoryOperations createOperations() {
+        return new InventoryOperations(this::slotClick, InventoryOperations.SlotPolicy.always());
+    }
 
     @Override
     public boolean singleTransfer(AbstractContainerScreen<?> screen, Slot clickedSlot) {
