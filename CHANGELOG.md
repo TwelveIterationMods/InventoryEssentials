@@ -1,1 +1,8 @@
-- Fixed Inventory Essentials controls not working in large containers on slots > 127
+- Added `Dump to Container` key
+- Added `Restock Inventory` key
+- Added `enableStackRefill` option
+- Added `enableToolRefill` option
+- Added `RETAIN_ORDER` and `CREATIVE` sorting, make creative sorting the default
+- Changed `enableMiddleClickSort` option to `inventorySorting` option, which can control the sorting order
+- Fixed config translation keys
+- Fixed Inventory Essentials not working in large containers on slots > 127
