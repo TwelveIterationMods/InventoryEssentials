@@ -1,3 +1,3 @@
-- Added `RETAIN_ORDER`, `CONSOLIDATE_ONLY`  and `CREATIVE` (default) sorting
-- Replace `enableMiddleClickSort` option with `inventorySorting` option to control sorting order
-  - If you want to disable sorting, unbind the key
+- Added `enableStackRefill` option to automatically replace blocks in the hotbar from your inventory when placing the last one
+- Added `enableToolRefill` option to automatically replace tools in the hotbar from your inventory when they break
+- Added `enableBundleAutoFill` option to automatically place picked up items into bundles that already contain this item
