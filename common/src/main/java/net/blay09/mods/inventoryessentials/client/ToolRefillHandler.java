@@ -21,7 +21,7 @@ final class ToolRefillHandler {
 
         final var player = client.player;
         final var config = InventoryEssentialsConfig.getActive();
-        if (player == null || client.screen != null || !config.enableToolRefill) {
+        if (player == null || client.gui.screen() != null || !config.enableToolRefill) {
             return;
         }
 
@@ -58,7 +58,7 @@ final class ToolRefillHandler {
         reset();
 
         final var player = client.player;
-        if (player == null || client.gameMode == null || client.screen != null || !InventoryEssentialsConfig.getActive().enableToolRefill) {
+        if (player == null || client.gameMode == null || client.gui.screen() != null || !InventoryEssentialsConfig.getActive().enableToolRefill) {
             return;
         }
 

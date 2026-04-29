@@ -25,7 +25,7 @@ final class StackRefillHandler {
         }
 
         reset();
-        if (client.player != player || client.screen != null || !InventoryEssentialsConfig.getActive().enableStackRefill) {
+        if (client.player != player || client.gui.screen() != null || !InventoryEssentialsConfig.getActive().enableStackRefill) {
             return;
         }
 
@@ -52,7 +52,7 @@ final class StackRefillHandler {
         final var targetMenuSlot = pendingMenuSlot;
         reset();
 
-        if (client.gameMode == null || client.screen != null || !InventoryEssentialsConfig.getActive().enableStackRefill) {
+        if (client.gameMode == null || client.gui.screen() != null || !InventoryEssentialsConfig.getActive().enableStackRefill) {
             return;
         }
 
