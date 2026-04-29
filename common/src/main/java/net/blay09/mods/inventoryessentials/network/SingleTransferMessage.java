@@ -23,8 +23,8 @@ public class SingleTransferMessage {
 
     public static void handle(ServerPlayer player, SingleTransferMessage message) {
         final var menu = player.containerMenu;
-        if (menu != null && message.slotNumber >= 0 && message.slotNumber < menu.slots.size()) {
-            final var slot = menu.slots.get(message.slotNumber);
+        if (menu != null && menu.isValidSlotIndex(message.slotNumber)) {
+            final var slot = menu.getSlot(message.slotNumber);
             ServerInventoryTransfers.singleTransfer(player, menu, slot);
         }
     }
