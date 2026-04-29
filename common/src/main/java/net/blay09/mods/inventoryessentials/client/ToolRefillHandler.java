@@ -66,7 +66,7 @@ final class ToolRefillHandler {
             return;
         }
 
-        final var targetSlot = packet.getSlot() >= 0 && packet.getSlot() < menu.slots.size() ? menu.getSlot(packet.getSlot()) : null;
+        final var targetSlot = menu.isValidSlotIndex(packet.getSlot()) ? menu.getSlot(packet.getSlot()) : null;
         if (targetSlot == null || !targetSlot.getItem().isEmpty()) {
             return;
         }

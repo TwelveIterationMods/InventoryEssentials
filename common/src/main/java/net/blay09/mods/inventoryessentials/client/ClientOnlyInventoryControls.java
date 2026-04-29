@@ -560,7 +560,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
     protected void slotClick(AbstractContainerMenu menu, int slotIndex, int mouseButton, ClickType clickType) {
         Player player = Minecraft.getInstance().player;
         MultiPlayerGameMode gameMode = Minecraft.getInstance().gameMode;
-        if (player != null && gameMode != null && (slotIndex >= 0 && slotIndex < menu.slots.size() || slotIndex == -999)) {
+        if (player != null && gameMode != null && (menu.isValidSlotIndex(slotIndex) || slotIndex == -999)) {
             gameMode.handleInventoryMouseClick(menu.containerId, slotIndex, mouseButton, clickType, player);
         }
     }
