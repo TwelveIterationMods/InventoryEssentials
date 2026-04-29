@@ -52,7 +52,7 @@ final class BundleAutoFillHandler {
             return;
         }
 
-        if (packet.getSlot() < 0 || packet.getSlot() >= menu.slots.size()) {
+        if (!menu.isValidSlotIndex(packet.getSlot())) {
             return;
         }
 

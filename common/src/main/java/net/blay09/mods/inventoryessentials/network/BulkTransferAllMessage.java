@@ -34,8 +34,8 @@ public record BulkTransferAllMessage(int slotNumber) implements CustomPacketPayl
 
     public static void handle(ServerPlayer player, BulkTransferAllMessage message) {
         AbstractContainerMenu menu = player.containerMenu;
-        if (menu != null && message.slotNumber >= 0 && message.slotNumber < menu.slots.size()) {
-            Slot clickedSlot = menu.slots.get(message.slotNumber);
+        if (menu != null && menu.isValidSlotIndex(message.slotNumber)) {
+            Slot clickedSlot = menu.getSlot(message.slotNumber);
 
             boolean isProbablyMovingToPlayerInventory = false;
             // If the clicked slot is *not* from the player inventory,

@@ -61,7 +61,7 @@ final class StackRefillHandler {
             return;
         }
 
-        final var targetSlot = targetMenuSlot >= 0 && targetMenuSlot < menu.slots.size() ? menu.getSlot(targetMenuSlot) : null;
+        final var targetSlot = menu.isValidSlotIndex(targetMenuSlot) ? menu.getSlot(targetMenuSlot) : null;
         if (targetSlot == null || !targetSlot.getItem().isEmpty()) {
             return;
         }
