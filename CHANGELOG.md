@@ -1,3 +1,1 @@
-- Added `enableStackRefill` option to automatically replace blocks in the hotbar from your inventory when placing the last one
-- Added `enableToolRefill` option to automatically replace tools in the hotbar from your inventory when they break
-- Added `enableBundleAutoFill` option to automatically place picked up items into bundles that already contain this item
+- Fixed wrong slots being sometimes affected by features like CTRL-CLICK (e.g. in Sophisticated Storage with upgraded slots)
