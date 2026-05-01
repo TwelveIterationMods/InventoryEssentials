@@ -1,1 +1,1 @@
-- Fixed Inventory Essentials controls not working in large containers on slots > 127
+- Fixed wrong slots being sometimes affected by features like CTRL-CLICK (e.g. in Sophisticated Storage with upgraded slots)
