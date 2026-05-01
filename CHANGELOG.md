@@ -1,8 +1,1 @@
-- Added `Dump to Container` key
-- Added `Restock Inventory` key
-- Added `enableStackRefill` option
-- Added `enableToolRefill` option
-- Added `RETAIN_ORDER` and `CREATIVE` sorting, make creative sorting the default
-- Changed `enableMiddleClickSort` option to `inventorySorting` option, which can control the sorting order
-- Fixed config translation keys
-- Fixed Inventory Essentials not working in large containers on slots > 127
+- Fixed wrong slots being sometimes affected by features like CTRL-CLICK (e.g. in Sophisticated Storage with upgraded slots)
