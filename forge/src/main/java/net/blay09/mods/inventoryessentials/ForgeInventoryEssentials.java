@@ -25,6 +25,11 @@ public class ForgeInventoryEssentials {
 
                 return slot.isSameInventory(targetSlot);
             }
+
+            @Override
+            public boolean isPlatformSpecificSortableSlot(Slot slot) {
+                return slot instanceof SlotItemHandler;
+            }
         };
 
         Balm.initialize(InventoryEssentials.MOD_ID, EmptyLoadContext.INSTANCE, InventoryEssentials::initialize);

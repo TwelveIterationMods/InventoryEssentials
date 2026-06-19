@@ -20,6 +20,11 @@ public class NeoForgeInventoryEssentials {
 
                 return slot.isSameInventory(targetSlot);
             }
+
+            @Override
+            public boolean isPlatformSpecificSortableSlot(Slot slot) {
+                return slot instanceof SlotItemHandler;
+            }
         };
 
         final var context = new NeoForgeLoadContext(modEventBus);
