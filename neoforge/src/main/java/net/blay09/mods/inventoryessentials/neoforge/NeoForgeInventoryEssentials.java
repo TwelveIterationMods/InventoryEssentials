@@ -26,8 +26,10 @@ public class NeoForgeInventoryEssentials {
             }
 
             @Override
-            public boolean isPlatformSpecificSortableSlot(Slot slot) {
-                return slot instanceof SlotItemHandler
+            @SuppressWarnings("removal")
+            public boolean isSortableSlot(Slot slot) {
+                return super.isSortableSlot(slot)
+                        || slot instanceof SlotItemHandler
                         || slot instanceof ResourceHandlerSlot;
             }
         };
