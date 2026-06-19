@@ -163,6 +163,11 @@ public class ClientInventorySorting {
 
             final var thisStack = thisSlot.getItem();
             for (int j = i + 1; j < slots.size(); j++) {
+                final int thisStackLimit = Math.min(thisSlot.getMaxStackSize(), thisSlot.getMaxStackSize(thisStack));
+                if (thisStack.getCount() >= thisStackLimit) {
+                    break;
+                }
+
                 final var otherSlot = slots.get(j);
                 final var otherStack = otherSlot.getItem();
 
@@ -176,12 +181,6 @@ public class ClientInventorySorting {
                     clicker.click(menu, thisSlot, 0, ClickType.PICKUP);
                     if (!menu.getCarried().isEmpty()) {
                         clicker.click(menu, otherSlot, 0, ClickType.PICKUP);
-                    }
-
-                    final var newThisStack = thisSlot.getItem();
-                    final int newThisStackFull = newThisStack.getMaxStackSize();
-                    if (newThisStack.getCount() >= newThisStackFull) {
-                        break;
                     }
                 }
             }
