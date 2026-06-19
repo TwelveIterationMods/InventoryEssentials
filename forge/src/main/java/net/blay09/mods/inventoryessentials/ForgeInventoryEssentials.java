@@ -27,8 +27,8 @@ public class ForgeInventoryEssentials {
             }
 
             @Override
-            public boolean isPlatformSpecificSortableSlot(Slot slot) {
-                return slot instanceof SlotItemHandler;
+            public boolean isSortableSlot(Slot slot) {
+                return super.isSortableSlot(slot) || slot instanceof SlotItemHandler;
             }
         };
 

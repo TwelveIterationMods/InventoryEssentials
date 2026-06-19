@@ -144,8 +144,6 @@ public class ClientInventorySorting {
         }
 
         // We only sort the most standard slots you would find in your inventory or chests
-        return slot.getClass() == Slot.class
-                || slot.getClass() == ShulkerBoxSlot.class
-                || PlatformBindings.INSTANCE.isPlatformSpecificSortableSlot(slot);
+        return PlatformBindings.INSTANCE.isSortableSlot(slot);
     }
 }

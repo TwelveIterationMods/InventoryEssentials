@@ -12,11 +12,6 @@ public class FabricInventoryEssentials implements ModInitializer {
             public boolean isSameInventory(Slot targetSlot, Slot slot) {
                 return slot.container == targetSlot.container;
             }
-
-            @Override
-            public boolean isPlatformSpecificSortableSlot(Slot slot) {
-                return false;
-            }
         };
 
         Balm.initialize(InventoryEssentials.MOD_ID, InventoryEssentials::initialize);
