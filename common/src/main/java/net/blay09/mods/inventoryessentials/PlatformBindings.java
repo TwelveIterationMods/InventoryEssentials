@@ -1,5 +1,6 @@
 package net.blay09.mods.inventoryessentials;
 
+import net.minecraft.world.inventory.ShulkerBoxSlot;
 import net.minecraft.world.inventory.Slot;
 
 public abstract class PlatformBindings {
@@ -8,6 +9,9 @@ public abstract class PlatformBindings {
 
     public abstract boolean isSameInventory(Slot targetSlot, Slot slot);
 
-    public abstract boolean isPlatformSpecificSortableSlot(Slot slot);
+    public boolean isSortableSlot(Slot slot) {
+        return slot.getClass() == Slot.class
+                || slot.getClass() == ShulkerBoxSlot.class;
+    }
 
 }
