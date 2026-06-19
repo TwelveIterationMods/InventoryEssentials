@@ -8,4 +8,6 @@ public abstract class PlatformBindings {
 
     public abstract boolean isSameInventory(Slot targetSlot, Slot slot);
 
+    public abstract boolean isPlatformSpecificSortableSlot(Slot slot);
+
 }

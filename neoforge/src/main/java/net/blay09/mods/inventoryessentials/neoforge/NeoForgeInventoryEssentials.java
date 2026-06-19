@@ -9,6 +9,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 @Mod(InventoryEssentials.MOD_ID)
 public class NeoForgeInventoryEssentials {
@@ -22,6 +23,12 @@ public class NeoForgeInventoryEssentials {
                 }
 
                 return slot.isSameInventory(targetSlot);
+            }
+
+            @Override
+            public boolean isPlatformSpecificSortableSlot(Slot slot) {
+                return slot instanceof SlotItemHandler
+                        || slot instanceof ResourceHandlerSlot;
             }
         };
 
