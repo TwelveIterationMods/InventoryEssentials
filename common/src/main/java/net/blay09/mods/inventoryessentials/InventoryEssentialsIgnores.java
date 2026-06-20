@@ -28,11 +28,16 @@ public class InventoryEssentialsIgnores {
             return true;
         }
 
+        final var containerScreen = (AbstractContainerScreen<?>) screen;
+        if (InventoryEssentialsExtensions.shouldIgnoreScreen(containerScreen)) {
+            return true;
+        }
+
         if (ignoredScreenClasses.contains(screen.getClass().getName())) {
             return true;
         }
 
-        final var menu = ((AbstractContainerScreen<?>) screen).getMenu();
+        final var menu = containerScreen.getMenu();
         if (ignoredMenuClasses.contains(menu.getClass().getName())) {
             return true;
         }
@@ -49,6 +54,10 @@ public class InventoryEssentialsIgnores {
 
     public static boolean shouldIgnoreSlot(AbstractContainerScreen<?> screen, @Nullable Slot slot) {
         if (slot == null) {
+            return true;
+        }
+
+        if (InventoryEssentialsExtensions.shouldIgnoreSlot(screen, slot)) {
             return true;
         }
 
