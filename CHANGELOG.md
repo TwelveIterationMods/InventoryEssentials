@@ -1,1 +1,4 @@
-- Updated to Minecraft 26.2
+- Added `inventoryessentials/extensions` jsons with support for defining additional sortable slots
+- Added support for `SlotItemHandler` and `ResourceHandlerSlot` slots in sorting
+- Fixed sorting not working inside Mekanism Personal Storage and AE2 Sky Chest
+- Fixed sorting sending slot click packets even if no moves are to be made
