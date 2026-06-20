@@ -1,0 +1,10 @@
+{
+  "sorting": {
+    "sortableSlots": [
+      {
+        "menuType": "ae2:skychest",
+        "slotClass": "appeng.menu.slot.AppEngSlot"
+      }
+    ]
+  }
+}

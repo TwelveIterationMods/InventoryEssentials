@@ -1,0 +1,14 @@
+{
+  "sorting": {
+    "sortableSlots": [
+      {
+        "menuType": "mekanism:personal_storage_block",
+        "slotClass": "mekanism.common.inventory.container.slot.MainInventorySlot"
+      },
+      {
+        "menuType": "mekanism:personal_storage_block",
+        "slotClass": "mekanism.common.inventory.container.slot.InventoryContainerSlot"
+      }
+    ]
+  }
+}

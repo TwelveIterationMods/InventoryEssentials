@@ -1,14 +1,18 @@
 package net.blay09.mods.inventoryessentials.client;
 
+import net.blay09.mods.inventoryessentials.InventoryEssentialsExtensions;
 import net.blay09.mods.inventoryessentials.InventoryUtils;
 import net.blay09.mods.inventoryessentials.PlatformBindings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.ShulkerBoxSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,6 +20,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class ClientInventorySorting {
+
+    private static final Logger logger = LoggerFactory.getLogger(ClientInventorySorting.class);
 
     private static final Comparator<ItemStack> defaultComparator =
             Comparator.comparing((ItemStack itemStack) -> itemStack.getHoverName().getString(), String.CASE_INSENSITIVE_ORDER)
@@ -29,20 +35,26 @@ public class ClientInventorySorting {
         void click(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType);
     }
 
-    public static boolean sort(AbstractContainerMenu menu, Slot baseSlot, SlotClicker clicker) {
+    public static boolean sort(AbstractContainerScreen<?> screen, Slot baseSlot, SlotClicker clicker) {
         final var player = Minecraft.getInstance().player;
         if (player == null) {
             return false;
         }
 
+        final var menu = screen.getMenu();
         final var slotsToSort = new ArrayList<Slot>();
         for (final var slot : menu.slots) {
-            if (isSortableSlot(slot) && InventoryUtils.isSameInventory(baseSlot, slot, true)) {
+            if (isSortableSlot(screen, slot) && InventoryUtils.isSameInventory(baseSlot, slot, true)) {
                 slotsToSort.add(slot);
             }
         }
 
         if (slotsToSort.isEmpty()) {
+            try {
+                logger.debug("No slots to sort found; clicked slot was {} in {}", baseSlot.getClass().getName(), BuiltInRegistries.MENU.getKey(menu.getType()));
+            } catch (UnsupportedOperationException e) {
+                logger.debug("No slots to sort found; clicked slot was {} in {}", baseSlot.getClass().getName(), menu.getClass().getName());
+            }
             return false;
         }
 
@@ -134,7 +146,7 @@ public class ClientInventorySorting {
         }
     }
 
-    private static boolean isSortableSlot(Slot slot) {
+    private static boolean isSortableSlot(AbstractContainerScreen<?> screen, Slot slot) {
         // Hotbar and armor slots are never sortable
         if (slot.container instanceof Inventory) {
             final var containerSlot = slot.getContainerSlot();
@@ -144,6 +156,7 @@ public class ClientInventorySorting {
         }
 
         // We only sort the most standard slots you would find in your inventory or chests
-        return PlatformBindings.INSTANCE.isSortableSlot(slot);
+        return PlatformBindings.INSTANCE.isSortableSlot(slot)
+                || InventoryEssentialsExtensions.isSortableSlot(screen, slot);
     }
 }

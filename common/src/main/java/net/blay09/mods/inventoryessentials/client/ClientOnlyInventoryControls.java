@@ -411,8 +411,7 @@ public class ClientOnlyInventoryControls implements InventoryControls {
 
     @Override
     public boolean sort(AbstractContainerScreen<?> screen, Slot baseSlot) {
-        final var menu = screen.getMenu();
-        return ClientInventorySorting.sort(menu, baseSlot, this::slotClick);
+        return ClientInventorySorting.sort(screen, baseSlot, this::slotClick);
     }
 
     protected void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ClickType clickType) {
