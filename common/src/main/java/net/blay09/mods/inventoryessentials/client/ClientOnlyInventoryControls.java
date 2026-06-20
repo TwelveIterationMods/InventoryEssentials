@@ -458,15 +458,15 @@ public class ClientOnlyInventoryControls implements InventoryControls {
         return ClientInventorySorting.sort(screen, baseSlot, InventoryEssentialsConfig.getActive().inventorySorting, this::slotClick);
     }
 
-    protected void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ContainerInput ContainerInput) {
-        slotClick(menu, slot.index, mouseButton, ContainerInput);
+    protected void slotClick(AbstractContainerMenu menu, Slot slot, int mouseButton, ContainerInput containerInput) {
+        slotClick(menu, slot.index, mouseButton, containerInput);
     }
 
-    protected void slotClick(AbstractContainerMenu menu, int slotIndex, int mouseButton, ContainerInput ContainerInput) {
+    protected void slotClick(AbstractContainerMenu menu, int slotIndex, int mouseButton, ContainerInput containerInput) {
         Player player = Minecraft.getInstance().player;
         MultiPlayerGameMode gameMode = Minecraft.getInstance().gameMode;
         if (player != null && gameMode != null && (menu.isValidSlotIndex(slotIndex) || slotIndex == -999)) {
-            gameMode.handleContainerInput(menu.containerId, slotIndex, mouseButton, ContainerInput, player);
+            gameMode.handleContainerInput(menu.containerId, slotIndex, mouseButton, containerInput, player);
         }
     }
 
