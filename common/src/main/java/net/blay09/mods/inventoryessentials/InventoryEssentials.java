@@ -4,7 +4,9 @@ import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.core.BalmRegistrars;
 import net.blay09.mods.balm.platform.event.callback.ServerPlayerCallback;
 import net.blay09.mods.inventoryessentials.data.ConfigJsonCompatLoader;
+import net.blay09.mods.inventoryessentials.data.ConfigJsonExtensionLoader;
 import net.blay09.mods.inventoryessentials.data.ModFileJsonCompatLoader;
+import net.blay09.mods.inventoryessentials.data.ModFileJsonExtensionLoader;
 import net.blay09.mods.inventoryessentials.network.HelloMessage;
 import net.blay09.mods.inventoryessentials.network.ModNetworking;
 
@@ -22,6 +24,8 @@ public class InventoryEssentials {
         Balm.config().onConfigAvailable(InventoryEssentialsConfig.class, config -> {
             ModFileJsonCompatLoader.load();
             ConfigJsonCompatLoader.load();
+            ModFileJsonExtensionLoader.load();
+            ConfigJsonExtensionLoader.load();
         });
     }
 
