@@ -160,9 +160,16 @@ public class ClientInventorySorting {
                     clicker.click(menu, secondSlot, 0, ClickType.PICKUP);
                 }
             } else {
-                clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
-                clicker.click(menu, secondSlot, 0, ClickType.PICKUP);
-                clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
+                // When the items to be swapped match, we must pick up the stack with higher count first,
+                // because putting a lower count stack on a higher count stack doesn't do anything
+                final var firstSlotToClick = ItemStack.isSameItemSameComponents(firstStack, secondStack)
+                        && secondStack.getCount() > firstStack.getCount()
+                        ? secondSlot
+                        : firstSlot;
+                final var secondSlotToClick = firstSlotToClick == firstSlot ? secondSlot : firstSlot;
+                clicker.click(menu, firstSlotToClick, 0, ClickType.PICKUP);
+                clicker.click(menu, secondSlotToClick, 0, ClickType.PICKUP);
+                clicker.click(menu, firstSlotToClick, 0, ClickType.PICKUP);
             }
         }
     }
