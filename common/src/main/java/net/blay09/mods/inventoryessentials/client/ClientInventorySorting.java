@@ -103,6 +103,8 @@ public class ClientInventorySorting {
         if (firstIndex != secondIndex) {
             final var firstSlot = slots.get(firstIndex);
             final var secondSlot = slots.get(secondIndex);
+            final var firstStack = firstSlot.getItem();
+            final var secondStack = secondSlot.getItem();
 
             // If one of the two slots is empty, we just have to do a simple move
             if (!firstSlot.hasItem() || !secondSlot.hasItem()) {
@@ -113,9 +115,16 @@ public class ClientInventorySorting {
                 return;
             }
 
-            clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
-            clicker.click(menu, secondSlot, 0, ClickType.PICKUP);
-            clicker.click(menu, firstSlot, 0, ClickType.PICKUP);
+            // When the items to be swapped match, we must pick up the stack with higher count first,
+            // because putting a lower count stack on a higher count stack doesn't do anything
+            final var firstSlotToClick = ItemStack.isSameItemSameTags(firstStack, secondStack)
+                    && secondStack.getCount() > firstStack.getCount()
+                    ? secondSlot
+                    : firstSlot;
+            final var secondSlotToClick = firstSlotToClick == firstSlot ? secondSlot : firstSlot;
+            clicker.click(menu, firstSlotToClick, 0, ClickType.PICKUP);
+            clicker.click(menu, secondSlotToClick, 0, ClickType.PICKUP);
+            clicker.click(menu, firstSlotToClick, 0, ClickType.PICKUP);
         }
     }
 
