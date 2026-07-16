@@ -121,7 +121,7 @@ public class InventoryEssentialsClient {
             }
 
             // If shift is held, perform drag transfer
-            if (ModKeyMappings.keyDragTransfer.isActiveAndDown() && (button == 0 || button == 1)) {
+            if (ModKeyMappings.keyDragTransfer.isActiveAndDown() && (button == InputConstants.MOUSE_BUTTON_LEFT || button == InputConstants.MOUSE_BUTTON_RIGHT)) {
                 if (hoverSlot.hasItem() && hoverSlot != lastDragHoverSlot) {
                     InventoryControls controls = getInventoryControls(containerScreen);
                     if (InventoryEssentialsConfig.getActive().enableShiftDrag) {
@@ -137,7 +137,7 @@ public class InventoryEssentialsClient {
                 final var carriedStack = containerScreen.getMenu().getCarried();
                 if (carriedStack.is(ItemTags.BUNDLES)) {
                     if (hoverSlot != lastDragHoverSlot) {
-                        if ((button == 0 && hoverSlot.hasItem()) || (button == 1 && !hoverSlot.hasItem())) {
+                        if ((button == InputConstants.MOUSE_BUTTON_LEFT && hoverSlot.hasItem()) || (button == InputConstants.MOUSE_BUTTON_RIGHT && !hoverSlot.hasItem())) {
                             final var controls = getInventoryControls(containerScreen);
                             controls.dragClick(containerScreen, hoverSlot, button);
                             hasDragClicked = true;
