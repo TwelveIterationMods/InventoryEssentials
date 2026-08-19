@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.Nullable;
@@ -66,7 +67,7 @@ public class InventoryEssentialsIgnores {
         }
 
         // Do not handle drags on crafting result slots
-        if (slot instanceof ResultSlot) {
+        if (slot instanceof ResultSlot || slot.container instanceof ResultContainer) {
             return true;
         }
 
