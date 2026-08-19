@@ -1,5 +1,5 @@
 dependencies {
-    implementation fg.deobf("net.blay09.mods:kuma-api-forge:[20.1.0,20.2.0)")
-    implementation fg.deobf("curse.maven:sophisticated-core-618298:6965342")
-    implementation fg.deobf("curse.maven:sophisticated-storage-619320:6960639")
+    modImplementation "net.blay09.mods:kuma-api-forge:[20.1.0,20.2.0)"
+    modImplementation "curse.maven:sophisticated-core-618298:6965342"
+    modImplementation "curse.maven:sophisticated-storage-619320:6960639"
 }
