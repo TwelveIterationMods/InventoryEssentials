@@ -1,2 +1,1 @@
-- Fixed sorting sometimes messing up when multiple stacks of the same item with different counts exist
-- Fixed harmless log warning about missing refmaps
+- Fixed non-ResultSlot slots that are backed by ResultContainer not being ignored
